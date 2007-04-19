@@ -1,5 +1,6 @@
 %define with_debug 0
 %define kdrive_builds_vesa 0
+%define enable_xvnc 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
 
@@ -8,8 +9,8 @@
 %endif
 
 Name: x11-server
-Version: 1.2.0
-Release: %mkrel 10
+Version: 1.2.99.905
+Release: %mkrel 1
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -19,10 +20,10 @@ Source2: xvfb-run
 Source3: xvfb-run.man.pre
 License: MIT
 BuildRoot: %{_tmppath}/%{name}-root
+Obsoletes: x11-server13 < 1.2.99.905
 
 BuildRequires: libdmx-devel >= 1.0.1
 BuildRequires: libfontenc-devel >= 1.0.1
-BuildRequires: liblbxutil-devel >= 1.0.0
 BuildRequires: libmesagl-devel >= 6.4.2
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
@@ -65,9 +66,7 @@ Patch33: 0033-dont-backfill-bg-none.txt
 Patch34: 0034-offscreen-pixmaps.txt
 Patch37: 0037-fdo8991-xorg-server-1.1.99.901-glXDRIbindTexImage-target.txt
 Patch38: 0038-fdo9367-libdrm-ignore-load-requests-fixes-fglrx.txt
-Patch39: 0039-randr_version.txt
 Patch40: xorg-server-1.2.0-xvfb-run.patch
-Patch41: 0040-XEphyr-bus_error_64bit.txt
 Patch42: x11-server-64bit_fixes.patch
 
 # -----------------------------------------------------------------------------
@@ -89,6 +88,7 @@ License: MIT
 
 %define oldxorgnamedevel  %mklibname xorg-x11
 Conflicts: %{oldxorgnamedevel}-devel < 7.0
+Obsoletes: x11-server13-devel < 1.2.99.905
 
 %description devel
 Development files for %{name}
@@ -116,7 +116,8 @@ Summary: X server common files
 Group: System/X11
 License: MIT
 Provides: XFree86 = 7.0.0
-Conflicts:     xorg-x11 <= 6.9.0-12mdk
+Conflicts: xorg-x11 <= 6.9.0-12mdk
+Obsoletes: x11-server13-common < 1.2.99.905
 Requires: rgb
 # for 'fixed' and 'cursor' fonts
 Requires: x11-font-misc-misc
@@ -170,6 +171,7 @@ Requires: libx11-common
 Requires: x11-driver-input-mouse
 Requires: x11-driver-input-keyboard
 Conflicts: compiz < 0.5.0-1mdv2007.1
+Obsoletes: x11-server13-xorg < 1.2.99.905
 #Obsoletes: xorg-x11-server < 7.0
 #Provides: xorg-x11-server = 7.0
 
@@ -306,6 +308,7 @@ install Xvfb for that purpose.
 
 #------------------------------------------------------------------------------
 
+%if %enable_xvnc
 %package xvnc
 Summary: X VNC server
 Group: System/X11
@@ -323,6 +326,7 @@ VNC clients access to the 'virtual' display it provides.
 %{_bindir}/Xvnc
 #{_mandir}/man1/Xvnc.*.bz2
 
+%endif
 #------------------------------------------------------------------------------
 
 %package xati
@@ -714,15 +718,15 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch7  -p1 -b .vt7
 %patch10 -p1 -b .evdev
 %patch17 -p1 -b .visual_index_matching
+%if %enable_xvnc
 %patch18 -p1 -b .vnc
+%endif
 %patch32 -p0 -b .no_move_damage
 %patch33 -p0 -b .dont_backfill
 %patch34 -p0 -b .offscreen_pixmaps
 %patch37 -p1 -b .glxdribindteximage
 %patch38 -p0 -b .libdrm_fix
-%patch39 -p1 -b .randr_version
 %patch40 -p1 -b .xvfb
-%patch41 -p1 -b .xephyr64bit
 %patch42 -p1 -b .64bit_fixes
 
 %build
@@ -756,24 +760,29 @@ aclocal && autoconf && automake
   		--enable-xinerama \
   		--enable-xf86vidmode \
   		--enable-xf86misc \
+		--enable-xace \
   		--enable-xcsecurity \
 		--enable-xevie \
-  		--enable-lbx \
   		--enable-appgroup \
   		--enable-cup \
   		--enable-evi \
   		--enable-xf86bigfont \
   		--enable-dpms \
   		--enable-xinput \
+		--disable-xcalibrate \
+		--disable-tslib \
   		--enable-multibuffer \
   		--enable-fontcache \
   		--enable-dbe \
+		--enable-xfree86-utils \
   		--enable-xorg \
+		%if %enable_xvnc
   		--enable-xorg-vnc \
-  		--enable-dmx \
-  		--disable-xdmx-vnc \
-  		--enable-xvfb \
   		--enable-xvnc \
+  		--disable-xdmx-vnc \
+		%endif
+  		--enable-dmx \
+  		--enable-xvfb \
   		--enable-xnest \
   		--disable-xwin \
   		--enable-xprint \
@@ -783,20 +792,21 @@ aclocal && autoconf && automake
   		--enable-kdrive \
   		--enable-xephyr \
   		--enable-xsdl \
-     	--disable-freetype \
+		--disable-freetype \
   		--disable-install-setuid \
  		--enable-secure-rpc \
   		--enable-xorgcfg \
   		--enable-kbd_mode \
 		--enable-xwrapper \
 		--enable-pam \
-      --with-fontdir=%_datadir/fonts \
-      --with-default-font-path="%_datadir/fonts/misc:unscaled,unix/:-1"
+		--with-fontdir="%{_datadir}/fonts" \
+		--with-default-font-path="%{_datadir}/fonts/misc:unscaled,unix/:-1"
 %make
 
 %install
 rm -rf %{buildroot}
 %makeinstall_std
+
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
 ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
 ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
