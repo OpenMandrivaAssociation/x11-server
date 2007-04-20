@@ -9,7 +9,7 @@
 %endif
 
 Name: x11-server
-Version: 1.2.99.905
+Version: 1.3.0.0
 Release: %mkrel 1
 Summary:  X11 servers
 Group: System/X11
@@ -20,7 +20,7 @@ Source2: xvfb-run
 Source3: xvfb-run.man.pre
 License: MIT
 BuildRoot: %{_tmppath}/%{name}-root
-Obsoletes: x11-server13 < 1.2.99.905
+Obsoletes: x11-server13 <= 1.2.99.905
 
 BuildRequires: libdmx-devel >= 1.0.1
 BuildRequires: libfontenc-devel >= 1.0.1
@@ -88,7 +88,7 @@ License: MIT
 
 %define oldxorgnamedevel  %mklibname xorg-x11
 Conflicts: %{oldxorgnamedevel}-devel < 7.0
-Obsoletes: x11-server13-devel < 1.2.99.905
+Obsoletes: x11-server13-devel <= 1.2.99.905
 
 %description devel
 Development files for %{name}
@@ -117,7 +117,7 @@ Group: System/X11
 License: MIT
 Provides: XFree86 = 7.0.0
 Conflicts: xorg-x11 <= 6.9.0-12mdk
-Obsoletes: x11-server13-common < 1.2.99.905
+Obsoletes: x11-server13-common <= 1.2.99.905
 Requires: rgb
 # for 'fixed' and 'cursor' fonts
 Requires: x11-font-misc-misc
@@ -171,7 +171,7 @@ Requires: libx11-common
 Requires: x11-driver-input-mouse
 Requires: x11-driver-input-keyboard
 Conflicts: compiz < 0.5.0-1mdv2007.1
-Obsoletes: x11-server13-xorg < 1.2.99.905
+Obsoletes: x11-server13-xorg <= 1.2.99.905
 #Obsoletes: xorg-x11-server < 7.0
 #Provides: xorg-x11-server = 7.0
 
