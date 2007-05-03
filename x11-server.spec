@@ -10,7 +10,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 1
+Release: %mkrel 2
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -68,6 +68,10 @@ Patch37: 0037-fdo8991-xorg-server-1.1.99.901-glXDRIbindTexImage-target.txt
 Patch38: 0038-fdo9367-libdrm-ignore-load-requests-fixes-fglrx.txt
 Patch40: xorg-server-1.2.0-xvfb-run.patch
 Patch42: x11-server-64bit_fixes.patch
+
+Patch43: xorg-server-1.3.0.0-mesa-6.5.3.patch
+Patch44: xorg-server-1.3.0.0-glinterface.patch
+Patch45: xorg-server-1.3.0.0-glinterface2.patch
 
 # -----------------------------------------------------------------------------
 
@@ -713,6 +717,10 @@ This KDrive server is targetted for VIA chipsets.
 cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 #patches
+%patch43 -p2 -b .mesa653
+%patch44 -p1 -b .glinterface
+%patch45 -p1 -b .glinterface2
+
 %patch3  -p1 -b .xwrapper
 %patch4  -p1 -b .blue_bg
 %patch7  -p1 -b .vt7
