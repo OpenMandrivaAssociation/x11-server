@@ -3,6 +3,7 @@
 %define enable_xvnc 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
+%define mesaver 6.5.3
 
 %ifarch %{ix86} alpha
 %define kdrive_builds_vesa 1
@@ -24,7 +25,7 @@ Obsoletes: x11-server13 <= 1.2.99.905
 
 BuildRequires: libdmx-devel >= 1.0.1
 BuildRequires: libfontenc-devel >= 1.0.1
-BuildRequires: libmesagl-devel >= 6.4.2
+BuildRequires: libmesagl-devel >= %{mesaver}
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
 BuildRequires: libxdmcp-devel >= 1.0.0
@@ -42,8 +43,8 @@ BuildRequires: libxres-devel >= 1.0.0
 BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxxf86misc-devel >= 1.0.0
 BuildRequires: libxxf86vm-devel >= 1.0.0
-BuildRequires: mesa-source >= 6.5.1
 BuildRequires: libxfont-devel >= 1.0.0
+BuildRequires: mesa-source >= %{mesaver}
 BuildRequires: x11-proto-devel >= 1.0.3-2
 BuildRequires: x11-util-macros >= 1.0.1
 BuildRequires: x11-xtrans-devel >= 1.0.0
