@@ -720,7 +720,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 #patches
 %patch43 -p2 -b .mesa653
 %patch44 -p1 -b .glinterface
-%patch45 -p1 -b .glinterface2
+%patch45 -p0 -b .glinterface2
 
 %patch3  -p1 -b .xwrapper
 %patch4  -p1 -b .blue_bg
