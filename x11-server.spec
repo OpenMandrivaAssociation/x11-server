@@ -73,8 +73,6 @@ Patch42: x11-server-64bit_fixes.patch
 Patch43: xorg-server-1.3.0.0-mesa-6.5.3.patch
 Patch44: xorg-server-1.3.0.0-glinterface.patch
 Patch45: xorg-server-1.3.0.0-glinterface2.patch
-Patch46: x11-server-1.3.0.0-xprintcfgdir.patch
-Patch47: x11-server-1.3.0.0-xprint-init.patch
 
 # -----------------------------------------------------------------------------
 
@@ -138,7 +136,6 @@ X server common files
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
 %dir %{_libdir}/xserver
-%dir %{_sysconfdir}/X11/Xsession.d/
 %{_bindir}/xorgcfg
 %{_bindir}/xorgconfig
 %{_bindir}/gtf
@@ -255,30 +252,6 @@ testing purposes).
 %defattr(-,root,root)
 %{_bindir}/Xnest
 %{_mandir}/man1/Xnest.*.bz2
-
-#------------------------------------------------------------------------------
-
-%package xprt
-Summary: A X print server (Xprint)
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-#Obsoletes: xorg-x11-Xprt < 7.0
-#Provides: xorg-x11-Xprt = 7.0
-
-%description xprt
-A X11 Print server. Xprt (Xprint) is an advanced printing system which
-enables X11 applications to use devices like printers, FAX or
-create documents in formats like PostScript, PDF, PCL, etc.
-
-%files xprt
-%defattr(-,root,root)
-%{_bindir}/Xprt
-%{_mandir}/man1/Xprt.*.bz2
-%dir %{_libdir}/X11/xprint/
-%{_libdir}/X11/xprint/*
-%{_sysconfdir}/X11/Xsession.d/92xprint-xpserverlist
-
 
 #------------------------------------------------------------------------------
 
@@ -725,8 +698,6 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch43 -p2 -b .mesa653
 %patch44 -p1 -b .glinterface
 %patch45 -p0 -b .glinterface2
-%patch46 -p1 -b .xprintcfgdir
-%patch47 -p1 -b .xprint-init
 
 %patch3  -p1 -b .xwrapper
 %patch4  -p1 -b .blue_bg
@@ -745,7 +716,6 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch42 -p1 -b .64bit_fixes
 
 %build
-%define xprintcfgdir %{_libdir}/X11/xprint
 aclocal && autoconf && automake
 %configure2_5x  --x-includes=%{_includedir} \
                 --x-libraries=%{_libdir} \
@@ -801,8 +771,7 @@ aclocal && autoconf && automake
   		--enable-xvfb \
   		--enable-xnest \
   		--disable-xwin \
-  		--enable-xprint \
-  		--with-xprint-configdir=%{xprintcfgdir} \
+  		--disable-xprint \
   		--disable-xgl \
   		--disable-xglx \
   		--disable-xegl \
@@ -835,10 +804,6 @@ touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
 # move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
 mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_datadir}/X11/xkb/
-
-# fix hardcoded xprint cfgdir paths
-sed --in-place s@/usr/X11R6/lib/X11/xserver/@%{xprintcfgdir}@ \
-	%{buildroot}%{_mandir}/man1/Xprt.1
 
 %clean
 rm -rf %{buildroot}
