@@ -123,6 +123,7 @@ License: MIT
 Provides: XFree86 = 7.0.0
 Conflicts: xorg-x11 <= 6.9.0-12mdk
 Obsoletes: x11-server13-common <= 1.2.99.905
+Obsoletes: x11-server-xprt <= 1.3.0.0-2mdv2008.0
 Requires: rgb
 # for 'fixed' and 'cursor' fonts
 Requires: x11-font-misc-misc
