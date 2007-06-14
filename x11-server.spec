@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 4
+Release: %mkrel 5
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -137,6 +137,8 @@ X server common files
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
 %dir %{_libdir}/xserver
+%dir %{_sysconfdir}/X11
+%dir %{_sysconfdir}/X11/app-defaults
 %{_bindir}/xorgcfg
 %{_bindir}/xorgconfig
 %{_bindir}/gtf
@@ -802,6 +804,8 @@ mkdir -p %{buildroot}%{_sysconfdir}/pam.d
 install -m 0644 %{_sourcedir}/xserver.pamd %{buildroot}%{_sysconfdir}/pam.d/xserver     
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
+
+mkdir -p %{buildroot}%{_sysconfdir}/X11/app-defaults
 
 # move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
 mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_datadir}/X11/xkb/
