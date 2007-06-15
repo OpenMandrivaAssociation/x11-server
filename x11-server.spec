@@ -719,8 +719,8 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch42 -p1 -b .64bit_fixes
 
 %build
-aclocal && autoconf && automake
-%configure2_5x  --x-includes=%{_includedir} \
+autoreconf -ifs
+%configure  --x-includes=%{_includedir} \
                 --x-libraries=%{_libdir} \
  		--with-log-dir=%{_logdir} \
 		%if %{with_debug}
