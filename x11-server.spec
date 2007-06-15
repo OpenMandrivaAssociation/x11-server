@@ -50,6 +50,7 @@ BuildRequires: x11-util-macros >= 1.0.1
 BuildRequires: x11-xtrans-devel >= 1.0.0
 BuildRequires: libdmx-devel >= 1.0.1
 BuildRequires: libpam-devel
+BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
 # for VNC:
 BuildRequires: libjpeg-devel
