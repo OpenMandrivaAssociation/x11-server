@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 5
+Release: %mkrel 6
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -30,7 +30,7 @@ BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
 BuildRequires: libxdmcp-devel >= 1.0.0
 BuildRequires: libxext-devel >= 1.0.0
-BuildRequires: libxfont-devel >= 1.0.0
+BuildRequires: libxfont-devel >= 1.2.8-2mdv
 BuildRequires: libxfixes-devel
 BuildRequires: libxi-devel >= 1.0.0
 BuildRequires: libxkbfile-devel >= 1.0.1
@@ -74,6 +74,7 @@ Patch42: x11-server-64bit_fixes.patch
 Patch43: xorg-server-1.3.0.0-mesa-6.5.3.patch
 Patch44: xorg-server-1.3.0.0-glinterface.patch
 Patch45: xorg-server-1.3.0.0-glinterface2.patch
+Patch46: xorg-server-fontpath_d-doc.patch
 
 # -----------------------------------------------------------------------------
 
@@ -140,6 +141,7 @@ X server common files
 %dir %{_libdir}/xserver
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
+%dir %{_sysconfdir}/X11/fontpath.d
 %{_bindir}/xorgcfg
 %{_bindir}/xorgconfig
 %{_bindir}/gtf
@@ -181,6 +183,9 @@ Conflicts: compiz < 0.5.0-1mdv2007.1
 Obsoletes: x11-server13-xorg <= 1.2.99.905
 #Obsoletes: xorg-x11-server < 7.0
 #Provides: xorg-x11-server = 7.0
+
+# because of fontpath.d support
+Requires: libxfont >= 1.2.8-2mdv
 
 %description xorg
 x11-server-xorg is the new generation of X server from X.Org.
@@ -718,12 +723,11 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch38 -p0 -b .libdrm_fix
 %patch40 -p1 -b .xvfb
 %patch42 -p1 -b .64bit_fixes
+%patch46 -p1 -b .fontpath_d
 
 %build
 autoreconf -ifs
-%configure  --x-includes=%{_includedir} \
-                --x-libraries=%{_libdir} \
- 		--with-log-dir=%{_logdir} \
+%configure --with-log-dir=%{_logdir} \
 		%if %{with_debug}
   		--enable-debug \
 		%else
@@ -807,6 +811,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/app-defaults
+mkdir -p %{buildroot}%{_sysconfdir}/X11/fontpath.d
 
 # move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
 mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_datadir}/X11/xkb/
