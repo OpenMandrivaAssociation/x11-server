@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 6
+Release: %mkrel 7
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -127,6 +127,7 @@ Conflicts: xorg-x11 <= 6.9.0-12mdk
 Obsoletes: x11-server13-common <= 1.2.99.905
 Obsoletes: x11-server-xprt <= 1.3.0.0-2mdv2008.0
 Requires: rgb
+Requires: filesystem >= 2.1.8
 # for 'fixed' and 'cursor' fonts
 Requires: x11-font-misc-misc
 Requires: x11-font-cursor-misc
@@ -139,6 +140,7 @@ X server common files
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
 %dir %{_libdir}/xserver
+%dir %{_libdir}/X11
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
 %dir %{_sysconfdir}/X11/fontpath.d
@@ -166,6 +168,10 @@ X server common files
 %{_mandir}/man1/vdltodmx.*.bz2
 %{_mandir}/man4/fbdevhw.4.bz2
 %{_mandir}/man4/exa.4.bz2
+%dir %{_prefix}/X11R6
+%dir %{_prefix}/X11R6/lib
+%dir %{_prefix}/X11R6/lib/X11
+
 
 #------------------------------------------------------------------------------
 
@@ -815,6 +821,10 @@ mkdir -p %{buildroot}%{_sysconfdir}/X11/fontpath.d
 
 # move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
 mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_datadir}/X11/xkb/
+
+# for compatibility with legacy applications (see #23423, for example)
+mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
+ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 %clean
 rm -rf %{buildroot}
