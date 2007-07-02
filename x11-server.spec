@@ -127,11 +127,13 @@ Conflicts: xorg-x11 <= 6.9.0-12mdk
 Obsoletes: x11-server13-common <= 1.2.99.905
 Obsoletes: x11-server-xprt <= 1.3.0.0-2mdv2008.0
 Requires: rgb
-Requires: filesystem >= 2.1.8
 # for 'fixed' and 'cursor' fonts
 Requires: x11-font-misc-misc
 Requires: x11-font-cursor-misc
 Requires: x11-font-alias                                                  
+
+# due to a trigger moving /usr/X11R6/ to /usr/lib/X11/...
+Requires: filesystem >= 2.1.8
 
 %description common
 X server common files
