@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 7
+Release: %mkrel 8
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -130,13 +130,28 @@ Requires: rgb
 # for 'fixed' and 'cursor' fonts
 Requires: x11-font-misc-misc
 Requires: x11-font-cursor-misc
-Requires: x11-font-alias                                                  
-
-# due to a trigger moving /usr/X11R6/ to /usr/lib/X11/...
-Requires: filesystem >= 2.1.8
+Requires: x11-font-alias
+# see comment about /usr/X11R6/lib below
+Conflicts: filesystem < 2.1.8
 
 %description common
 X server common files
+
+# old packages had a dir structure on /usr/X11R6/lib/ but starting on
+# filesystem-2.1.8 these dirs where kept there but were not owned by any
+# package.  It now should be a compat symlink to the new path: /usr/lib/X11,
+# but there are scenarios where /usr/lib/X11 and /usr/X11R6/lib/X11 both
+# exist as directories.
+%pre common
+if [ -L %{_libdir}/X11 ]; then 
+	rm -f %{_libdir}/X11
+fi
+if [ -d /usr/X11R6/lib/X11 ]; then
+	mkdir -p %{_libdir}/X11
+	rm -f /usr/X11R6/lib/X11/fs # old symlink, already on the target dir
+	mv -f /usr/X11R6/lib/X11/* %{_libdir}/X11/ 2> /dev/null
+	rm -rf /usr/X11R6/lib/X11
+fi
 
 %files common
 %defattr(-,root,root)
