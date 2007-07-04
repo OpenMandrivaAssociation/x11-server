@@ -826,7 +826,7 @@ mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_da
 
 # for compatibility with legacy applications (see #23423, for example)
 mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
-ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
+ln -s ../../lib/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 %clean
 rm -rf %{buildroot}
