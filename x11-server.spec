@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 8
+Release: %mkrel 9
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -817,7 +817,7 @@ autoreconf -ifs
 		--enable-xwrapper \
 		--enable-pam \
 		--with-fontdir="%{_datadir}/fonts" \
-		--with-default-font-path="%{_datadir}/fonts/misc:unscaled,unix/:-1"
+		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 %make
 
 %install
