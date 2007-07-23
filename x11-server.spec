@@ -177,15 +177,15 @@ fi
 %{_libdir}/xorg/modules/*
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/xkb/README.compiled
-%{_mandir}/man1/xorgcfg.*.bz2
-%{_mandir}/man1/xorgconfig.*.bz2
-%{_mandir}/man1/gtf.*.bz2
-%{_mandir}/man1/cvt.1.bz2
-%{_mandir}/man1/pcitweak.*.bz2
-%{_mandir}/man1/scanpci.*.bz2
-%{_mandir}/man1/vdltodmx.*.bz2
-%{_mandir}/man4/fbdevhw.4.bz2
-%{_mandir}/man4/exa.4.bz2
+%{_mandir}/man1/xorgcfg.*
+%{_mandir}/man1/xorgconfig.*
+%{_mandir}/man1/gtf.*
+%{_mandir}/man1/cvt.*
+%{_mandir}/man1/pcitweak.*
+%{_mandir}/man1/scanpci.*
+%{_mandir}/man1/vdltodmx.*
+%{_mandir}/man4/fbdevhw.*
+%{_mandir}/man4/exa.*
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %dir %{_prefix}/X11R6/lib/X11
@@ -223,9 +223,9 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
 %{_datadir}/X11/app-defaults/XOrgCfg
-%{_mandir}/man1/Xorg.*.bz2
-%{_mandir}/man1/Xserver.*.bz2
-%{_mandir}/man5/xorg.conf.*.bz2
+%{_mandir}/man1/Xorg.*
+%{_mandir}/man1/Xserver.*
+%{_mandir}/man5/xorg.conf.*
 
 #------------------------------------------------------------------------------
 
@@ -256,9 +256,9 @@ and standard and/or commonly available X server extensions.
 %{_bindir}/Xdmx
 %{_bindir}/xdmx*
 %{_bindir}/dmx*
-%{_mandir}/man1/Xdmx.*.bz2
-%{_mandir}/man1/xdmxconfig.*.bz2
-%{_mandir}/man1/dmxtodmx.*.bz2
+%{_mandir}/man1/Xdmx.*
+%{_mandir}/man1/xdmxconfig.*
+%{_mandir}/man1/dmxtodmx.*
 
 #------------------------------------------------------------------------------
 
@@ -284,7 +284,7 @@ testing purposes).
 %files xnest
 %defattr(-,root,root)
 %{_bindir}/Xnest
-%{_mandir}/man1/Xnest.*.bz2
+%{_mandir}/man1/Xnest.*
 
 #------------------------------------------------------------------------------
 
@@ -318,8 +318,8 @@ install Xvfb for that purpose.
 %defattr(-,root,root)
 %{_bindir}/Xvfb
 %{_bindir}/xvfb-run
-%{_mandir}/man1/Xvfb.*.bz2
-%{_mandir}/man1/xvfb-run.*.bz2
+%{_mandir}/man1/Xvfb.*
+%{_mandir}/man1/xvfb-run.*
 
 #------------------------------------------------------------------------------
 
