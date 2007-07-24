@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 10
+Release: %mkrel 11
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -77,6 +77,7 @@ Patch45: xorg-server-1.3.0.0-glinterface2.patch
 Patch46: xorg-server-fontpath_d-doc.patch
 
 Patch47: x11-server-randr1.2_set_crtc_in_output.patch
+Patch48: x11-server-fix_oldrandr.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -749,6 +750,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch42 -p1 -b .64bit_fixes
 %patch46 -p1 -b .fontpath_d
 %patch47 -p1 -b .randr12_set_crtc
+%patch48 -p1 -b .fix_old_randr
 
 %build
 autoreconf -ifs
