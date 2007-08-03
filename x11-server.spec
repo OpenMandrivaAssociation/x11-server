@@ -76,8 +76,10 @@ Patch44: xorg-server-1.3.0.0-glinterface.patch
 Patch45: xorg-server-1.3.0.0-glinterface2.patch
 Patch46: xorg-server-fontpath_d-doc.patch
 
-Patch47: x11-server-randr1.2_set_crtc_in_output.patch
-Patch48: x11-server-fix_oldrandr.patch
+# RandR1.2 related fixes
+Patch47: x11-server-1.3-multiple_randr12_fixes.patch
+Patch48: x11-server-fix_crash_when_rotating.patch
+ 
 Patch49: xorg-server-cursor-and-randr-fixes.patch
 # Some debug for patch49
 Patch50: xorg-server-cursor-debug.patch
@@ -752,8 +754,8 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch40 -p1 -b .xvfb
 %patch42 -p1 -b .64bit_fixes
 %patch46 -p1 -b .fontpath_d
-#%patch47 -p1 -b .randr12_set_crtc
-#%patch48 -p1 -b .fix_old_randr
+%patch47 -p1 -b .randr12_fixes
+%patch48 -p1 -b .crash_on_rotate
 %patch49 -p1 -b .cursor_crash
 %if %{with_debug}
 %patch50 -p1 -b .cursor_crash_debug
