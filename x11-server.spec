@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 12
+Release: %mkrel 13
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -78,6 +78,9 @@ Patch46: xorg-server-fontpath_d-doc.patch
 
 Patch47: x11-server-randr1.2_set_crtc_in_output.patch
 Patch48: x11-server-fix_oldrandr.patch
+Patch49: xorg-server-cursor-and-randr-fixes.patch
+# Some debug for patch49
+Patch50: xorg-server-cursor-debug.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -751,9 +754,16 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch46 -p1 -b .fontpath_d
 #%patch47 -p1 -b .randr12_set_crtc
 #%patch48 -p1 -b .fix_old_randr
+%patch49 -p1 -b .cursor_crash
+%if %{with_debug}
+%patch50 -p1 -b .cursor_crash_debug
+%endif
 
 %build
 autoreconf -ifs
+%if %{with_debug}
+CFLAGS='-DBUILDDEBUG -g' \
+%endif
 %configure --with-log-dir=%{_logdir} \
 		%if %{with_debug}
   		--enable-debug \
