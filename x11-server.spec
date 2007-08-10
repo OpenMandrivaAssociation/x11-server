@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 13
+Release: %mkrel 14
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -52,6 +52,7 @@ BuildRequires: libdmx-devel >= 1.0.1
 BuildRequires: libpam-devel
 BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
+BuildRequires: libgii-devel
 # for VNC:
 BuildRequires: libjpeg-devel
 
@@ -76,13 +77,37 @@ Patch44: xorg-server-1.3.0.0-glinterface.patch
 Patch45: xorg-server-1.3.0.0-glinterface2.patch
 Patch46: xorg-server-fontpath_d-doc.patch
 
-# RandR1.2 related fixes
-Patch47: x11-server-1.3-multiple_randr12_fixes.patch
-Patch48: x11-server-fix_crash_when_rotating.patch
- 
+
 Patch49: xorg-server-cursor-and-randr-fixes.patch
 # Some debug for patch49
 Patch50: xorg-server-cursor-debug.patch
+
+# ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
+# Description of what each patch is for can be seen inside the patch files
+Patch100: 0100-Set-the-crtc-before-the-output-change-is-notified.patch
+Patch101: 0101-Fix-the-output-crtc-initialization-in-the-old-randr.patch
+Patch102: 0102-Fix-a-crash-when-rotating-the-screen.patch
+Patch103: 0103-RRScanOldConfig-wasn-t-getting-crtcs-set-correctly.patch
+Patch104: 0104-RRScanOldConfig-cannot-use-RRFirstOutput-before-outp.patch
+Patch105: 0105-Allocate-the-right-number-of-entries-for-saving-cr.patch
+Patch106: 0106-Decrement-mode-count-when-removing-RandR-output-mode.patch
+Patch107: 0107-Make-PreferredMode-option-in-config-file-override-ED.patch
+Patch108: 0108-Query-modes-on-disabled-but-not-ignored-outputs.patch
+Patch109: 0109-Make-pending-property-changes-trigger-mode-setting.patch
+Patch110: 0110-Screen-size-bounds-check-in-ProcRRSetCrtcConfig-not.patch
+Patch111: 0111-Skip-driver-mode-detection-configuration-when-vtSem.patch
+Patch112: 0112-Disable-all-outputs-and-crtcs-at-startup.patch
+Patch113: 0113-Don-t-call-xf86RandR12TellChanged-if-it-doesn-t-exis.patch
+Patch114: 0114-Adjust-the-screen-pixmap-s-dimensions-in-xf86RandR12.patch
+Patch115: 0115-Include-xf86Rename.h-in-xf86RandR12.h.patch
+Patch116: 0116-Use-Screen-block-handler-for-rotation-to-draw-under.patch
+Patch117: 0117-Fix-mode-validation-against-the-maximum-X-Y-values-c.patch
+Patch118: 0118-Fix-sync-polarity-on-Samsung-SyncMaster-205BW-monito.patch
+Patch119: 0119-Bug-10814-Add-needed-quirk-for-Samsung-225BW-like.patch
+Patch120: 0120-Add-RandR-reflection-support.patch
+Patch121: 0121-MakeAtom-needs-length-without-trailing-NUL.-sizeof.patch
+Patch122: 0122-Include-picturestr.h-in-xf86Crtc.h-to-pick-up-defini.patch
+Patch123: 0123-Disable-RANDR-s-fake-Xinerama-protocol-when-there-s.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -754,12 +779,36 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch40 -p1 -b .xvfb
 %patch42 -p1 -b .64bit_fixes
 %patch46 -p1 -b .fontpath_d
-%patch47 -p1 -b .randr12_fixes
-%patch48 -p1 -b .crash_on_rotate
 %patch49 -p1 -b .cursor_crash
 %if %{with_debug}
 %patch50 -p1 -b .cursor_crash_debug
 %endif
+
+# randr1.2 fixes
+%patch100 -p1 -b .set_crtc
+%patch101 -p1 -b .fix_crtc_old_randr
+%patch102 -p1 -b .crash_on_rotate
+%patch103 -p1 -b .fix_rrscanoldconfig
+%patch104 -p1 -b .do_not_use_rrfirstoutput
+%patch105 -p1 -b .fix_memory_corruption
+%patch106 -p1 -b .decrement_mode_count
+%patch107 -p1 -b .preferred_mode
+%patch108 -p1 -b .query_modes_on_disabled
+%patch109 -p1 -b .pending_property
+%patch110 -p1 -b .screen_bounds_check
+%patch111 -p1 -b .skip_when_vtsema
+%patch112 -p1 -b .disable_at_startup
+%patch113 -p1 -b .fix_xf86randr12tellchanged_call
+%patch114 -p1 -b .pixmap_dimensions
+%patch115 -p1 -b .xf86rename_include
+%patch116 -p1 -b .block_handler
+%patch117 -p1 -b .validate_maximum
+%patch118 -p1 -b .syncmaster_205bw_polarity
+%patch119 -p1 -b .syncmaster_225bw_quirk
+%patch120 -p1 -b .randr_reflection
+%patch121 -p1 -b .atom_lenght
+%patch122 -p1 -b .include_picturestr
+%patch123 -p1 -b .disable_randr_on_multiple_screens
 
 %build
 autoreconf -ifs
