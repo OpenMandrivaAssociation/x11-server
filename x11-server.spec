@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 14
+Release: %mkrel 15
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -76,11 +76,10 @@ Patch43: xorg-server-1.3.0.0-mesa-6.5.3.patch
 Patch44: xorg-server-1.3.0.0-glinterface.patch
 Patch45: xorg-server-1.3.0.0-glinterface2.patch
 Patch46: xorg-server-fontpath_d-doc.patch
-
-
-Patch49: xorg-server-cursor-and-randr-fixes.patch
+Patch47: xorg-server-cursor-and-randr-fixes.patch
 # Some debug for patch49
-Patch50: xorg-server-cursor-debug.patch
+Patch48: xorg-server-cursor-debug.patch
+Patch49: x11-server-1.3.0-reput_video_fix.patch
 
 # ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
 # Description of what each patch is for can be seen inside the patch files
@@ -779,10 +778,11 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch40 -p1 -b .xvfb
 %patch42 -p1 -b .64bit_fixes
 %patch46 -p1 -b .fontpath_d
-%patch49 -p1 -b .cursor_crash
+%patch47 -p1 -b .cursor_crash
 %if %{with_debug}
-%patch50 -p1 -b .cursor_crash_debug
+%patch48 -p1 -b .cursor_crash_debug
 %endif
+%patch49 -p1 -b .reput_video
 
 # randr1.2 fixes
 %patch100 -p1 -b .set_crtc
