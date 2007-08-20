@@ -1,6 +1,6 @@
 %define with_debug 0
 %define kdrive_builds_vesa 0
-%define enable_xvnc 0
+%define enable_xvnc 1
 
 %define mesasrcdir %{_prefix}/src/Mesa
 %define mesaver 6.5.3
@@ -11,7 +11,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 15
+Release: %mkrel 16
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -768,7 +768,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch10 -p1 -b .evdev
 %patch17 -p1 -b .visual_index_matching
 %if %enable_xvnc
-%patch18 -p1 -b .vnc
+%patch18 -p0 -b .vnc
 %endif
 %patch32 -p0 -b .no_move_damage
 %patch33 -p0 -b .dont_backfill
