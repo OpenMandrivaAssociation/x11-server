@@ -369,7 +369,7 @@ VNC clients access to the 'virtual' display it provides.
 %files xvnc
 %defattr(-,root,root)
 %{_bindir}/Xvnc
-#{_mandir}/man1/Xvnc.*.bz2
+#{_mandir}/man1/Xvnc.*
 
 %endif
 #------------------------------------------------------------------------------
