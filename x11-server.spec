@@ -9,9 +9,12 @@
 %define kdrive_builds_vesa 1
 %endif
 
+# Alternatives priority for standard libglx.so and mesa libs
+%define priority 500
+
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 16
+Release: %mkrel 17
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -162,6 +165,8 @@ Requires: rgb
 Requires: x11-font-misc-misc
 Requires: x11-font-cursor-misc
 Requires: x11-font-alias
+Requires(post): update-alternatives >= 1.9.0
+Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
 Conflicts: filesystem < 2.1.8
 
@@ -184,6 +189,33 @@ if [ -d /usr/X11R6/lib/X11 ]; then
 	rm -rf /usr/X11R6/lib/X11
 fi
 
+%post common
+%{_sbindir}/update-alternatives \
+	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
+	--slave %{_libdir}/xorg/modules/extensions/libglx.so libglx %{_libdir}/xorg/modules/extensions/standard/libglx.so
+
+# (anssi)
+%triggerun common -- %{name}-common < 1.3.0.0-17
+[ $1 -eq 2 ] || exit 0 # do not run if downgrading
+[ -L %{_libdir}/xorg/modules/extensions/libglx.so ] || rm -f %{_libdir}/xorg/modules/extensions/libglx.so
+current_glconf="$(readlink -e %{_sysconfdir}/ld.so.conf.d/GL.conf)"
+if [ "${current_glconf#*mesa}" == "gl1.conf" ]; then
+	# This an upgrade of a system with no proprietary drivers enabled, update
+	# the link to point to the new standard.conf instead of libmesagl1.conf (2008.0 change).
+	# This also replaces old libglx.so with a symlink.
+	%{_sbindir}/update-alternatives --set gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
+else
+	# XFdrake did not set symlink to manual mode before 2008.0, so we ensure it here.
+	# This also replaces old libglx.so with a symlink.
+	%{_sbindir}/update-alternatives --set gl_conf "${current_glconf}"
+fi
+true
+
+%postun common
+if [ ! -f %{_sysconfdir}/ld.so.conf.d/GL/standard.conf ]; then
+	/usr/sbin/update-alternatives --remove gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
+fi
+
 %files common
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
@@ -192,6 +224,9 @@ fi
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
 %dir %{_sysconfdir}/X11/fontpath.d
+%dir %{_sysconfdir}/ld.so.conf.d/GL
+%ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
+%{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 %{_bindir}/xorgcfg
 %{_bindir}/xorgconfig
 %{_bindir}/gtf
@@ -205,6 +240,7 @@ fi
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
+%ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/xorgcfg.*
@@ -907,6 +943,18 @@ mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_da
 # for compatibility with legacy applications (see #23423, for example)
 mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
 ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
+
+# (anssi) manage proprietary drivers
+install -d -m755 %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL
+cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
+# This file is knowingly empty since the libraries are in standard search
+# path. Please do not remove this file.
+EOF
+touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
+install -d -m755 %{buildroot}%{_libdir}/xorg/modules/extensions/standard
+mv %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so \
+	%{buildroot}%{_libdir}/xorg/modules/extensions/standard/libglx.so
+touch %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so
 
 %clean
 rm -rf %{buildroot}
