@@ -14,7 +14,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 17
+Release: %mkrel 18
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -110,6 +110,7 @@ Patch120: 0120-Add-RandR-reflection-support.patch
 Patch121: 0121-MakeAtom-needs-length-without-trailing-NUL.-sizeof.patch
 Patch122: 0122-Include-picturestr.h-in-xf86Crtc.h-to-pick-up-defini.patch
 Patch123: 0123-Disable-RANDR-s-fake-Xinerama-protocol-when-there-s.patch
+Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -845,6 +846,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch121 -p1 -b .atom_lenght
 %patch122 -p1 -b .include_picturestr
 %patch123 -p1 -b .disable_randr_on_multiple_screens
+%patch124 -p1 -b .no_mouse_keys
 
 %build
 autoreconf -ifs
