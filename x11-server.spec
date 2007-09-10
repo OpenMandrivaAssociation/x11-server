@@ -171,6 +171,11 @@ Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
 Conflicts: filesystem < 2.1.8
 
+# xorgcfg requires these
+Requires: x11-data-bitmaps
+Requires: X11-75dpi-fonts
+Requires: X11-100dpi-fonts
+
 %description common
 X server common files
 
