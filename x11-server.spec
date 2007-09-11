@@ -1,4 +1,4 @@
-%define with_debug 0
+%define with_debug 1
 %define kdrive_builds_vesa 0
 %define enable_xvnc 1
 
@@ -112,6 +112,7 @@ Patch122: 0122-Include-picturestr.h-in-xf86Crtc.h-to-pick-up-defini.patch
 Patch123: 0123-Disable-RANDR-s-fake-Xinerama-protocol-when-there-s.patch
 Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
+Patch126: 0126-find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -852,6 +853,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch123 -p1 -b .disable_randr_on_multiple_screens
 %patch124 -p1 -b .no_mouse_keys
 %patch125 -p1 -b .only_fixed_fonts
+%patch126 -p1 -b .find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix
 
 %build
 autoreconf -ifs
