@@ -111,6 +111,7 @@ Patch121: 0121-MakeAtom-needs-length-without-trailing-NUL.-sizeof.patch
 Patch122: 0122-Include-picturestr.h-in-xf86Crtc.h-to-pick-up-defini.patch
 Patch123: 0123-Disable-RANDR-s-fake-Xinerama-protocol-when-there-s.patch
 Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
+Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -173,8 +174,6 @@ Conflicts: filesystem < 2.1.8
 
 # xorgcfg requires these
 Requires: x11-data-bitmaps
-Requires: X11-75dpi-fonts
-Requires: X11-100dpi-fonts
 
 %description common
 X server common files
@@ -852,6 +851,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch122 -p1 -b .include_picturestr
 %patch123 -p1 -b .disable_randr_on_multiple_screens
 %patch124 -p1 -b .no_mouse_keys
+%patch125 -p1 -b .only_fixed_fonts
 
 %build
 autoreconf -ifs
