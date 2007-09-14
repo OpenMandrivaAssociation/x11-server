@@ -953,6 +953,9 @@ mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_da
 mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
 ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
+# create more module directories to be owned by x11-server-common
+install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
+
 # (anssi) manage proprietary drivers
 install -d -m755 %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL
 cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
