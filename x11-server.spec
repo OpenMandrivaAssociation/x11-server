@@ -863,6 +863,8 @@ autoreconf -ifs
 CFLAGS='-DBUILDDEBUG -g' \
 %endif
 %configure --with-log-dir=%{_logdir} \
+		--with-os-vendor="Mandriva" \
+		--with-os-name=\"`uname -s -r`\" \
 		%if %{with_debug}
   		--enable-debug \
 		%else
