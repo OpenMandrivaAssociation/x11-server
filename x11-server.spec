@@ -113,6 +113,7 @@ Patch123: 0123-Disable-RANDR-s-fake-Xinerama-protocol-when-there-s.patch
 Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
 Patch126: 0126-find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix.patch
+Patch127: 0127-24_32_pixmap_wmaker_kde_crash.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -854,6 +855,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch124 -p1 -b .no_mouse_keys
 %patch125 -p1 -b .only_fixed_fonts
 %patch126 -p1 -b .find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix
+%patch127 -p1 -b .pixmap_wmaker_kde_crash
 
 %build
 autoreconf -ifs
