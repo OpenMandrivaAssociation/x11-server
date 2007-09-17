@@ -863,7 +863,7 @@ CFLAGS='-DBUILDDEBUG -g' \
 %endif
 %configure --with-log-dir=%{_logdir} \
 		--with-os-vendor="Mandriva" \
-		--with-os-name=\"`uname -s -r`\" \
+		--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 		%if %{with_debug}
   		--enable-debug \
 		%else
