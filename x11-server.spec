@@ -14,7 +14,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 18
+Release: %mkrel 19
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -68,7 +68,6 @@ Patch10: 0010-Xephyr-evdev-support.txt
 Patch17: 0017-Fix-index-matching-of-visuals.txt 
 Patch18: 0018-vnc-support.txt 
 Patch32: 0032-no-move-damage.txt
-Patch33: 0033-dont-backfill-bg-none.txt
 Patch34: 0034-offscreen-pixmaps.txt
 Patch37: 0037-fdo8991-xorg-server-1.1.99.901-glXDRIbindTexImage-target.txt
 Patch38: 0038-fdo9367-libdrm-ignore-load-requests-fixes-fglrx.txt
@@ -83,6 +82,7 @@ Patch47: xorg-server-cursor-and-randr-fixes.patch
 # Some debug for patch49
 Patch48: xorg-server-cursor-debug.patch
 Patch49: x11-server-1.3.0-reput_video_fix.patch
+Patch50: xorg-git-CVE-2007-4730.patch
 
 # ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
 # Description of what each patch is for can be seen inside the patch files
@@ -814,7 +814,6 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch18 -p0 -b .vnc
 %endif
 %patch32 -p0 -b .no_move_damage
-%patch33 -p0 -b .dont_backfill
 %patch34 -p0 -b .offscreen_pixmaps
 %patch37 -p1 -b .glxdribindteximage
 %patch38 -p0 -b .libdrm_fix
