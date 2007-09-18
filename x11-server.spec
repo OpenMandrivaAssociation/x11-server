@@ -1,4 +1,4 @@
-%define with_debug 1
+%define with_debug 0
 %define kdrive_builds_vesa 0
 %define enable_xvnc 1
 
