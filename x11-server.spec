@@ -84,6 +84,10 @@ Patch48: xorg-server-cursor-debug.patch
 Patch49: x11-server-1.3.0-reput_video_fix.patch
 Patch50: xorg-git-CVE-2007-4730.patch
 
+# see bug #31183 for patch51 & patch52
+Patch51: xorg-server-1.3.0.0-fix-parsing-edid.patch
+Patch52: xorg-server-1.3.0.0-search-best-DPI-using-also-width.patch
+
 # ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
 # Description of what each patch is for can be seen inside the patch files
 Patch100: 0100-Set-the-crtc-before-the-output-change-is-notified.patch
