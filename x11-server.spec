@@ -831,6 +831,9 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %endif
 %patch49 -p1 -b .reput_video
 
+%patch51 -p1 -b .parse_edid
+%patch52 -p1 -b .best_with_width
+
 # randr1.2 fixes
 %patch100 -p1 -b .set_crtc
 %patch101 -p1 -b .fix_crtc_old_randr
