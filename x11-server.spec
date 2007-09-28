@@ -14,7 +14,7 @@
 
 Name: x11-server
 Version: 1.3.0.0
-Release: %mkrel 22
+Release: %mkrel 23
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -88,10 +88,6 @@ Patch50: xorg-git-CVE-2007-4730.patch
 Patch51: xorg-server-1.3.0.0-fix-parsing-edid.patch
 Patch52: xorg-server-1.3.0.0-search-best-DPI-using-also-width.patch
 
-# [pix] fix deadloop occurring if preferred resolution (PreferredMode)
-# matches more than one mode
-Patch53: xorg-server-1.3.0.0-fix-deadloop-using-PreferredMode.patch
-
 # patch from Fedora that ensures backward compatibility with previous Xorg behaviour:
 # prefered mode is the first Modes in Subsection "Display"
 Patch54: xserver-1.3.0-randr12-config-hack.patch
@@ -126,6 +122,11 @@ Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
 Patch126: 0126-find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix.patch
 Patch127: 0127-24_32_pixmap_wmaker_kde_crash.patch
+
+# [pix] fix deadloop occurring if preferred resolution (PreferredMode)
+# matches more than one mode
+Patch128: 0128-xorg-server-1.3.0.0-fix-deadloop-using-PreferredMode.patch
+
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
@@ -840,7 +841,6 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 %patch51 -p1 -b .parse_edid
 %patch52 -p1 -b .best_with_width
-%patch53 -p1 -b .deadloop
 %patch54 -p1 -b .prefer_Modes
 
 # randr1.2 fixes
@@ -872,6 +872,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch125 -p1 -b .only_fixed_fonts
 %patch126 -p1 -b .find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix
 %patch127 -p1 -b .pixmap_wmaker_kde_crash
+%patch128 -p1 -b .deadloop
 
 %build
 autoreconf -ifs
