@@ -1,9 +1,15 @@
+# xorg-1.4 TODO:
+#  . VNC support is disabled (requires a big patch)
+#  . dmx support is disabled (compilation is broken)
+#  . see FIXMEs (specially patches which should be checked/reviewed)
+
 %define with_debug 0
 %define kdrive_builds_vesa 0
-%define enable_xvnc 1
+%define enable_xvnc 0
+%define enable_dmx 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
-%define mesaver 6.5.3
+%define mesaver 7.0.1
 
 %ifarch %{ix86} alpha
 %define kdrive_builds_vesa 1
@@ -13,8 +19,8 @@
 %define priority 500
 
 Name: x11-server
-Version: 1.3.0.0
-Release: %mkrel 24
+Version: 1.4
+Release: %mkrel 1
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -26,7 +32,9 @@ License: MIT
 BuildRoot: %{_tmppath}/%{name}-root
 Obsoletes: x11-server13 <= 1.2.99.905
 
+%if %enable_dmx
 BuildRequires: libdmx-devel >= 1.0.1
+%endif
 BuildRequires: libfontenc-devel >= 1.0.1
 BuildRequires: libmesagl-devel >= %{mesaver}
 BuildRequires: libxau-devel >= 1.0.0
@@ -35,27 +43,27 @@ BuildRequires: libxdmcp-devel >= 1.0.0
 BuildRequires: libxext-devel >= 1.0.0
 BuildRequires: libxfont-devel >= 1.2.8-2mdv
 BuildRequires: libxfixes-devel
-BuildRequires: libxi-devel >= 1.0.0
-BuildRequires: libxkbfile-devel >= 1.0.1
+BuildRequires: libxi-devel >= 1.1.3
+BuildRequires: libxkbfile-devel >= 1.0.4
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxkbui-devel >= 1.0.1
 BuildRequires: libxmu-devel >= 1.0.0
 BuildRequires: libxpm-devel >= 3.5.4.2
-BuildRequires: libxrender-devel >= 0.9.0.2
+BuildRequires: libxrender-devel >= 0.9.4
 BuildRequires: libxres-devel >= 1.0.0
 BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxxf86misc-devel >= 1.0.0
 BuildRequires: libxxf86vm-devel >= 1.0.0
 BuildRequires: libxfont-devel >= 1.0.0
 BuildRequires: mesa-source >= %{mesaver}
-BuildRequires: x11-proto-devel >= 1.0.3-2
-BuildRequires: x11-util-macros >= 1.0.1
-BuildRequires: x11-xtrans-devel >= 1.0.0
-BuildRequires: libdmx-devel >= 1.0.1
+BuildRequires: x11-proto-devel >= 1.4.0
+BuildRequires: x11-util-macros >= 1.1.5
+BuildRequires: x11-xtrans-devel >= 1.0.3
 BuildRequires: libpam-devel
 BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
 BuildRequires: libgii-devel
+BuildRequires: libpixman-1-devel >= 0.9.5
 # for VNC:
 BuildRequires: libjpeg-devel
 
@@ -70,19 +78,13 @@ Patch18: 0018-vnc-support.txt
 Patch32: 0032-no-move-damage.txt
 Patch34: 0034-offscreen-pixmaps.txt
 Patch37: 0037-fdo8991-xorg-server-1.1.99.901-glXDRIbindTexImage-target.txt
-Patch38: 0038-fdo9367-libdrm-ignore-load-requests-fixes-fglrx.txt
-Patch40: xorg-server-1.2.0-xvfb-run.patch
+Patch40: xorg-server-1.4-xvfb-run.patch
 Patch42: x11-server-64bit_fixes.patch
 
-Patch43: xorg-server-1.3.0.0-mesa-6.5.3.patch
-Patch44: xorg-server-1.3.0.0-glinterface.patch
-Patch45: xorg-server-1.3.0.0-glinterface2.patch
-Patch46: xorg-server-fontpath_d-doc.patch
+Patch45: 0001-Add-xorg.conf-man-section-about-catalogue-dir-FPE.patch
+Patch46: 0002-Add-Xserver-man-section-about-catalogue-dir-FPE.patch
+
 Patch47: xorg-server-cursor-and-randr-fixes.patch
-# Some debug for patch49
-Patch48: xorg-server-cursor-debug.patch
-Patch49: x11-server-1.3.0-reput_video_fix.patch
-Patch50: xorg-git-CVE-2007-4730.patch
 
 # see bug #31183 for patch51 & patch52
 Patch51: xorg-server-1.3.0.0-fix-parsing-edid.patch
@@ -94,33 +96,10 @@ Patch54: xserver-1.3.0-randr12-config-hack.patch
 
 # ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
 # Description of what each patch is for can be seen inside the patch files
-Patch100: 0100-Set-the-crtc-before-the-output-change-is-notified.patch
-Patch101: 0101-Fix-the-output-crtc-initialization-in-the-old-randr.patch
-Patch102: 0102-Fix-a-crash-when-rotating-the-screen.patch
-Patch103: 0103-RRScanOldConfig-wasn-t-getting-crtcs-set-correctly.patch
-Patch104: 0104-RRScanOldConfig-cannot-use-RRFirstOutput-before-outp.patch
-Patch105: 0105-Allocate-the-right-number-of-entries-for-saving-cr.patch
-Patch106: 0106-Decrement-mode-count-when-removing-RandR-output-mode.patch
-Patch107: 0107-Make-PreferredMode-option-in-config-file-override-ED.patch
-Patch108: 0108-Query-modes-on-disabled-but-not-ignored-outputs.patch
-Patch109: 0109-Make-pending-property-changes-trigger-mode-setting.patch
-Patch110: 0110-Screen-size-bounds-check-in-ProcRRSetCrtcConfig-not.patch
-Patch111: 0111-Skip-driver-mode-detection-configuration-when-vtSem.patch
-Patch112: 0112-Disable-all-outputs-and-crtcs-at-startup.patch
-Patch113: 0113-Don-t-call-xf86RandR12TellChanged-if-it-doesn-t-exis.patch
-Patch114: 0114-Adjust-the-screen-pixmap-s-dimensions-in-xf86RandR12.patch
-Patch115: 0115-Include-xf86Rename.h-in-xf86RandR12.h.patch
-Patch116: 0116-Use-Screen-block-handler-for-rotation-to-draw-under.patch
-Patch117: 0117-Fix-mode-validation-against-the-maximum-X-Y-values-c.patch
 Patch118: 0118-Fix-sync-polarity-on-Samsung-SyncMaster-205BW-monito.patch
 Patch119: 0119-Bug-10814-Add-needed-quirk-for-Samsung-225BW-like.patch
-Patch120: 0120-Add-RandR-reflection-support.patch
-Patch121: 0121-MakeAtom-needs-length-without-trailing-NUL.-sizeof.patch
-Patch122: 0122-Include-picturestr.h-in-xf86Crtc.h-to-pick-up-defini.patch
-Patch123: 0123-Disable-RANDR-s-fake-Xinerama-protocol-when-there-s.patch
 Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
-Patch126: 0126-find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix.patch
 Patch127: 0127-24_32_pixmap_wmaker_kde_crash.patch
 
 # [pix] fix deadloop occurring if preferred resolution (PreferredMode)
@@ -130,7 +109,9 @@ Patch128: 0128-xorg-server-1.3.0.0-fix-deadloop-using-PreferredMode.patch
 # -----------------------------------------------------------------------------
 
 Requires: %{name}-xorg
+%if %enable_dmx
 Requires: %{name}-xdmx
+%endif
 Requires: %{name}-xnest
 Requires: %{name}-xvfb
 
@@ -256,11 +237,14 @@ fi
 %{_bindir}/out*
 %{_bindir}/pcitweak
 %{_bindir}/scanpci
+%if %enable_dmx
 %{_bindir}/vdltodmx
+%endif
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
-%ghost %{_libdir}/xorg/modules/extensions/libglx.so
+# FIXME why this ghost file? rpm-build fails with "file listed twice"
+#%ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/xorgcfg.*
@@ -269,9 +253,12 @@ fi
 %{_mandir}/man1/cvt.*
 %{_mandir}/man1/pcitweak.*
 %{_mandir}/man1/scanpci.*
+%if %enable_dmx
 %{_mandir}/man1/vdltodmx.*
+%endif
 %{_mandir}/man4/fbdevhw.*
 %{_mandir}/man4/exa.*
+%{_mandir}/man5/SecurityPolicy.*
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %dir %{_prefix}/X11R6/lib/X11
@@ -315,6 +302,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 
 #------------------------------------------------------------------------------
 
+%if %enable_dmx
 %package xdmx
 Summary: Distributed Multi-head X server
 Group: System/X11
@@ -345,6 +333,7 @@ and standard and/or commonly available X server extensions.
 %{_mandir}/man1/Xdmx.*
 %{_mandir}/man1/xdmxconfig.*
 %{_mandir}/man1/dmxtodmx.*
+%endif
 
 #------------------------------------------------------------------------------
 
@@ -425,8 +414,6 @@ VNC clients access to the 'virtual' display it provides.
 %files xvnc
 %defattr(-,root,root)
 %{_bindir}/Xvnc
-#{_mandir}/man1/Xvnc.*
-
 %endif
 #------------------------------------------------------------------------------
 
@@ -633,28 +620,6 @@ This KDrive server is targetted for mga chipsets.
 
 #------------------------------------------------------------------------------
  
-%package xneomagic
-Summary: KDrive neomagic X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xneomagic
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for neomagic chipsets.
-
-%if %kdrive_builds_vesa
-%files xneomagic
-%defattr(-,root,root)
-%{_bindir}/Xneomagic
-%endif
-
-#------------------------------------------------------------------------------
- 
 %package xnvidia
 Summary: KDrive nvidia X server
 Group: System/X11
@@ -814,65 +779,39 @@ This KDrive server is targetted for VIA chipsets.
 cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 #patches
-%patch43 -p2 -b .mesa653
-%patch44 -p1 -b .glinterface
-%patch45 -p0 -b .glinterface2
-
 %patch3  -p1 -b .xwrapper
-%patch4  -p1 -b .blue_bg
+#%patch4  -p1 -b .blue_bg -- FIXME
 %patch7  -p1 -b .vt7
-%patch10 -p1 -b .evdev
-%patch17 -p1 -b .visual_index_matching
+
+#%patch10 -p1 -b .evdev -- FIXME
+#%patch17 -p1 -b .visual_index_matching -- FIXME
+
 %if %enable_xvnc
-%patch18 -p0 -b .vnc
+#%patch18 -p0 -b .vnc -- FIXME
 %endif
 %patch32 -p0 -b .no_move_damage
 %patch34 -p0 -b .offscreen_pixmaps
-%patch37 -p1 -b .glxdribindteximage
-%patch38 -p0 -b .libdrm_fix
+#%patch37 -p1 -b .glxdribindteximage -- FIXME
 %patch40 -p1 -b .xvfb
-%patch42 -p1 -b .64bit_fixes
+#%patch42 -p1 -b .64bit_fixes -- FIXME
+#%patch47 -p1 -b .cursor_crash -- FIXME
+
+%patch45 -p1 -b .fontpath_d
 %patch46 -p1 -b .fontpath_d
-%patch47 -p1 -b .cursor_crash
-%if %{with_debug}
-%patch48 -p1 -b .cursor_crash_debug
-%endif
-%patch49 -p1 -b .reput_video
 
 %patch51 -p1 -b .parse_edid
 %patch52 -p1 -b .best_with_width
-%patch54 -p1 -b .prefer_Modes
+#%patch54 -p1 -b .prefer_Modes -- FIXME
 
 # randr1.2 fixes
-%patch100 -p1 -b .set_crtc
-%patch101 -p1 -b .fix_crtc_old_randr
-%patch102 -p1 -b .crash_on_rotate
-%patch103 -p1 -b .fix_rrscanoldconfig
-%patch104 -p1 -b .do_not_use_rrfirstoutput
-%patch105 -p1 -b .fix_memory_corruption
-%patch106 -p1 -b .decrement_mode_count
-%patch107 -p1 -b .preferred_mode
-%patch108 -p1 -b .query_modes_on_disabled
-%patch109 -p1 -b .pending_property
-%patch110 -p1 -b .screen_bounds_check
-%patch111 -p1 -b .skip_when_vtsema
-%patch112 -p1 -b .disable_at_startup
-%patch113 -p1 -b .fix_xf86randr12tellchanged_call
-%patch114 -p1 -b .pixmap_dimensions
-%patch115 -p1 -b .xf86rename_include
-%patch116 -p1 -b .block_handler
-%patch117 -p1 -b .validate_maximum
 %patch118 -p1 -b .syncmaster_205bw_polarity
-%patch119 -p1 -b .syncmaster_225bw_quirk
-%patch120 -p1 -b .randr_reflection
-%patch121 -p1 -b .atom_lenght
-%patch122 -p1 -b .include_picturestr
-%patch123 -p1 -b .disable_randr_on_multiple_screens
+#%patch119 -p1 -b .syncmaster_225bw_quirk -- FIXME
 %patch124 -p1 -b .no_mouse_keys
 %patch125 -p1 -b .only_fixed_fonts
-%patch126 -p1 -b .find_mesa_visual_offby_one_error_and_possibly_remote_gl_fix
 %patch127 -p1 -b .pixmap_wmaker_kde_crash
+
 %patch128 -p1 -b .deadloop
+
 
 %build
 autoreconf -ifs
@@ -929,7 +868,9 @@ CFLAGS='-DBUILDDEBUG -g' \
   		--enable-xvnc \
   		--disable-xdmx-vnc \
 		%endif
+		%if %enable_dmx
   		--enable-dmx \
+		%endif
   		--enable-xvfb \
   		--enable-xnest \
   		--disable-xwin \
@@ -938,6 +879,7 @@ CFLAGS='-DBUILDDEBUG -g' \
   		--disable-xglx \
   		--disable-xegl \
   		--enable-kdrive \
+  		--enable-xfake \
   		--enable-xephyr \
   		--enable-xsdl \
 		--disable-freetype \
