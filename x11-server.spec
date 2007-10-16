@@ -20,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 1
+Release: %mkrel 2
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -128,6 +128,7 @@ License: MIT
 %define oldxorgnamedevel  %mklibname xorg-x11
 Conflicts: %{oldxorgnamedevel}-devel < 7.0
 Obsoletes: x11-server13-devel <= 1.2.99.905
+Requires: libpixman-1-devel
 
 %description devel
 Development files for %{name}
