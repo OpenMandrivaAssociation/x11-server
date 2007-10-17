@@ -20,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 2
+Release: %mkrel 3
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -244,8 +244,10 @@ fi
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
-# FIXME why this ghost file? rpm-build fails with "file listed twice"
-#%ghost %{_libdir}/xorg/modules/extensions/libglx.so
+# (anssi) We do not want this file to really exist, it is empty.
+# This entry causes an rpm-build warning "file listed twice", but getting rid
+# of the warning would need us to list all the other extensions one-by-one.
+%ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/xorgcfg.*
