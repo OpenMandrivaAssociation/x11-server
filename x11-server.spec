@@ -780,7 +780,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 #patches
 %patch3  -p1 -b .xwrapper
-%patch4  -p1 -b .blue_bg
+#%patch4  -p1 -b .blue_bg
 %patch7  -p1 -b .vt7
 
 #%patch10 -p1 -b .evdev -- FIXME
