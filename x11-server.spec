@@ -20,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 3
+Release: %mkrel 4
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -70,7 +70,7 @@ BuildRequires: libjpeg-devel
 
 # --------- Patches ----------------------------------------------------------
 Patch3:  0003-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-give-X-root-privileges.txt
-Patch4:  0004-Blue-background-on-startup.txt
+Patch4:  xorg-server-1.4-blue-background.patch
 Patch7:  0007-find-free-VT.txt
 Patch10: 0010-Xephyr-evdev-support.txt 
 Patch17: 0017-Fix-index-matching-of-visuals.txt 
@@ -84,8 +84,6 @@ Patch42: x11-server-64bit_fixes.patch
 Patch45: 0001-Add-xorg.conf-man-section-about-catalogue-dir-FPE.patch
 Patch46: 0002-Add-Xserver-man-section-about-catalogue-dir-FPE.patch
 
-Patch47: xorg-server-cursor-and-randr-fixes.patch
-
 # see bug #31183 for patch51 & patch52
 Patch51: xorg-server-1.3.0.0-fix-parsing-edid.patch
 Patch52: xorg-server-1.3.0.0-search-best-DPI-using-also-width.patch
@@ -97,7 +95,6 @@ Patch54: xserver-1.3.0-randr12-config-hack.patch
 # ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
 # Description of what each patch is for can be seen inside the patch files
 Patch118: 0118-Fix-sync-polarity-on-Samsung-SyncMaster-205BW-monito.patch
-Patch119: 0119-Bug-10814-Add-needed-quirk-for-Samsung-225BW-like.patch
 Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
 Patch127: 0127-24_32_pixmap_wmaker_kde_crash.patch
@@ -783,7 +780,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 #patches
 %patch3  -p1 -b .xwrapper
-#%patch4  -p1 -b .blue_bg -- FIXME
+%patch4  -p1 -b .blue_bg
 %patch7  -p1 -b .vt7
 
 #%patch10 -p1 -b .evdev -- FIXME
@@ -797,7 +794,6 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 #%patch37 -p1 -b .glxdribindteximage -- FIXME
 %patch40 -p1 -b .xvfb
 #%patch42 -p1 -b .64bit_fixes -- FIXME
-#%patch47 -p1 -b .cursor_crash -- FIXME
 
 %patch45 -p1 -b .fontpath_d
 %patch46 -p1 -b .fontpath_d
@@ -808,7 +804,6 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 # randr1.2 fixes
 %patch118 -p1 -b .syncmaster_205bw_polarity
-#%patch119 -p1 -b .syncmaster_225bw_quirk -- FIXME
 %patch124 -p1 -b .no_mouse_keys
 %patch125 -p1 -b .only_fixed_fonts
 %patch127 -p1 -b .pixmap_wmaker_kde_crash
