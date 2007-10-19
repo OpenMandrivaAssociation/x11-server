@@ -4,7 +4,7 @@
 
 %define with_debug 0
 %define kdrive_builds_vesa 0
-%define enable_xvnc 1
+%define enable_xvnc 0
 %define enable_dmx 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
@@ -829,6 +829,7 @@ CFLAGS='-DBUILDDEBUG -g' \
   		--enable-composite \
   		--enable-shm \
   		--enable-xres \
+  		--enable-xtrap \
   		--enable-record \
   		--enable-xv \
   		--enable-xvmc \
