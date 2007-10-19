@@ -93,6 +93,10 @@ Patch52: xorg-server-1.3.0.0-search-best-DPI-using-also-width.patch
 # prefered mode is the first Modes in Subsection "Display"
 Patch54: xserver-1.3.0-randr12-config-hack.patch
 
+# Suport for keyboard events handled by SIGIO and saving stack context using
+# sigsetjmp/siglongjmp to try to recover from errors
+Patch100: xorg-server-1.4-save-context.patch
+
 # ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
 # Description of what each patch is for can be seen inside the patch files
 Patch118: 0118-Fix-sync-polarity-on-Samsung-SyncMaster-205BW-monito.patch
@@ -805,6 +809,8 @@ chmod a+x hw/vnc/symlink-vnc.sh
 %patch52 -p1 -b .best_with_width
 #%patch54 -p1 -b .prefer_Modes -- FIXME
 
+%patch100 -p1 -b .save-context
+
 # randr1.2 fixes
 %patch118 -p1 -b .syncmaster_205bw_polarity
 %patch124 -p1 -b .no_mouse_keys
@@ -832,7 +838,6 @@ CFLAGS='-DBUILDDEBUG -g' \
   		--enable-composite \
   		--enable-shm \
   		--enable-xres \
-  		--enable-xtrap \
   		--enable-record \
   		--enable-xv \
   		--enable-xvmc \
@@ -892,6 +897,7 @@ CFLAGS='-DBUILDDEBUG -g' \
 		--enable-pam \
 		--with-fontdir="%{_datadir}/fonts" \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
+pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 %make
 
 %install
