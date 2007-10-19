@@ -5,7 +5,7 @@
 
 %define with_debug 0
 %define kdrive_builds_vesa 0
-%define enable_xvnc 0
+%define enable_xvnc 1
 %define enable_dmx 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
@@ -74,7 +74,8 @@ Patch4:  xorg-server-1.4-blue-background.patch
 Patch7:  0007-find-free-VT.txt
 Patch10: 0010-Xephyr-evdev-support.txt 
 Patch17: 0017-Fix-index-matching-of-visuals.txt 
-Patch18: 0018-vnc-support.txt 
+Patch18: 0018-vnc-support.txt
+Patch19: 0018-vnc-support-1.4.patch
 Patch32: 0032-no-move-damage.txt
 Patch34: 0034-offscreen-pixmaps.txt
 Patch37: 0037-fdo8991-xorg-server-1.1.99.901-glXDRIbindTexImage-target.txt
@@ -787,7 +788,9 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 #%patch17 -p1 -b .visual_index_matching -- FIXME
 
 %if %enable_xvnc
-#%patch18 -p0 -b .vnc -- FIXME
+%patch18 -p1 -b .vnc
+chmod a+x hw/vnc/symlink-vnc.sh
+%patch19 -p0 -b .vnc_14
 %endif
 %patch32 -p0 -b .no_move_damage
 %patch34 -p0 -b .offscreen_pixmaps
@@ -862,12 +865,12 @@ CFLAGS='-DBUILDDEBUG -g' \
 		--enable-xfree86-utils \
   		--enable-xorg \
 		%if %enable_xvnc
-  		--enable-xorg-vnc \
   		--enable-xvnc \
-  		--disable-xdmx-vnc \
 		%endif
 		%if %enable_dmx
   		--enable-dmx \
+		%else
+		--disable-dmx \
 		%endif
   		--enable-xvfb \
   		--enable-xnest \
