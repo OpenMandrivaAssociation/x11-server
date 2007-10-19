@@ -1,5 +1,4 @@
 # xorg-1.4 TODO:
-#  . VNC support is disabled (requires a big patch)
 #  . dmx support is disabled (compilation is broken)
 #  . see FIXMEs (specially patches which should be checked/reviewed)
 
@@ -20,7 +19,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 5
+Release: %mkrel 6
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -78,20 +77,19 @@ Patch18: 0018-vnc-support.txt
 Patch19: 0018-vnc-support-1.4.patch
 Patch32: 0032-no-move-damage.txt
 Patch34: 0034-offscreen-pixmaps.txt
-Patch37: 0037-fdo8991-xorg-server-1.1.99.901-glXDRIbindTexImage-target.txt
 Patch40: xorg-server-1.4-xvfb-run.patch
 Patch42: x11-server-64bit_fixes.patch
 
 Patch45: 0001-Add-xorg.conf-man-section-about-catalogue-dir-FPE.patch
 Patch46: 0002-Add-Xserver-man-section-about-catalogue-dir-FPE.patch
 
+# patch from git that ensures backward compatibility with previous Xorg behaviour:
+# prefered mode is the first Modes in Subsection "Display"
+Patch50: 0001-Make-config-file-preferred-mode-override-monitor-pre.patch
+
 # see bug #31183 for patch51 & patch52
 Patch51: xorg-server-1.3.0.0-fix-parsing-edid.patch
-Patch52: xorg-server-1.3.0.0-search-best-DPI-using-also-width.patch
-
-# patch from Fedora that ensures backward compatibility with previous Xorg behaviour:
-# prefered mode is the first Modes in Subsection "Display"
-Patch54: xserver-1.3.0-randr12-config-hack.patch
+Patch52: xorg-server-1.4-search-best-DPI-using-also-width.patch
 
 # Suport for keyboard events handled by SIGIO and saving stack context using
 # sigsetjmp/siglongjmp to try to recover from errors
@@ -103,10 +101,6 @@ Patch118: 0118-Fix-sync-polarity-on-Samsung-SyncMaster-205BW-monito.patch
 Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
 Patch127: 0127-24_32_pixmap_wmaker_kde_crash.patch
-
-# [pix] fix deadloop occurring if preferred resolution (PreferredMode)
-# matches more than one mode
-Patch128: 0128-xorg-server-1.3.0.0-fix-deadloop-using-PreferredMode.patch
 
 # -----------------------------------------------------------------------------
 
@@ -785,7 +779,7 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 #patches
 %patch3  -p1 -b .xwrapper
-#%patch4  -p1 -b .blue_bg
+%patch4  -p1 -b .blue_bg
 %patch7  -p1 -b .vt7
 
 #%patch10 -p1 -b .evdev -- FIXME
@@ -798,16 +792,15 @@ chmod a+x hw/vnc/symlink-vnc.sh
 %endif
 %patch32 -p0 -b .no_move_damage
 %patch34 -p0 -b .offscreen_pixmaps
-#%patch37 -p1 -b .glxdribindteximage -- FIXME
 %patch40 -p1 -b .xvfb
 #%patch42 -p1 -b .64bit_fixes -- FIXME
 
 %patch45 -p1 -b .fontpath_d
 %patch46 -p1 -b .fontpath_d
 
+%patch50 -p1 -b .prefer_Modes
 %patch51 -p1 -b .parse_edid
 %patch52 -p1 -b .best_with_width
-#%patch54 -p1 -b .prefer_Modes -- FIXME
 
 %patch100 -p1 -b .save-context
 
@@ -816,8 +809,6 @@ chmod a+x hw/vnc/symlink-vnc.sh
 %patch124 -p1 -b .no_mouse_keys
 %patch125 -p1 -b .only_fixed_fonts
 %patch127 -p1 -b .pixmap_wmaker_kde_crash
-
-%patch128 -p1 -b .deadloop
 
 
 %build
