@@ -101,6 +101,7 @@ Patch118: 0118-Fix-sync-polarity-on-Samsung-SyncMaster-205BW-monito.patch
 Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
 Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
 Patch127: 0127-24_32_pixmap_wmaker_kde_crash.patch
+Patch128: xorg-server-1.4-keyboard-leds.patch
 
 # -----------------------------------------------------------------------------
 
@@ -809,6 +810,7 @@ chmod a+x hw/vnc/symlink-vnc.sh
 %patch124 -p1 -b .no_mouse_keys
 %patch125 -p1 -b .only_fixed_fonts
 %patch127 -p1 -b .pixmap_wmaker_kde_crash
+%patch128 -p1 -b .keyboard-leds
 
 
 %build
