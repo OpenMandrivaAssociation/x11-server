@@ -75,6 +75,8 @@ Patch10: 0010-Xephyr-evdev-support.txt
 Patch17: 0017-Fix-index-matching-of-visuals.txt 
 Patch18: 0018-vnc-support.txt
 Patch19: 0018-vnc-support-1.4.patch
+Patch20: 0018-vnc-support-1.4-64bit.patch
+Patch21: 0018-vnc-support-1.4-include-path.patch
 Patch32: 0032-no-move-damage.txt
 Patch34: 0034-offscreen-pixmaps.txt
 Patch40: xorg-server-1.4-xvfb-run.patch
@@ -790,6 +792,8 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch18 -p1 -b .vnc
 chmod a+x hw/vnc/symlink-vnc.sh
 %patch19 -p0 -b .vnc_14
+%patch20 -p0 -b .x86_64
+%patch21 -p1 -b .incpath
 %endif
 %patch32 -p0 -b .no_move_damage
 %patch34 -p0 -b .offscreen_pixmaps
