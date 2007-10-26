@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 6
+Release: %mkrel 7
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -143,10 +143,12 @@ fi
 %dir %{_includedir}/X11/bitmaps
 %dir %{_includedir}/X11/pixmaps
 %{_includedir}/xorg/*.h
-%{_includedir}/X11/bitmaps/*
-%{_includedir}/X11/pixmaps/*
 %{_libdir}/pkgconfig/xorg-server.pc
 %{_datadir}/aclocal/xorg-server.m4
+# Don't add xorgcfg bitmaps to server devel
+%{_includedir}/X11/bitmaps/??
+%{_includedir}/X11/bitmaps/???
+%{_includedir}/X11/bitmaps/*[^.]???
 
 #------------------------------------------------------------------------------
 
@@ -264,6 +266,9 @@ fi
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %dir %{_prefix}/X11R6/lib/X11
+# xorgcfg bitmaps/pixmaps
+%{_includedir}/X11/bitmaps/*.xbm
+%{_includedir}/X11/pixmaps/*.xpm
 
 
 #------------------------------------------------------------------------------
