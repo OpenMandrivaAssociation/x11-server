@@ -145,10 +145,6 @@ fi
 %{_includedir}/xorg/*.h
 %{_libdir}/pkgconfig/xorg-server.pc
 %{_datadir}/aclocal/xorg-server.m4
-# Don't add xorgcfg bitmaps to server devel
-%{_includedir}/X11/bitmaps/??
-%{_includedir}/X11/bitmaps/???
-%{_includedir}/X11/bitmaps/*[^.]???
 
 #------------------------------------------------------------------------------
 
