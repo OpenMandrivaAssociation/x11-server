@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 8
+Release: %mkrel 7
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -68,6 +68,10 @@ BuildRequires: libjpeg-devel
 
 
 # --------- Patches ----------------------------------------------------------
+
+# git-diff xorg-server-1.4 origin/server-1.4-branch
+Patch0: xorg-server-1.4-git-branch-fixes-2007-11-06.patch
+
 Patch3:  0003-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-give-X-root-privileges.txt
 Patch4:  xorg-server-1.4-blue-background.patch
 Patch7:  0007-find-free-VT.txt
@@ -781,7 +785,7 @@ This KDrive server is targetted for VIA chipsets.
 # xvfb-run
 cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
-#patches
+%patch0  -p1 -b .git
 %patch3  -p1 -b .xwrapper
 %patch4  -p1 -b .blue_bg
 %patch7  -p1 -b .vt7
