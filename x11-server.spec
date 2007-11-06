@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 7
+Release: %mkrel 8
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
