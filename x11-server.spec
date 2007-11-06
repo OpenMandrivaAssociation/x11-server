@@ -1,10 +1,6 @@
-# xorg-1.4 TODO:
-#  . dmx support is disabled (compilation is broken)
-#  . see FIXMEs (specially patches which should be checked/reviewed)
-
 %define with_debug 0
 %define kdrive_builds_vesa 0
-%define enable_xvnc 0
+%define enable_xvnc 1
 %define enable_dmx 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
@@ -19,7 +15,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 9
+Release: %mkrel 10
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -75,8 +71,6 @@ Patch0: xorg-server-1.4-git-branch-fixes-2007-11-06.patch
 Patch3:  0003-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-give-X-root-privileges.txt
 Patch4:  xorg-server-1.4-blue-background.patch
 Patch7:  0007-find-free-VT.txt
-Patch10: 0010-Xephyr-evdev-support.txt 
-Patch17: 0017-Fix-index-matching-of-visuals.txt 
 Patch18: 0018-vnc-support.txt
 Patch19: 0018-vnc-support-1.4.patch
 Patch20: 0018-vnc-support-1.4-64bit.patch
@@ -84,7 +78,6 @@ Patch21: 0018-vnc-support-1.4-include-path.patch
 Patch32: 0032-no-move-damage.txt
 Patch34: 0034-offscreen-pixmaps.txt
 Patch40: xorg-server-1.4-xvfb-run.patch
-Patch42: x11-server-64bit_fixes.patch
 
 Patch45: 0001-Add-xorg.conf-man-section-about-catalogue-dir-FPE.patch
 Patch46: 0002-Add-Xserver-man-section-about-catalogue-dir-FPE.patch
@@ -285,8 +278,6 @@ Requires: x11-driver-input-mouse
 Requires: x11-driver-input-keyboard
 Conflicts: compiz < 0.5.0-1mdv2007.1
 Obsoletes: x11-server13-xorg <= 1.2.99.905
-#Obsoletes: xorg-x11-server < 7.0
-#Provides: xorg-x11-server = 7.0
 
 # because of fontpath.d support
 Requires: libxfont >= 1.2.8-2mdv
@@ -315,8 +306,6 @@ Summary: Distributed Multi-head X server
 Group: System/X11
 License: MIT
 Requires: x11-server-common = %{version}-%{release}
-#Obsoletes: xorg-x11-Xdmx < 7.0
-#Provides: xorg-x11-Xdmx = 7.0
 
 %description xdmx
 Xdmx is a proxy X server that uses one or more other X servers
@@ -349,8 +338,6 @@ Summary: A nested X server
 Group: System/X11
 License: MIT
 Requires: x11-server-common = %{version}-%{release}
-#Obsoletes: xorg-x11-Xnest < 7.0
-#Provides: xorg-x11-Xnest = 7.0
 
 %description xnest
 Xnest is an X Window System server which runs in an X window.
@@ -376,8 +363,6 @@ Group: System/X11
 License: MIT
 Requires: x11-server-common = %{version}-%{release}
 Requires: xauth
-#Obsoletes: xorg-x11-Xvfb < 7.0
-#Provides: xorg-x11-Xvfb = 7.0
 
 %description xvfb
 Xvfb (X Virtual Frame Buffer) is an X Windows System server
@@ -411,8 +396,6 @@ Summary: X VNC server
 Group: System/X11
 License: GPL
 Requires: x11-server-common = %{version}-%{release}
-#Obsoletes: xorg-x11-Xvnc < 7.0
-#Provides: xorg-x11-Xvnc = 7.0
 
 %description xvnc
 Xvnc is a virtual X Windows System server like Xvfb, but it allows 
@@ -790,9 +773,6 @@ cp %{SOURCE2} %{SOURCE3} hw/vfb/
 %patch4  -p1 -b .blue_bg
 %patch7  -p1 -b .vt7
 
-#%patch10 -p1 -b .evdev -- FIXME
-#%patch17 -p1 -b .visual_index_matching -- FIXME
-
 %if %enable_xvnc
 %patch18 -p1 -b .vnc
 chmod a+x hw/vnc/symlink-vnc.sh
@@ -803,7 +783,6 @@ chmod a+x hw/vnc/symlink-vnc.sh
 %patch32 -p0 -b .no_move_damage
 %patch34 -p0 -b .offscreen_pixmaps
 %patch40 -p1 -b .xvfb
-#%patch42 -p1 -b .64bit_fixes -- FIXME
 
 %patch45 -p1 -b .fontpath_d
 %patch46 -p1 -b .fontpath_d
