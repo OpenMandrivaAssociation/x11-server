@@ -1,4 +1,4 @@
-%define with_debug 1
+%define with_debug 0
 %define kdrive_builds_vesa 0
 %define enable_xvnc 0
 %define enable_dmx 0
@@ -15,7 +15,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 11
+Release: %mkrel 12
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -66,8 +66,7 @@ BuildRequires: libjpeg-devel
 # --------- Patches ----------------------------------------------------------
 
 # git-diff xorg-server-1.4 origin/server-1.4-branch
-Patch0: xorg-server-1.4-git-branch-fixes-2007-11-07.patch
-
+Patch0: xorg-server-1.4-git-branch-fixes-2007-11-13.patch
 Patch1:  xorg-server-1.4-fix-keyboard-events.patch
 
 Patch3:  0003-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-give-X-root-privileges.txt
