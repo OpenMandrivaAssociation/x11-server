@@ -59,6 +59,7 @@ BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
 BuildRequires: libgii-devel
 BuildRequires: libpixman-1-devel >= 0.9.5
+# so that input-hotplug is enabled:
 BuildRequires: libhal-devel
 BuildRequires: libdbus-1-devel
 # for VNC:
