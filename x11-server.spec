@@ -15,7 +15,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 13
+Release: %mkrel 14
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -59,6 +59,8 @@ BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
 BuildRequires: libgii-devel
 BuildRequires: libpixman-1-devel >= 0.9.5
+BuildRequires: libhal-devel
+BuildRequires: libdbus-1-devel
 # for VNC:
 BuildRequires: libjpeg-devel
 
@@ -66,9 +68,7 @@ BuildRequires: libjpeg-devel
 # --------- Patches ----------------------------------------------------------
 
 # git-diff xorg-server-1.4 origin/server-1.4-branch
-Patch0: xorg-server-1.4-git-branch-fixes-2007-11-13.patch
-Patch1: xorg-server-1.4-fix-keyboard-events.patch
-Patch2: xorg-server-1.4-fix-keyboard-events2.patch
+Patch0: xorg-server-1.4-git-branch-fixes-2007-11-19.patch
 
 Patch3:  0003-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-give-X-root-privileges.txt
 Patch4:  xorg-server-1.4-blue-background.patch
@@ -771,8 +771,6 @@ This KDrive server is targetted for VIA chipsets.
 cp %{SOURCE2} %{SOURCE3} hw/vfb/
 
 %patch0  -p1 -b .git
-%patch1  -p1 -b .kbd-events
-%patch2  -p1 -b .kbd-rate
 
 %patch3  -p1 -b .xwrapper
 %patch4  -p1 -b .blue_bg
