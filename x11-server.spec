@@ -884,6 +884,7 @@ CFLAGS='-DBUILDDEBUG -g' \
   		--enable-kbd_mode \
 		--enable-xwrapper \
 		--enable-pam \
+		--enable-config-hal \
 		--with-fontdir="%{_datadir}/fonts" \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
