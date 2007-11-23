@@ -1,6 +1,6 @@
 %define with_debug 0
 %define kdrive_builds_vesa 0
-%define enable_xvnc 0
+%define enable_xvnc 1
 %define enable_dmx 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
@@ -15,7 +15,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 14
+Release: %mkrel 15
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
