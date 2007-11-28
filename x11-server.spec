@@ -2,6 +2,7 @@
 %define kdrive_builds_vesa 0
 %define enable_xvnc 1
 %define enable_dmx 0
+%define enable_hal 0
 
 %define mesasrcdir %{_prefix}/src/Mesa
 %define mesaver 7.0.1
@@ -15,7 +16,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 15
+Release: %mkrel 17
 Summary:  X11 servers
 Group: System/X11
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
@@ -816,6 +817,7 @@ CFLAGS='-DBUILDDEBUG -g' \
 %configure --with-log-dir=%{_logdir} \
 		--with-os-vendor="Mandriva" \
 		--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
+		--with-vendor-web="http://qa.mandriva.com" \
 		%if %{with_debug}
   		--enable-debug \
 		%else
@@ -884,7 +886,11 @@ CFLAGS='-DBUILDDEBUG -g' \
   		--enable-kbd_mode \
 		--enable-xwrapper \
 		--enable-pam \
+		%if %{enable_hal}
 		--enable-config-hal \
+		%else
+		--disable-config-hal \
+		%endif
 		--with-fontdir="%{_datadir}/fonts" \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
