@@ -25,7 +25,6 @@ Source1: xserver.pamd
 Source2: xvfb-run
 Source3: xvfb-run.man.pre
 License: MIT
-BuildRoot: %{_tmppath}/%{name}-root
 Obsoletes: x11-server13 <= 1.2.99.905
 
 %if %enable_dmx
