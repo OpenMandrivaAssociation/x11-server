@@ -1,8 +1,9 @@
-%define with_debug 0
-%define kdrive_builds_vesa 0
-%define enable_xvnc 1
-%define enable_dmx 0
-%define enable_hal 0
+%define with_debug		0
+%define kdrive_builds_vesa	0
+%define enable_xvnc		1
+%define enable_dmx		0
+%define enable_hal		0
+%define enable_dbus		%{enable_hal}
 
 %define mesasrcdir %{_prefix}/src/Mesa
 %define mesaver 7.0.1
@@ -16,15 +17,22 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 17
+Release: %mkrel 18
 Summary:  X11 servers
 Group: System/X11
-Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+URL: http://xorg.freedesktop.org
+
+########################################################################
+# git clone git://git.mandriva.com/people/pcpa/xorg/xserver xorg/xserver
+# cd xorg/xserver
+# git-archive --format=tar --prefix=xorg-server-1.4/ origin/server-1.4-branch | bzip2 -9 > xorg-server-1.4.tar.bz2
+########################################################################
+Source: xorg-server-1.4.tar.bz2
 Source1: xserver.pamd
-# xvfb-run script and manpage from debian's xorg-server source package
-Source2: xvfb-run
-Source3: xvfb-run.man.pre
-License: MIT
+
+########################################################################
+License: GPLv2+ and MIT
+
 Obsoletes: x11-server13 <= 1.2.99.905
 
 %if %enable_dmx
@@ -59,54 +67,31 @@ BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
 BuildRequires: libgii-devel
 BuildRequires: libpixman-1-devel >= 0.9.5
+%if %{enable_dbus}
 # so that input-hotplug is enabled:
 BuildRequires: libhal-devel
+%endif
+%if %{enable_hal}
 BuildRequires: libdbus-1-devel
+%endif
+%if %{enable_xvnc}
 # for VNC:
 BuildRequires: libjpeg-devel
+%endif
 
-
-# --------- Patches ----------------------------------------------------------
-
-# git-diff xorg-server-1.4 origin/server-1.4-branch
-Patch0: xorg-server-1.4-git-branch-fixes-2007-11-19.patch
-
-Patch3:  0003-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-give-X-root-privileges.txt
-Patch4:  xorg-server-1.4-blue-background.patch
-Patch7:  0007-find-free-VT.txt
-Patch18: 0018-vnc-support.txt
-Patch19: 0018-vnc-support-1.4.patch
-Patch20: 0018-vnc-support-1.4-64bit.patch
-Patch21: 0018-vnc-support-1.4-include-path.patch
-Patch32: 0032-no-move-damage.txt
-Patch34: 0034-offscreen-pixmaps.txt
-Patch40: xorg-server-1.4-xvfb-run.patch
-
-Patch45: 0001-Add-xorg.conf-man-section-about-catalogue-dir-FPE.patch
-Patch46: 0002-Add-Xserver-man-section-about-catalogue-dir-FPE.patch
-
-# patch from git that ensures backward compatibility with previous Xorg behaviour:
-# prefered mode is the first Modes in Subsection "Display"
-Patch50: 0001-Make-config-file-preferred-mode-override-monitor-pre.patch
-
-# see bug #31183 for patch51 & patch52
-Patch51: xorg-server-1.3.0.0-fix-parsing-edid.patch
-Patch52: xorg-server-1.4-search-best-DPI-using-also-width.patch
-
-# Suport for keyboard events handled by SIGIO and saving stack context using
-# sigsetjmp/siglongjmp to try to recover from errors
-Patch100: xorg-server-1.4-save-context.patch
-
-# ------- Start of RandR1.2 fixes cherry-picked from xserver git tree ---------
-# Description of what each patch is for can be seen inside the patch files
-Patch118: 0118-Fix-sync-polarity-on-Samsung-SyncMaster-205BW-monito.patch
-Patch124: 0124-NoMousekeysIfXAlreadyRunning.patch
-Patch125: 0125-XOrgCfg-fixed-fonts-only.patch
-Patch126: 0126-XOrgCfg-files-section.patch
-Patch127: 0127-24_32_pixmap_wmaker_kde_crash.patch
-Patch128: xorg-server-1.4-keyboard-leds.patch
-
-# -----------------------------------------------------------------------------
+########################################################################
+# git-format-patch origin/server-1.4-branch..origin/mandriva+gpl
+Patch1: 0001-First-version-of-code-to-make-symbols-default-to-h.patch
+Patch2: 0002-This-is-a-set-of-patches-that-should-be-safe-to-ap.patch
+Patch3: 0003-Blue-background-custom-patch.patch
+Patch4: 0004-Fontpath.d-updated-documentation.patch
+Patch5: 0005-Add-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch-to.patch
+Patch6: 0006-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch7: 0007-First-commit-in-new-branch-mandriva-gpl-adding-Xv.patch
+Patch8: 0008-xvfb-run-support-patch-added-to-mandriva-gpl-branc.patch
+Patch9: 0009-Fix-vnc-build-by-using-sh-.-script.sh-instead-of.patch
+Patch10:0010-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
+########################################################################
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -769,51 +754,23 @@ This KDrive server is targetted for VIA chipsets.
 %prep
 %setup -q -n xorg-server-%{version}
 
-# xvfb-run
-cp %{SOURCE2} %{SOURCE3} hw/vfb/
-
-%patch0  -p1 -b .git
-
-%patch3  -p1 -b .xwrapper
-%patch4  -p1 -b .blue_bg
-%patch7  -p1 -b .vt7
-
-%if %enable_xvnc
-%patch18 -p1 -b .vnc
-chmod a+x hw/vnc/symlink-vnc.sh
-%patch19 -p0 -b .vnc_14
-%patch20 -p0 -b .x86_64
-%patch21 -p1 -b .incpath
-%endif
-%patch32 -p0 -b .no_move_damage
-%patch34 -p0 -b .offscreen_pixmaps
-%patch40 -p1 -b .xvfb
-
-%patch45 -p1 -b .fontpath_d
-%patch46 -p1 -b .fontpath_d
-
-%patch50 -p1 -b .prefer_Modes
-%patch51 -p1 -b .parse_edid
-%patch52 -p1 -b .best_with_width
-
-%patch100 -p1 -b .save-context
-
-# randr1.2 fixes
-%patch118 -p1 -b .syncmaster_205bw_polarity
-
-%patch124 -p1 -b .no_mouse_keys
-%patch125 -p1 -b .only_fixed_fonts
-%patch126 -p1 -b .files_section
-%patch127 -p1 -b .pixmap_wmaker_kde_crash
-%patch128 -p1 -b .keyboard-leds
-
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 %build
 autoreconf -ifs
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -g' \
 %endif
-%configure --with-log-dir=%{_logdir} \
+%configure	--with-log-dir=%{_logdir} \
 		--with-os-vendor="Mandriva" \
 		--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 		--with-vendor-web="http://qa.mandriva.com" \
@@ -885,6 +842,11 @@ CFLAGS='-DBUILDDEBUG -g' \
   		--enable-kbd_mode \
 		--enable-xwrapper \
 		--enable-pam \
+		%if %{enable_dbus}
+		--enable-config-dbus \
+		%else
+		--disable-config-dbus \
+		%endif
 		%if %{enable_hal}
 		--enable-config-hal \
 		%else
@@ -933,10 +895,21 @@ mv %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so \
 	%{buildroot}%{_libdir}/xorg/modules/extensions/standard/libglx.so
 touch %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so
 
+# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
+# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
+# This module is broken. Probably most code using it has been patched
+# to not use it anymore, but it is still installed by default, and
+# have missing symbols caused by api changes not updated back.
+# For the moment, just don't install it.
+# Afaik only the mga driver uses it; maybe it somehow works because
+# the missing symbols are never used? Anyway, must be fixed.
+# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
+# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
+rm -f %{buildroot}%{_libdir}/xorg/modules/libxf8_32bpp.*
+
+
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-
-
