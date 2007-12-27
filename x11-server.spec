@@ -60,7 +60,7 @@ BuildRequires: libxxf86vm-devel >= 1.0.0
 BuildRequires: libxfont-devel >= 1.0.0
 BuildRequires: mesa-source >= %{mesaver}
 BuildRequires: x11-proto-devel >= 1.4.0
-BuildRequires: x11-util-macros >= 1.1.5
+BuildRequires: x11-util-macros >= 1.1.5-4mdk
 BuildRequires: x11-xtrans-devel >= 1.0.3
 BuildRequires: libpam-devel
 BuildRequires: libgpm-devel
@@ -168,6 +168,11 @@ fi
 %{_includedir}/xorg/*.h
 %{_libdir}/pkgconfig/xorg-server.pc
 %{_datadir}/aclocal/xorg-server.m4
+%{_libdir}/xorg/modules/*.la
+%{_libdir}/xorg/modules/extensions/*.la
+%{_libdir}/xorg/modules/fonts/*.la
+%{_libdir}/xorg/modules/linux/*.la
+%{_libdir}/xorg/modules/multimedia/*.la
 %{_datadir}/X11/mandriva/*.deps
 
 #------------------------------------------------------------------------------
@@ -264,7 +269,20 @@ fi
 %endif
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
-%{_libdir}/xorg/modules/*
+%dir %{_libdir}/xorg/modules
+%{_libdir}/xorg/modules/*.so
+%dir %{_libdir}/xorg/modules/drivers
+%{_libdir}/xorg/modules/fonts/*.so
+%dir %{_libdir}/xorg/modules/extensions
+%{_libdir}/xorg/modules/extensions/*.so
+%dir %{_libdir}/xorg/modules/extensions/standard
+%{_libdir}/xorg/modules/extensions/standard/*.so
+%dir %{_libdir}/xorg/modules/fonts
+%dir %{_libdir}/xorg/modules/input
+%dir %{_libdir}/xorg/modules/linux
+%{_libdir}/xorg/modules/linux/*.so
+%dir %{_libdir}/xorg/modules/multimedia
+%{_libdir}/xorg/modules/multimedia/*.so
 # (anssi) We do not want this file to really exist, it is empty.
 # This entry causes an rpm-build warning "file listed twice", but getting rid
 # of the warning would need us to list all the other extensions one-by-one.
