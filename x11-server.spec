@@ -6,7 +6,7 @@
 %define enable_dbus		%{enable_hal}
 
 %define mesasrcdir %{_prefix}/src/Mesa
-%define mesaver 7.0.1
+%define mesaver 7.0.2
 
 %ifarch %{ix86} alpha
 %define kdrive_builds_vesa 1
