@@ -997,7 +997,10 @@ touch %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so
 # the missing symbols are never used? Anyway, must be fixed.
 # FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
 # FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
-rm -f %{buildroot}%{_libdir}/xorg/modules/libxf8_32bpp.*
+### ... dont remove it for now, or mga and glint drivers will have
+### unresolved symbol cfb8_32ScreenInit, and mga driver will also
+### have unresolved symbol xf86Overlay8Plus32Init
+#rm -f %{buildroot}%{_libdir}/xorg/modules/libxf8_32bpp.*
 
 
 # Create list of dependencies
