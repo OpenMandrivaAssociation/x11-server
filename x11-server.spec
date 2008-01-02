@@ -78,7 +78,6 @@ BuildRequires: libdbus-1-devel
 # for VNC:
 BuildRequires: libjpeg-devel
 %endif
-BuildRequires: x11-util-modular
 
 ########################################################################
 # git-format-patch xorg-server-1.4..origin/mandriva+gpl
@@ -168,12 +167,7 @@ fi
 %{_includedir}/xorg/*.h
 %{_libdir}/pkgconfig/xorg-server.pc
 %{_datadir}/aclocal/xorg-server.m4
-%{_libdir}/xorg/modules/*.la
-%{_libdir}/xorg/modules/extensions/*.la
-%{_libdir}/xorg/modules/fonts/*.la
-%{_libdir}/xorg/modules/linux/*.la
-%{_libdir}/xorg/modules/multimedia/*.la
-%{_datadir}/X11/mandriva/*.deps
+
 
 #------------------------------------------------------------------------------
 
@@ -1002,12 +996,12 @@ touch %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so
 ### have unresolved symbol xf86Overlay8Plus32Init
 #rm -f %{buildroot}%{_libdir}/xorg/modules/libxf8_32bpp.*
 
-
-# Create list of dependencies
-x-check-deps.pl
-for deps in *.deps; do
-    install -D -m 644 $deps %{buildroot}/%{_datadir}/X11/mandriva/$deps
-done
+# Don't install .la files
+rm -f %{buildroot}/%{_libdir}/xorg/modules/*.la
+rm -f %{buildroot}/%{_libdir}/xorg/modules/extensions/*.la
+rm -f %{buildroot}/%{_libdir}/xorg/modules/fonts/*.la
+rm -f %{buildroot}/%{_libdir}/xorg/modules/linux/*.la
+rm -f %{buildroot}/%{_libdir}/xorg/modules/multimedia/*.la
 
 %clean
 rm -rf %{buildroot}
