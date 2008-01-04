@@ -127,6 +127,8 @@ Patch43: 0043-First-commit-in-new-branch-mandriva-gpl-adding-Xv.patch
 Patch44: 0044-xvfb-run-support-patch-added-to-mandriva-gpl-branc.patch
 Patch45: 0045-Fix-vnc-build-by-using-sh-.-script.sh-instead-of.patch
 Patch46: 0046-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
+Patch47: 0047-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch48: 0048-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -850,6 +852,8 @@ This KDrive server is targetted for VIA chipsets.
 %patch44 -p1
 %patch45 -p1
 %patch46 -p1
+%patch47 -p1
+%patch48 -p1
 
 %build
 autoreconf -ifs
@@ -980,21 +984,6 @@ install -d -m755 %{buildroot}%{_libdir}/xorg/modules/extensions/standard
 mv %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so \
 	%{buildroot}%{_libdir}/xorg/modules/extensions/standard/libglx.so
 touch %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so
-
-# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
-# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
-# This module is broken. Probably most code using it has been patched
-# to not use it anymore, but it is still installed by default, and
-# have missing symbols caused by api changes not updated back.
-# For the moment, just don't install it.
-# Afaik only the mga driver uses it; maybe it somehow works because
-# the missing symbols are never used? Anyway, must be fixed.
-# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
-# FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
-### ... dont remove it for now, or mga and glint drivers will have
-### unresolved symbol cfb8_32ScreenInit, and mga driver will also
-### have unresolved symbol xf86Overlay8Plus32Init
-#rm -f %{buildroot}%{_libdir}/xorg/modules/libxf8_32bpp.*
 
 # Don't install .la files
 rm -f %{buildroot}/%{_libdir}/xorg/modules/*.la
