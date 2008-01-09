@@ -1,3 +1,6 @@
+%define debug_package		%{nil}
+
+
 %define with_debug		0
 %define kdrive_builds_vesa	0
 %define enable_xvnc		1
@@ -17,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 18
+Release: %mkrel 19
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -129,6 +132,9 @@ Patch45: 0045-Fix-vnc-build-by-using-sh-.-script.sh-instead-of.patch
 Patch46: 0046-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
 Patch47: 0047-Mouse-moves-slower-than-hand-movement-in-games.patch
 Patch48: 0048-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
+Patch49: 0049-Fix-unresolved-symbol-in-binary-nvidia-driver.patch
+Patch50: 0050-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
+Patch51: 0051-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
 ########################################################################
 
 Requires: %{name}-xorg
