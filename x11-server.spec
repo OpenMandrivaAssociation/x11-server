@@ -7,12 +7,13 @@
 %define enable_dmx		0
 %define enable_hal		0
 %define enable_dbus		%{enable_hal}
+%define enable_builddocs	0
 
-%define mesasrcdir %{_prefix}/src/Mesa
-%define mesaver 7.0.2
+%define mesasrcdir		%{_prefix}/src/Mesa
+%define mesaver			7.0.2
 
 %ifarch %{ix86} alpha
-%define kdrive_builds_vesa 1
+%define kdrive_builds_vesa	1
 %endif
 
 # Alternatives priority for standard libglx.so and mesa libs
@@ -38,49 +39,82 @@ License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
 
-%if %enable_dmx
-BuildRequires: libdmx-devel >= 1.0.1
-%endif
-BuildRequires: libfontenc-devel >= 1.0.1
-BuildRequires: libmesagl-devel >= %{mesaver}
-BuildRequires: libxau-devel >= 1.0.0
-BuildRequires: libxaw-devel >= 1.0.1
-BuildRequires: libxdmcp-devel >= 1.0.0
-BuildRequires: libxext-devel >= 1.0.0
-BuildRequires: libxfont-devel >= 1.2.8-2mdv
-BuildRequires: libxfixes-devel
-BuildRequires: libxi-devel >= 1.1.3
-BuildRequires: libxkbfile-devel >= 1.0.4
-BuildRequires: libxau-devel >= 1.0.0
-BuildRequires: libxkbui-devel >= 1.0.1
-BuildRequires: libxmu-devel >= 1.0.0
-BuildRequires: libxpm-devel >= 3.5.4.2
-BuildRequires: libxrender-devel >= 0.9.4
-BuildRequires: libxres-devel >= 1.0.0
-BuildRequires: libxtst-devel >= 1.0.1
-BuildRequires: libxxf86misc-devel >= 1.0.0
-BuildRequires: libxxf86vm-devel >= 1.0.0
-BuildRequires: libxfont-devel >= 1.0.0
-BuildRequires: mesa-source >= %{mesaver}
-BuildRequires: x11-proto-devel >= 1.4.0
-BuildRequires: x11-util-macros >= 1.1.5-4mdk
-BuildRequires: x11-xtrans-devel >= 1.0.3
+BuildRequires: x11-util-macros		>= 1.1.5
+
+# BuildRequires: gcc			>= 4.2.2
+BuildRequires: x11-xtrans-devel		>= 1.0.4
+# BuildRequires: glibc-devel		>= 2.6.1
+BuildRequires: x11-proto-devel		>= 7.3
+BuildRequires: libice6-devel		>= 1.0.4
+BuildRequires: libxdmcp6-devel		>= 1.0.2
+BuildRequires: libxau6-devel		>= 1.0.3
+BuildRequires: libsm6-devel		>= 1.0.3
+BuildRequires: libxfont1-devel		>= 1.3.1
+BuildRequires: libfontenc1-devel	>= 1.0.4
+BuildRequires: libxkbfile-devel		>= 1.0.4
+BuildRequires: libpixman-1-devel	>= 0.9.6
+
+BuildRequires: libdrm-devel		>= 2.3.0
+BuildRequires: mesa-source		>= %{mesaver}
+
+## Xsdl only?
+BuildRequires: libSDL1.2-devel
+#>= 1.2.12
+
+## xwrapper only?
 BuildRequires: libpam-devel
-BuildRequires: libgpm-devel
-BuildRequires: SDL-devel
-BuildRequires: libgii-devel
-BuildRequires: libpixman-1-devel >= 0.9.5
-%if %{enable_dbus}
-# so that input-hotplug is enabled:
-BuildRequires: libhal-devel
+#>= 0.99.8
+
+## xorgcfg only?
+BuildRequires: libncurses-devel
+#>= 5.6-1
+BuildRequires: libx11_6-devel		>= 1.1.3
+BuildRequires: libxt6-devel		>= 1.0.5
+BuildRequires: libxmu6-devel		>= 1.0.3
+BuildRequires: libxaw-devel		>= 1.0.4
+BuildRequires: libxkbui-devel		>= 1.0.2
+
+## vnc only?
+BuildRequires: zlib1-devel
+#>= 1.2.3
+%if %{enable_xvnc}
+BuildRequires: libjpeg62-devel
+#>= -6b
 %endif
+
 %if %{enable_hal}
+# For the moment only really required if compiling with --config-dbus
+# But if available at build time, will include headers, but do nothing
+BuildRequires: libdbus-1-devel		>= 1.1.2
+%endif
+
+%if %{enable_dbus}
 BuildRequires: libdbus-1-devel
 %endif
-%if %{enable_xvnc}
-# for VNC:
-BuildRequires: libjpeg-devel
+
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# Not fully verified.
+#	not triggered by scripts checking header files
+#	maybe requires some binary during build?
+#	xext, xpm, xf86misc, xf86vm should be required only to link xorgcfg
+%if %enable_dmx
+BuildRequires: libdmx-devel		>= 1.0.1
 %endif
+BuildRequires: libxext-devel		>= 1.0.3
+BuildRequires: libxfixes3-devel		>= 4.0.3
+BuildRequires: libxi-devel		>= 1.1.3
+BuildRequires: libxpm-devel		>= 3.5.7
+BuildRequires: libxrender1-devel	>= 0.9.4
+BuildRequires: libxres-devel		>= 1.0.3
+BuildRequires: libxtst6-devel		>= 1.0.3
+BuildRequires: libxxf86misc-devel	>= 1.0.1
+BuildRequires: libxxf86vm-devel		>= 1.0.1
+BuildRequires: libgpm-devel		>= 1.20.1
+BuildRequires: libgii-devel		>= 1.0.2
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+
 
 ########################################################################
 # git-format-patch xorg-server-1.4..origin/mandriva+gpl
@@ -135,6 +169,8 @@ Patch48: 0048-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
 Patch49: 0049-Fix-unresolved-symbol-in-binary-nvidia-driver.patch
 Patch50: 0050-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
 Patch51: 0051-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
+Patch52: 0052-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
+Patch53: 0053-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -860,6 +896,11 @@ This KDrive server is targetted for VIA chipsets.
 %patch46 -p1
 %patch47 -p1
 %patch48 -p1
+%patch49 -p1
+%patch50 -p1
+%patch51 -p1
+%patch52 -p1
+%patch53 -p1
 
 %build
 autoreconf -ifs
@@ -871,71 +912,75 @@ CFLAGS='-DBUILDDEBUG -g' \
 		--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 		--with-vendor-web="http://qa.mandriva.com" \
 		%if %{with_debug}
-  		--enable-debug \
+		--enable-debug \
 		%else
 		--disable-debug \
 		%endif
- 		--enable-builddocs \
-  		--disable-install-libxf86config \
-  		--enable-composite \
-  		--enable-shm \
-  		--enable-xres \
-  		--enable-xtrap \
-  		--enable-record \
-  		--enable-xv \
-  		--enable-xvmc \
-  		--enable-dga \
-  		--enable-screensaver \
-  		--enable-xdmcp \
-  		--enable-xdm-auth-1 \
-  		--enable-glx \
-  		--enable-aiglx \
-  		--enable-glx-tls \
-  		--enable-dri \
+		%if %{enable_builddocs}
+		--enable-builddocs \
+		%else
+		--disable-builddocs \
+		%endif
+		--disable-install-libxf86config \
+		--enable-composite \
+		--enable-shm \
+		--enable-xres \
+		--enable-xtrap \
+		--enable-record \
+		--enable-xv \
+		--enable-xvmc \
+		--enable-dga \
+		--enable-screensaver \
+		--enable-xdmcp \
+		--enable-xdm-auth-1 \
+		--enable-glx \
+		--enable-aiglx \
+		--enable-glx-tls \
+		--enable-dri \
 		--with-mesa-source=%{mesasrcdir} \
-  		--enable-xinerama \
-  		--enable-xf86vidmode \
-  		--enable-xf86misc \
+		--enable-xinerama \
+		--enable-xf86vidmode \
+		--enable-xf86misc \
 		--enable-xace \
-  		--enable-xcsecurity \
+		--enable-xcsecurity \
 		--enable-xevie \
-  		--enable-appgroup \
-  		--enable-cup \
-  		--enable-evi \
-  		--enable-xf86bigfont \
-  		--enable-dpms \
-  		--enable-xinput \
+		--enable-appgroup \
+		--enable-cup \
+		--enable-evi \
+		--enable-xf86bigfont \
+		--enable-dpms \
+		--enable-xinput \
 		--disable-xcalibrate \
 		--disable-tslib \
-  		--enable-multibuffer \
-  		--enable-fontcache \
-  		--enable-dbe \
+		--enable-multibuffer \
+		--enable-fontcache \
+		--enable-dbe \
 		--enable-xfree86-utils \
-  		--enable-xorg \
+		--enable-xorg \
 		%if %enable_xvnc
-  		--enable-xvnc \
+		--enable-xvnc \
 		%endif
 		%if %enable_dmx
-  		--enable-dmx \
+		--enable-dmx \
 		%else
 		--disable-dmx \
 		%endif
-  		--enable-xvfb \
-  		--enable-xnest \
-  		--disable-xwin \
-  		--disable-xprint \
-  		--disable-xgl \
-  		--disable-xglx \
-  		--disable-xegl \
-  		--enable-kdrive \
-  		--enable-xfake \
-  		--enable-xephyr \
-  		--enable-xsdl \
+		--enable-xvfb \
+		--enable-xnest \
+		--disable-xwin \
+		--disable-xprint \
+		--disable-xgl \
+		--disable-xglx \
+		--disable-xegl \
+		--enable-kdrive \
+		--enable-xfake \
+		--enable-xephyr \
+		--enable-xsdl \
 		--disable-freetype \
-  		--disable-install-setuid \
- 		--enable-secure-rpc \
-  		--enable-xorgcfg \
-  		--enable-kbd_mode \
+		--disable-install-setuid \
+		--enable-secure-rpc \
+		--enable-xorgcfg \
+		--enable-kbd_mode \
 		--enable-xwrapper \
 		--enable-pam \
 		%if %{enable_dbus}
