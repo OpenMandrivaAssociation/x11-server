@@ -45,12 +45,12 @@ BuildRequires: x11-util-macros		>= 1.1.5
 BuildRequires: x11-xtrans-devel		>= 1.0.4
 # BuildRequires: glibc-devel		>= 2.6.1
 BuildRequires: x11-proto-devel		>= 7.3
-BuildRequires: libice6-devel		>= 1.0.4
-BuildRequires: libxdmcp6-devel		>= 1.0.2
-BuildRequires: libxau6-devel		>= 1.0.3
-BuildRequires: libsm6-devel		>= 1.0.3
-BuildRequires: libxfont1-devel		>= 1.3.1
-BuildRequires: libfontenc1-devel	>= 1.0.4
+BuildRequires: libice-devel		>= 1.0.4
+BuildRequires: libxdmcp-devel		>= 1.0.2
+BuildRequires: libxau-devel		>= 1.0.3
+BuildRequires: libsm-devel		>= 1.0.3
+BuildRequires: libxfont-devel		>= 1.3.1
+BuildRequires: libfontenc-devel	>= 1.0.4
 BuildRequires: libxkbfile-devel		>= 1.0.4
 BuildRequires: libpixman-1-devel	>= 0.9.6
 
@@ -58,7 +58,7 @@ BuildRequires: libdrm-devel		>= 2.3.0
 BuildRequires: mesa-source		>= %{mesaver}
 
 ## Xsdl only?
-BuildRequires: libSDL1.2-devel
+BuildRequires: SDL-devel
 #>= 1.2.12
 
 ## xwrapper only?
@@ -68,9 +68,9 @@ BuildRequires: libpam-devel
 ## xorgcfg only?
 BuildRequires: libncurses-devel
 #>= 5.6-1
-BuildRequires: libx11_6-devel		>= 1.1.3
-BuildRequires: libxt6-devel		>= 1.0.5
-BuildRequires: libxmu6-devel		>= 1.0.3
+BuildRequires: libx11-devel		>= 1.1.3
+BuildRequires: libxt-devel		>= 1.0.5
+BuildRequires: libxmu-devel		>= 1.0.3
 BuildRequires: libxaw-devel		>= 1.0.4
 BuildRequires: libxkbui-devel		>= 1.0.2
 
@@ -78,7 +78,7 @@ BuildRequires: libxkbui-devel		>= 1.0.2
 BuildRequires: zlib1-devel
 #>= 1.2.3
 %if %{enable_xvnc}
-BuildRequires: libjpeg62-devel
+BuildRequires: libjpeg-devel
 #>= -6b
 %endif
 
@@ -102,12 +102,12 @@ BuildRequires: libdbus-1-devel
 BuildRequires: libdmx-devel		>= 1.0.1
 %endif
 BuildRequires: libxext-devel		>= 1.0.3
-BuildRequires: libxfixes3-devel		>= 4.0.3
+BuildRequires: libxfixes-devel		>= 4.0.3
 BuildRequires: libxi-devel		>= 1.1.3
 BuildRequires: libxpm-devel		>= 3.5.7
-BuildRequires: libxrender1-devel	>= 0.9.4
+BuildRequires: libxrender-devel	>= 0.9.4
 BuildRequires: libxres-devel		>= 1.0.3
-BuildRequires: libxtst6-devel		>= 1.0.3
+BuildRequires: libxtst-devel		>= 1.0.3
 BuildRequires: libxxf86misc-devel	>= 1.0.1
 BuildRequires: libxxf86vm-devel		>= 1.0.1
 BuildRequires: libgpm-devel		>= 1.20.1
