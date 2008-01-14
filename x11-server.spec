@@ -40,80 +40,53 @@ License: GPLv2+ and MIT
 Obsoletes: x11-server13 <= 1.2.99.905
 
 BuildRequires: x11-util-macros		>= 1.1.5
-
-# BuildRequires: gcc			>= 4.2.2
 BuildRequires: x11-xtrans-devel		>= 1.0.4
-# BuildRequires: glibc-devel		>= 2.6.1
-BuildRequires: x11-proto-devel		>= 7.3
-BuildRequires: libice-devel		>= 1.0.4
+BuildRequires: libxxf86misc-devel	>= 1.0.1
 BuildRequires: libxdmcp-devel		>= 1.0.2
-BuildRequires: libxau-devel		>= 1.0.3
-BuildRequires: libsm-devel		>= 1.0.3
-BuildRequires: libxfont-devel		>= 1.3.1
-BuildRequires: libfontenc-devel	>= 1.0.4
-BuildRequires: libxkbfile-devel		>= 1.0.4
-BuildRequires: libpixman-1-devel	>= 0.9.6
-
-BuildRequires: libdrm-devel		>= 2.3.0
+BuildRequires: libxxf86dga-devel	>= 1.0.2
 BuildRequires: mesa-source		>= %{mesaver}
-
-## Xsdl only?
+BuildRequires: libxi-devel		>= 1.1.3
 BuildRequires: SDL-devel
-#>= 1.2.12
-
-## xwrapper only?
-BuildRequires: libpam-devel
-#>= 0.99.8
-
-## xorgcfg only?
+BuildRequires: libxxf86vm-devel		>= 1.0.1
+BuildRequires: x11-proto-devel		>= 7.3
+BuildRequires: libdrm-devel		>= 2.3.0
+BuildRequires: libxfont-devel		>= 1.3.1
+BuildRequires: libxrender-devel		>= 0.9.4
 BuildRequires: libncurses-devel
-#>= 5.6-1
-BuildRequires: libx11-devel		>= 1.1.3
+BuildRequires: libpam-devel
+BuildRequires: libxaw-devel		>= 1.0.4
+BuildRequires: flex
 BuildRequires: libxt-devel		>= 1.0.5
 BuildRequires: libxmu-devel		>= 1.0.3
-BuildRequires: libxaw-devel		>= 1.0.4
-BuildRequires: libxkbui-devel		>= 1.0.2
-
-## vnc only?
-BuildRequires: zlib1-devel
-#>= 1.2.3
+BuildRequires: libxpm-devel		>= 3.5.7
+BuildRequires: libx11-devel		>= 1.1.3
+BuildRequires: libxext-devel		>= 1.0.3
+BuildRequires: libxkbfile-devel		>= 1.0.4
+BuildRequires: libfontenc-devel		>= 1.0.4
+BuildRequires: libpixman-1-devel	>= 0.9.6
+BuildRequires: libice-devel		>= 1.0.4
+BuildRequires: zlib-devel
+BuildRequires: libsm-devel		>= 1.0.3
 %if %{enable_xvnc}
 BuildRequires: libjpeg-devel
-#>= -6b
 %endif
+BuildRequires: libxkbui-devel		>= 1.0.2
+BuildRequires: libxau-devel		>= 1.0.3
+
 
 %if %{enable_hal}
 # For the moment only really required if compiling with --config-dbus
 # But if available at build time, will include headers, but do nothing
-BuildRequires: libdbus-1-devel		>= 1.1.2
+BuildRequires: libhal-devel		>= 0.5.10
 %endif
 
 %if %{enable_dbus}
-BuildRequires: libdbus-1-devel
+BuildRequires: libdbus-devel		>= 1.1.2
 %endif
 
-
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# Not fully verified.
-#	not triggered by scripts checking header files
-#	maybe requires some binary during build?
-#	xext, xpm, xf86misc, xf86vm should be required only to link xorgcfg
 %if %enable_dmx
 BuildRequires: libdmx-devel		>= 1.0.1
 %endif
-BuildRequires: libxext-devel		>= 1.0.3
-BuildRequires: libxfixes-devel		>= 4.0.3
-BuildRequires: libxi-devel		>= 1.1.3
-BuildRequires: libxpm-devel		>= 3.5.7
-BuildRequires: libxrender-devel	>= 0.9.4
-BuildRequires: libxres-devel		>= 1.0.3
-BuildRequires: libxtst-devel		>= 1.0.3
-BuildRequires: libxxf86misc-devel	>= 1.0.1
-BuildRequires: libxxf86vm-devel		>= 1.0.1
-BuildRequires: libgpm-devel		>= 1.20.1
-BuildRequires: libgii-devel		>= 1.0.2
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 
 
 ########################################################################
@@ -171,6 +144,7 @@ Patch50: 0050-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
 Patch51: 0051-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
 Patch52: 0052-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
 Patch53: 0053-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
+Patch54: 0054-reduce-wakeups-from-smart-scheduler.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -901,6 +875,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch51 -p1
 %patch52 -p1
 %patch53 -p1
+%patch54 -p1
 
 %build
 autoreconf -ifs
