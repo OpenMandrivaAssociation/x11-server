@@ -20,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 19
+Release: %mkrel 20
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -877,6 +877,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch53 -p1
 %patch54 -p1
 %patch55 -p1
+%patch56 -p1
 
 %build
 autoreconf -ifs
