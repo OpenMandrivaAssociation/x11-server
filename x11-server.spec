@@ -1,13 +1,12 @@
 %define debug_package		%{nil}
 
-
 %define with_debug		0
 %define kdrive_builds_vesa	0
 %define enable_xvnc		1
 %define enable_dmx		0
 %define enable_hal		0
 %define enable_dbus		%{enable_hal}
-%define enable_builddocs	0
+%define enable_builddocs	1
 
 %define mesasrcdir		%{_prefix}/src/Mesa
 %define mesaver			7.0.2
@@ -145,6 +144,7 @@ Patch51: 0051-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
 Patch52: 0052-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
 Patch53: 0053-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
 Patch54: 0054-reduce-wakeups-from-smart-scheduler.patch
+Patch55: 0055-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -876,6 +876,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch52 -p1
 %patch53 -p1
 %patch54 -p1
+%patch55 -p1
 
 %build
 autoreconf -ifs
