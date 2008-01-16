@@ -145,6 +145,7 @@ Patch52: 0052-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
 Patch53: 0053-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
 Patch54: 0054-reduce-wakeups-from-smart-scheduler.patch
 Patch55: 0055-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
+Patch56: 0056-Missing-symbols-xf86SetCursor-used-by-alternate-i8.patch
 ########################################################################
 
 Requires: %{name}-xorg
