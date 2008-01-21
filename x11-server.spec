@@ -20,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 20
+Release: %mkrel 21
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -146,6 +146,7 @@ Patch53: 0053-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
 Patch54: 0054-reduce-wakeups-from-smart-scheduler.patch
 Patch55: 0055-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
 Patch56: 0056-Missing-symbols-xf86SetCursor-used-by-alternate-i8.patch
+Patch57: 0057-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -879,6 +880,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch54 -p1
 %patch55 -p1
 %patch56 -p1
+%patch57 -p1
 
 %build
 autoreconf -ifs
