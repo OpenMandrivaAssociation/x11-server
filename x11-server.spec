@@ -145,6 +145,7 @@ Patch54: 0054-reduce-wakeups-from-smart-scheduler.patch
 Patch55: 0055-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
 Patch56: 0056-Missing-symbols-xf86SetCursor-used-by-alternate-i8.patch
 Patch57: 0057-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
+Patch58: 0058-Export-symbol-required-by-wacom-input-device-driver.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -879,6 +880,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch55 -p1
 %patch56 -p1
 %patch57 -p1
+%patch58 -p1
 
 %build
 autoreconf -ifs
