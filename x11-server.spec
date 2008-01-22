@@ -1,5 +1,3 @@
-%define debug_package		%{nil}
-
 %define with_debug		0
 %define kdrive_builds_vesa	0
 %define enable_xvnc		1
@@ -20,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 21
+Release: %mkrel 22
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
