@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4
-Release: %mkrel 22
+Release: %mkrel 23
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -146,6 +146,7 @@ Patch55: 0055-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
 Patch56: 0056-Missing-symbols-xf86SetCursor-used-by-alternate-i8.patch
 Patch57: 0057-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
 Patch58: 0058-Export-symbol-required-by-wacom-input-device-driver.patch
+Patch59: 0059-include-never-overwrite-realInputProc-with-enqueueI.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -881,6 +882,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch56 -p1
 %patch57 -p1
 %patch58 -p1
+%patch59 -p1
 
 %build
 autoreconf -ifs
