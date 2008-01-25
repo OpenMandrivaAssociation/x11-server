@@ -17,8 +17,8 @@
 %define priority 500
 
 Name: x11-server
-Version: 1.4
-Release: %mkrel 23
+Version: 1.4.0.90
+Release: %mkrel 1
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -26,9 +26,9 @@ URL: http://xorg.freedesktop.org
 ########################################################################
 # git clone git://git.mandriva.com/people/pcpa/xorg/xserver xorg/xserver
 # cd xorg/xserver
-# git-archive --format=tar --prefix=xorg-server-1.4/ xorg-server-1.4 | bzip2 -9 > xorg-server-1.4.tar.bz2
+# git-archive --format=tar --prefix=xorg-server-1.4.0.90/ xorg-server-1.4.0.90 | bzip2 -9 > xorg-server-1.4.0.90.tar.bz2
 ########################################################################
-Source: xorg-server-1.4.tar.bz2
+Source: xorg-server-1.4.0.90.tar.bz2
 Source1: xserver.pamd
 
 ########################################################################
@@ -87,66 +87,30 @@ BuildRequires: libdmx-devel		>= 1.0.1
 
 
 ########################################################################
-# git-format-patch xorg-server-1.4..origin/mandriva+gpl
-Patch1:  0001-config-return-BadValue-to-caller-if-add-remove-does.patch
-Patch2:  0002-config-Use-config-dbus-consistently-for-error-mes.patch
-Patch3:  0003-Don-t-segfault-on-shutdown-if-we-never-managed-to-co.patch
-Patch4:  0004-Set-noCompositeExtension-to-TRUE-when-failing-to-ini.patch
-Patch5:  0005-configure.ac-XFree86-Only-build-XF86Misc-and-XF86Vi.patch
-Patch6:  0006-Xi-Include-XI-protocol-header-in-exevents.h.patch
-Patch7:  0007-XKB-Add-more-bits-to-xkbsrv.h.patch
-Patch8:  0008-XFree86-Remove-ridiculous-SIGIO-debugging.patch
-Patch9:  0009-xkb-Store-the-action-filters-per-device-in-the-XkbS.patch
-Patch10: 0010-Save-processInputProc-before-wrapping-it-and-restore.patch
-Patch11: 0011-xkb-enable-XI-event-processing-for-xkb.patch
-Patch12: 0012-dix-add-XI-event-support-to-FixKeyState.patch
-Patch13: 0013-dix-don-t-compress-motion-events-from-different-dev.patch
-Patch14: 0014-xkb-xkbHandleActions-let-wrapping-take-care-of-eve.patch
-Patch15: 0015-xkb-Unwrap-properly-in-ProcessPointerEvent.patch
-Patch16: 0016-XKB-Don-t-update-indicators-on-all-devices-add-mis.patch
-Patch17: 0017-XKB-Cope-with-all-events-in-XkbProcessKeyboardEvent.patch
-Patch18: 0018-xfree86-wrap-keyboard-devices-for-XKB.patch
-Patch19: 0019-Input-Generate-XKB-mapping-changes-for-all-core-sen.patch
-Patch20: 0020-XFree86-Input-Save-restore-errno-around-SIGIO-bug.patch
-Patch21: 0021-Config-HAL-Touchpads-are-pointers-too.patch
-Patch22: 0022-DIX-XKB-Set-xkbInfo-to-NULL-as-well-as-freeing-it.patch
-Patch23: 0023-Config-D-Bus-Fix-dbus_bus_request_name-failure-che.patch
-Patch24: 0024-Screen-size-changing-should-leave-FB-alone-when-X-is.patch
-Patch25: 0025-Prefer-configured-DisplaySize-to-probed-DDC-data-if.patch
-Patch26: 0026-Actually-build-Secure-RPC-authentication-support-mi.patch
-Patch27: 0027-.gitignore-Ignore-build-directories.patch
-Patch28: 0028-Xephyr-don-t-initialise-the-GLX-extension.patch
-Patch29: 0029-XFree86-Misc-VidMode-Remove-ridiculous-debug-ErrorF.patch
-Patch30: 0030-Input-Fix-key-down-test-bug-12858.patch
-Patch31: 0031-GetKeyboardEvents-Reject-out-of-range-keycodes-bug.patch
-Patch32: 0032-XKB-Don-t-ring-the-bell-when-we-don-t-have-a-BellPr.patch
-Patch33: 0033-EXA-Punt-on-fallback-case-not-handled-correctly-in.patch
-Patch34: 0034-EXA-Make-sure-tile-offsets-passed-to-drivers-are-ne.patch
-Patch35: 0035-EXA-Don-t-attempt-to-move-in-pixmaps-that-can-t-be.patch
-Patch36: 0036-XKB-Generate-correct-key-repeat-events-bug-13114.patch
-Patch37: 0037-First-version-of-code-to-make-symbols-default-to-h.patch
-Patch38: 0038-This-is-a-set-of-patches-that-should-be-safe-to-ap.patch
-Patch39: 0039-Blue-background-custom-patch.patch
-Patch40: 0040-Fontpath.d-updated-documentation.patch
-Patch41: 0041-Add-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch-to.patch
-Patch42: 0042-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch43: 0043-First-commit-in-new-branch-mandriva-gpl-adding-Xv.patch
-Patch44: 0044-xvfb-run-support-patch-added-to-mandriva-gpl-branc.patch
-Patch45: 0045-Fix-vnc-build-by-using-sh-.-script.sh-instead-of.patch
-Patch46: 0046-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
-Patch47: 0047-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch48: 0048-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
-Patch49: 0049-Fix-unresolved-symbol-in-binary-nvidia-driver.patch
-Patch50: 0050-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
-Patch51: 0051-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
-Patch52: 0052-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
-Patch53: 0053-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
-Patch54: 0054-reduce-wakeups-from-smart-scheduler.patch
-Patch55: 0055-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
-Patch56: 0056-Missing-symbols-xf86SetCursor-used-by-alternate-i8.patch
-Patch57: 0057-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
-Patch58: 0058-Export-symbol-required-by-wacom-input-device-driver.patch
-Patch59: 0059-include-never-overwrite-realInputProc-with-enqueueI.patch
+# git-format-patch xorg-server-1.4.0.90..origin/mandriva+gpl
+Patch1:  0001-First-version-of-code-to-make-symbols-default-to-h.patch
+Patch2:  0002-This-is-a-set-of-patches-that-should-be-safe-to-ap.patch
+Patch3:  0003-Blue-background-custom-patch.patch
+Patch4:  0004-Fontpath.d-updated-documentation.patch
+Patch5:  0005-Add-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch-to.patch
+Patch6:  0006-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch7:  0007-First-commit-in-new-branch-mandriva-gpl-adding-Xv.patch
+Patch8:  0008-xvfb-run-support-patch-added-to-mandriva-gpl-branc.patch
+Patch9:  0009-Fix-vnc-build-by-using-sh-.-script.sh-instead-of.patch
+Patch10: 0010-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
+Patch11: 0011-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch12: 0012-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
+Patch13: 0013-Fix-unresolved-symbol-in-binary-nvidia-driver.patch
+Patch14: 0014-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
+Patch15: 0015-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
+Patch16: 0016-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
+Patch17: 0017-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
+Patch18: 0018-reduce-wakeups-from-smart-scheduler.patch
+Patch19: 0019-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
+Patch20: 0020-Missing-symbols-xf86SetCursor-used-by-alternate-i8.patch
+Patch21: 0021-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
+Patch22: 0022-Export-symbol-required-by-wacom-input-device-driver.patch
+Patch23: 0023-include-never-overwrite-realInputProc-with-enqueueI.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -847,42 +811,6 @@ This KDrive server is targetted for VIA chipsets.
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
-%patch24 -p1
-%patch25 -p1
-%patch26 -p1
-%patch27 -p1
-%patch28 -p1
-%patch29 -p1
-%patch30 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
-%patch34 -p1
-%patch35 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%patch41 -p1
-%patch42 -p1
-%patch43 -p1
-%patch44 -p1
-%patch45 -p1
-%patch46 -p1
-%patch47 -p1
-%patch48 -p1
-%patch49 -p1
-%patch50 -p1
-%patch51 -p1
-%patch52 -p1
-%patch53 -p1
-%patch54 -p1
-%patch55 -p1
-%patch56 -p1
-%patch57 -p1
-%patch58 -p1
-%patch59 -p1
 
 %build
 autoreconf -ifs
