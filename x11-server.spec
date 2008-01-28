@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 1
+Release: %mkrel 2
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -85,32 +85,39 @@ BuildRequires: libdbus-devel		>= 1.1.2
 BuildRequires: libdmx-devel		>= 1.0.1
 %endif
 
-
 ########################################################################
 # git-format-patch xorg-server-1.4.0.90..origin/mandriva+gpl
 Patch1:  0001-First-version-of-code-to-make-symbols-default-to-h.patch
 Patch2:  0002-This-is-a-set-of-patches-that-should-be-safe-to-ap.patch
-Patch3:  0003-Blue-background-custom-patch.patch
-Patch4:  0004-Fontpath.d-updated-documentation.patch
-Patch5:  0005-Add-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch-to.patch
-Patch6:  0006-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch7:  0007-First-commit-in-new-branch-mandriva-gpl-adding-Xv.patch
-Patch8:  0008-xvfb-run-support-patch-added-to-mandriva-gpl-branc.patch
-Patch9:  0009-Fix-vnc-build-by-using-sh-.-script.sh-instead-of.patch
-Patch10: 0010-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
-Patch11: 0011-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch12: 0012-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
-Patch13: 0013-Fix-unresolved-symbol-in-binary-nvidia-driver.patch
-Patch14: 0014-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
-Patch15: 0015-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
-Patch16: 0016-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
-Patch17: 0017-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
-Patch18: 0018-reduce-wakeups-from-smart-scheduler.patch
-Patch19: 0019-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
-Patch20: 0020-Missing-symbols-xf86SetCursor-used-by-alternate-i8.patch
-Patch21: 0021-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
-Patch22: 0022-Export-symbol-required-by-wacom-input-device-driver.patch
-Patch23: 0023-include-never-overwrite-realInputProc-with-enqueueI.patch
+Patch3:  0003-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
+Patch4:  0004-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
+Patch5:  0005-Fix-unresolved-symbol-in-binary-nvidia-driver.patch
+Patch6:  0006-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
+Patch7:  0007-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
+Patch8:  0008-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
+Patch9:  0009-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
+Patch10: 0010-reduce-wakeups-from-smart-scheduler.patch
+Patch11: 0011-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
+Patch12: 0012-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
+Patch13: 0013-Export-symbol-required-by-wacom-input-device-driver.patch
+Patch14: 0014-include-never-overwrite-realInputProc-with-enqueueI.patch
+Patch15: 0015-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
+Patch16: 0016-Missing-symbols-xf86SetCursor-used-by-alternate-i810.patch
+Patch17: 0017-Blue-background-custom-patch.patch
+Patch18: 0018-Fontpath.d-updated-documentation.patch
+Patch19: 0019-Add-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch-to-g.patch
+Patch20: 0020-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch21: 0021-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch22: 0022-First-commit-in-new-branch-mandriva-gpl-adding-Xvnc.patch
+Patch23: 0023-xvfb-run-support-patch-added-to-mandriva-gpl-branch.patch
+Patch24: 0024-Fix-vnc-build-by-using-sh-.-script.sh-instead-of-j.patch
+Patch25: 00025-Fix-for-CVE-2007-5760-XFree86-Misc-extension-out-o.patch
+Patch26: 00026-Fix-for-CVE-2008-0006-PCF-Font-parser-buffer-overf.patch
+Patch27: 00027-Fix-for-CVE-2007-6429-MIT-SHM-and-EVI-extensions-i.patch
+Patch28: 00028-Fix-for-CVE-2007-6428-TOG-cup-extension-memory-cor.patch
+Patch29: 00029-Fix-for-CVE-2007-6427-Xinput-extension-memory-corr.patch
+Patch30: 00030-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
+Patch31: 00031-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
 ########################################################################
 
 Requires: %{name}-xorg
@@ -811,6 +818,14 @@ This KDrive server is targetted for VIA chipsets.
 %patch21 -p1
 %patch22 -p1
 %patch23 -p1
+%patch24 -p1
+%patch25 -p1
+%patch26 -p1
+%patch27 -p1
+%patch28 -p1
+%patch29 -p1
+%patch30 -p1
+%patch31 -p1
 
 %build
 autoreconf -ifs
