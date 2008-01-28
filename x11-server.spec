@@ -111,13 +111,13 @@ Patch21: 0021-Mouse-moves-slower-than-hand-movement-in-games.patch
 Patch22: 0022-First-commit-in-new-branch-mandriva-gpl-adding-Xvnc.patch
 Patch23: 0023-xvfb-run-support-patch-added-to-mandriva-gpl-branch.patch
 Patch24: 0024-Fix-vnc-build-by-using-sh-.-script.sh-instead-of-j.patch
-Patch25: 00025-Fix-for-CVE-2007-5760-XFree86-Misc-extension-out-o.patch
-Patch26: 00026-Fix-for-CVE-2008-0006-PCF-Font-parser-buffer-overf.patch
-Patch27: 00027-Fix-for-CVE-2007-6429-MIT-SHM-and-EVI-extensions-i.patch
-Patch28: 00028-Fix-for-CVE-2007-6428-TOG-cup-extension-memory-cor.patch
-Patch29: 00029-Fix-for-CVE-2007-6427-Xinput-extension-memory-corr.patch
-Patch30: 00030-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
-Patch31: 00031-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
+Patch25: 0025-Fix-for-CVE-2007-5760-XFree86-Misc-extension-out-o.patch
+Patch26: 0026-Fix-for-CVE-2008-0006-PCF-Font-parser-buffer-overf.patch
+Patch27: 0027-Fix-for-CVE-2007-6429-MIT-SHM-and-EVI-extensions-i.patch
+Patch28: 0028-Fix-for-CVE-2007-6428-TOG-cup-extension-memory-cor.patch
+Patch29: 0029-Fix-for-CVE-2007-6427-Xinput-extension-memory-corr.patch
+Patch30: 0030-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
+Patch31: 0031-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
 ########################################################################
 
 Requires: %{name}-xorg
