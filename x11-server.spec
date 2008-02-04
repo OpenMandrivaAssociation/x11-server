@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 2
+Release: %mkrel 3
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -119,6 +119,9 @@ Patch29: 0029-Fix-for-CVE-2007-6427-Xinput-extension-memory-corr.patch
 Patch30: 0030-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
 Patch31: 0031-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
 ########################################################################
+
+# "fixes" setxkbmap not working in installer (DrakX) when keyboard is not pressed (#35912)
+Patch32: xorg-server-1.4.0.90-allow-setting-XKB-even-if-current-XkbDesc-is-weird.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -826,6 +829,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
+%patch32 -p1 -b .drakx-xkb
 
 %build
 autoreconf -ifs
