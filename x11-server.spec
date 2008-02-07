@@ -18,110 +18,100 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 3
+Release: %mkrel 4
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
-
-########################################################################
-# git clone git://git.mandriva.com/people/pcpa/xorg/xserver xorg/xserver
-# cd xorg/xserver
-# git-archive --format=tar --prefix=xorg-server-1.4.0.90/ xorg-server-1.4.0.90 | bzip2 -9 > xorg-server-1.4.0.90.tar.bz2
-########################################################################
-Source: xorg-server-1.4.0.90.tar.bz2
+Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 Source1: xserver.pamd
-
-########################################################################
 License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
 
-BuildRequires: x11-util-macros		>= 1.1.5
-BuildRequires: x11-xtrans-devel		>= 1.0.4
-BuildRequires: libxxf86misc-devel	>= 1.0.1
-BuildRequires: libxdmcp-devel		>= 1.0.2
-BuildRequires: libxxf86dga-devel	>= 1.0.2
-BuildRequires: mesa-source		>= %{mesaver}
-BuildRequires: libxi-devel		>= 1.1.3
-BuildRequires: SDL-devel
-BuildRequires: libxxf86vm-devel		>= 1.0.1
-BuildRequires: x11-proto-devel		>= 7.3
-BuildRequires: libdrm-devel		>= 2.3.0
-BuildRequires: libxfont-devel		>= 1.3.1
-BuildRequires: libxrender-devel		>= 0.9.4
-BuildRequires: libncurses-devel
-BuildRequires: libpam-devel
-BuildRequires: libxaw-devel		>= 1.0.4
-BuildRequires: flex
-BuildRequires: libxt-devel		>= 1.0.5
-BuildRequires: libxmu-devel		>= 1.0.3
-BuildRequires: libxpm-devel		>= 3.5.7
-BuildRequires: libx11-devel		>= 1.1.3
-BuildRequires: libxext-devel		>= 1.0.3
-BuildRequires: libxkbfile-devel		>= 1.0.4
-BuildRequires: libfontenc-devel		>= 1.0.4
-BuildRequires: libpixman-1-devel	>= 0.9.6
-BuildRequires: libice-devel		>= 1.0.4
-BuildRequires: zlib-devel
-BuildRequires: libsm-devel		>= 1.0.3
-%if %{enable_xvnc}
-BuildRequires: libjpeg-devel
+%if %enable_dmx
+BuildRequires: libdmx-devel >= 1.0.1
 %endif
-BuildRequires: libxkbui-devel		>= 1.0.2
-BuildRequires: libxau-devel		>= 1.0.3
-
+BuildRequires: libfontenc-devel >= 1.0.1
+BuildRequires: libmesagl-devel >= %{mesaver}
+BuildRequires: libxau-devel >= 1.0.0
+BuildRequires: libxaw-devel >= 1.0.1
+BuildRequires: libxdmcp-devel >= 1.0.0
+BuildRequires: libxext-devel >= 1.0.0
+BuildRequires: libxfont-devel >= 1.2.8-2mdv
+BuildRequires: libxfixes-devel
+BuildRequires: libxi-devel >= 1.1.3
+BuildRequires: libxkbfile-devel >= 1.0.4
+BuildRequires: libxau-devel >= 1.0.0
+BuildRequires: libxkbui-devel >= 1.0.1
+BuildRequires: libxmu-devel >= 1.0.0
+BuildRequires: libxpm-devel >= 3.5.4.2
+BuildRequires: libxrender-devel >= 0.9.4
+BuildRequires: libxres-devel >= 1.0.0
+BuildRequires: libxtst-devel >= 1.0.1
+BuildRequires: libxxf86misc-devel >= 1.0.0
+BuildRequires: libxxf86vm-devel >= 1.0.0
+BuildRequires: libxfont-devel >= 1.0.0
+BuildRequires: mesa-source >= %{mesaver}
+BuildRequires: x11-proto-devel >= 1.4.0
+BuildRequires: x11-util-macros >= 1.1.5
+BuildRequires: x11-xtrans-devel >= 1.0.3
+BuildRequires: libpam-devel
+BuildRequires: libgpm-devel
+BuildRequires: SDL-devel
+BuildRequires: libgii-devel
+BuildRequires: libpixman-1-devel >= 0.9.5
 
 %if %{enable_hal}
 # For the moment only really required if compiling with --config-dbus
 # But if available at build time, will include headers, but do nothing
-BuildRequires: libhal-devel		>= 0.5.10
+BuildRequires: libhal-devel
 %endif
 
 %if %{enable_dbus}
-BuildRequires: libdbus-devel		>= 1.1.2
+BuildRequires: libdbus-devel
 %endif
 
-%if %enable_dmx
-BuildRequires: libdmx-devel		>= 1.0.1
+%if %{enable_dmx}
+BuildRequires: libdmx-devel
 %endif
 
-########################################################################
-# git-format-patch xorg-server-1.4.0.90..origin/mandriva+gpl
-Patch1:  0001-First-version-of-code-to-make-symbols-default-to-h.patch
-Patch2:  0002-This-is-a-set-of-patches-that-should-be-safe-to-ap.patch
-Patch3:  0003-Extra-symbols-that-must-be-exported-to-satisfy-sym.patch
-Patch4:  0004-Export-extra-symbols-used-by-libxf8_32bpp.so.patch
-Patch5:  0005-Fix-unresolved-symbol-in-binary-nvidia-driver.patch
-Patch6:  0006-Explicitly-mark-as-public-libpcidata-libscanpci-sy.patch
-Patch7:  0007-Fix-symbols-used-by-vnc-patch-and-accessed-using-L.patch
-Patch8:  0008-Revert-Explicitly-mark-as-public-libpcidata-libsc.patch
-Patch9:  0009-Proper-implementation-of-fix-for-pci-code-using-Lo.patch
-Patch10: 0010-reduce-wakeups-from-smart-scheduler.patch
-Patch11: 0011-Fix-compilation-problem-on-x86_64-caused-by-a-typo-i.patch
-Patch12: 0012-Export-symbols-used-by-nouveau-driver-and-fpit-input.patch
-Patch13: 0013-Export-symbol-required-by-wacom-input-device-driver.patch
-Patch14: 0014-include-never-overwrite-realInputProc-with-enqueueI.patch
-Patch15: 0015-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
-Patch16: 0016-Missing-symbols-xf86SetCursor-used-by-alternate-i810.patch
-Patch17: 0017-Blue-background-custom-patch.patch
-Patch18: 0018-Fontpath.d-updated-documentation.patch
-Patch19: 0019-Add-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch-to-g.patch
-Patch20: 0020-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch21: 0021-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch22: 0022-First-commit-in-new-branch-mandriva-gpl-adding-Xvnc.patch
-Patch23: 0023-xvfb-run-support-patch-added-to-mandriva-gpl-branch.patch
-Patch24: 0024-Fix-vnc-build-by-using-sh-.-script.sh-instead-of-j.patch
-Patch25: 0025-Fix-for-CVE-2007-5760-XFree86-Misc-extension-out-o.patch
-Patch26: 0026-Fix-for-CVE-2008-0006-PCF-Font-parser-buffer-overf.patch
-Patch27: 0027-Fix-for-CVE-2007-6429-MIT-SHM-and-EVI-extensions-i.patch
-Patch28: 0028-Fix-for-CVE-2007-6428-TOG-cup-extension-memory-cor.patch
-Patch29: 0029-Fix-for-CVE-2007-6427-Xinput-extension-memory-corr.patch
-Patch30: 0030-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
-Patch31: 0031-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
-########################################################################
+%if %{enable_xvnc}
+BuildRequires: libjpeg-devel
+%endif
 
-# "fixes" setxkbmap not working in installer (DrakX) when keyboard is not pressed (#35912)
-Patch32: xorg-server-1.4.0.90-allow-setting-XKB-even-if-current-XkbDesc-is-weird.patch
+Patch1:  0001-Bug-13308-Verify-and-reject-obviously-broken-modes.patch
+Patch2:  0002-bgPixel-unsigned-long-is-64-bit-on-x86_64-so-1.patch
+Patch3:  0003-Xprint-Clean-up-generated-files.patch
+Patch4:  0004-Config-D-Bus-Don-t-leak-timers.patch
+Patch5:  0005-Config-HAL-Don-t-leak-options-on-failure-to-add-de.patch
+Patch6:  0006-OS-Don-t-leak-connection-translation-table-on-regen.patch
+Patch7:  0007-KDrive-Xephyr-Don-t-leak-screen-damage-structure.patch
+Patch8:  0008-Input-Don-t-reinit-devices.patch
+Patch9:  0009-include-never-overwrite-realInputProc-with-enqueueI.patch
+Patch10: 0010-OS-IO-Zero-out-client-buffers.patch
+Patch11: 0011-XKB-XkbCopyKeymap-Don-t-leak-all-the-sections.patch
+Patch12: 0012-Xephyr-One-time-keyboard-leak-fix.patch
+Patch13: 0013-Fix-for-CVE-2007-5760-XFree86-Misc-extension-out-o.patch
+Patch14: 0014-Fix-for-CVE-2007-6428-TOG-cup-extension-memory-cor.patch
+Patch15: 0015-Fix-for-CVE-2007-6427-Xinput-extension-memory-corr.patch
+Patch16: 0016-Fix-for-CVE-2007-6429-MIT-SHM-and-EVI-extensions-i.patch
+Patch17: 0017-Fix-for-CVE-2008-0006-PCF-Font-parser-buffer-overf.patch
+Patch18: 0018-Fix-for-CVE-2007-5958-File-existence-disclosure.patch
+Patch19: 0019-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
+Patch20: 0020-dix-set-the-correct-number-of-valuators-in-valuator.patch
+Patch21: 0021-xkb-don-t-update-LEDs-if-they-don-t-exist.-Bug-13.patch
+Patch22: 0022-This-is-a-set-of-patches-that-should-be-safe-to-appl.patch
+Patch23: 0023-reduce-wakeups-from-smart-scheduler.patch
+Patch24: 0024-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
+Patch25: 0025-Blue-background-custom-patch.patch
+Patch26: 0026-Fontpath.d-updated-documentation.patch
+Patch27: 0027-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
+Patch28: 0028-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch29: 0029-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch30: 0030-Xvnc-support.patch
+Patch31: 0031-xvfb-run-support.patch
+Patch32: 0032-fixes-mdvbz-35912.patch
+
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -185,6 +175,8 @@ Conflicts: filesystem < 2.1.8
 
 # xorgcfg requires these
 Requires: x11-data-bitmaps
+# xorgcfg requires bitmaps on this package...
+Requires: bitmap
 
 %description common
 X server common files
@@ -257,20 +249,7 @@ fi
 %endif
 %{_libdir}/X11/Cards
 %{_libdir}/X11/Options
-%dir %{_libdir}/xorg/modules
-%{_libdir}/xorg/modules/*.so
-%dir %{_libdir}/xorg/modules/drivers
-%{_libdir}/xorg/modules/fonts/*.so
-%dir %{_libdir}/xorg/modules/extensions
-%{_libdir}/xorg/modules/extensions/*.so
-%dir %{_libdir}/xorg/modules/extensions/standard
-%{_libdir}/xorg/modules/extensions/standard/*.so
-%dir %{_libdir}/xorg/modules/fonts
-%dir %{_libdir}/xorg/modules/input
-%dir %{_libdir}/xorg/modules/linux
-%{_libdir}/xorg/modules/linux/*.so
-%dir %{_libdir}/xorg/modules/multimedia
-%{_libdir}/xorg/modules/multimedia/*.so
+%{_libdir}/xorg/modules/*
 # (anssi) We do not want this file to really exist, it is empty.
 # This entry causes an rpm-build warning "file listed twice", but getting rid
 # of the warning would need us to list all the other extensions one-by-one.
@@ -964,13 +943,6 @@ install -d -m755 %{buildroot}%{_libdir}/xorg/modules/extensions/standard
 mv %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so \
 	%{buildroot}%{_libdir}/xorg/modules/extensions/standard/libglx.so
 touch %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so
-
-# Don't install .la files
-rm -f %{buildroot}/%{_libdir}/xorg/modules/*.la
-rm -f %{buildroot}/%{_libdir}/xorg/modules/extensions/*.la
-rm -f %{buildroot}/%{_libdir}/xorg/modules/fonts/*.la
-rm -f %{buildroot}/%{_libdir}/xorg/modules/linux/*.la
-rm -f %{buildroot}/%{_libdir}/xorg/modules/multimedia/*.la
 
 %clean
 rm -rf %{buildroot}
