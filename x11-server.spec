@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 4
+Release: %mkrel 5
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -100,6 +100,8 @@ Patch18: 0018-Fix-for-CVE-2007-5958-File-existence-disclosure.patch
 Patch19: 0019-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
 Patch20: 0020-dix-set-the-correct-number-of-valuators-in-valuator.patch
 Patch21: 0021-xkb-don-t-update-LEDs-if-they-don-t-exist.-Bug-13.patch
+
+# Patches bellow applied on top of server-1.4-branch
 Patch22: 0022-This-is-a-set-of-patches-that-should-be-safe-to-appl.patch
 Patch23: 0023-reduce-wakeups-from-smart-scheduler.patch
 Patch24: 0024-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
@@ -111,6 +113,16 @@ Patch29: 0029-Mouse-moves-slower-than-hand-movement-in-games.patch
 Patch30: 0030-Xvnc-support.patch
 Patch31: 0031-xvfb-run-support.patch
 Patch32: 0032-fixes-mdvbz-35912.patch
+Patch33: 0033-Update-keyboard-leds.patch
+
+# Some cherry-picks from master
+Patch34: 0034-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
+Patch35: 0035-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
+Patch36: 0036-Fix-potential-crasher-in-xf86CrtcRotate.patch
+Patch37: 0037-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
+Patch38: 0038-mi-change-infamous-Tossed-event-.-error-for-som.patch
+Patch39: 0039-Don-t-break-grab-and-focus-state-for-a-window-when-r.patch
+Patch40: 0040-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
 
 
 Requires: %{name}-xorg
@@ -809,6 +821,14 @@ This KDrive server is targetted for VIA chipsets.
 %patch30 -p1
 %patch31 -p1
 %patch32 -p1 -b .drakx-xkb
+%patch33 -p1
+%patch34 -p1
+%patch35 -p1
+%patch36 -p1
+%patch37 -p1
+%patch38 -p1
+%patch39 -p1
+%patch40 -p1
 
 %build
 autoreconf -ifs
