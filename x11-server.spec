@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 5
+Release: %mkrel 6
 Summary:  X11 servers
 Group: System/X11
 URL: http://xorg.freedesktop.org
@@ -184,6 +184,10 @@ Requires(post): update-alternatives >= 1.9.0
 Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
 Conflicts: filesystem < 2.1.8
+
+# Fix: missing conflicts to allow upgrade from 2008.0 to cooker
+# http://qa.mandriva.com/show_bug.cgi?id=36651
+Conflicts: x11-driver-video-nvidia-current <= 100.14.19
 
 # xorgcfg requires these
 Requires: x11-data-bitmaps
