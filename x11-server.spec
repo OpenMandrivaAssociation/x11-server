@@ -498,7 +498,7 @@ Images and shadow framebuffer updates to provide good performance. It also
 has a visual debugging mode for observing screen updates.
 
 Possible uses include; 
-- Xnest replacement - Window manager, Composite 'gadget', etc development tool. 
+- Xnest replacement - Window manager, Composite 'gadget', etc development tool.
 - Toolkit debugging - rendundant toolkit paints can be observered easily via
   the debugging mode. 
 - X Server internals development - develop without the need for an extra
