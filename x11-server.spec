@@ -21,6 +21,7 @@ Version: 1.4.0.90
 Release: %mkrel 6
 Summary:  X11 servers
 Group: System/X11
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL: http://xorg.freedesktop.org
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 Source1: xserver.pamd
