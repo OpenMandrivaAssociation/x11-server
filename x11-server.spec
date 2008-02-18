@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 6
+Release: %mkrel 7
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -101,29 +101,33 @@ Patch18: 0018-Fix-for-CVE-2007-5958-File-existence-disclosure.patch
 Patch19: 0019-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
 Patch20: 0020-dix-set-the-correct-number-of-valuators-in-valuator.patch
 Patch21: 0021-xkb-don-t-update-LEDs-if-they-don-t-exist.-Bug-13.patch
+Patch22: 0022-security-Fix-for-Bug-14480-untrusted-access-broke.patch
 
-# Patches bellow applied on top of server-1.4-branch
-Patch22: 0022-This-is-a-set-of-patches-that-should-be-safe-to-appl.patch
-Patch23: 0023-reduce-wakeups-from-smart-scheduler.patch
-Patch24: 0024-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
-Patch25: 0025-Blue-background-custom-patch.patch
-Patch26: 0026-Fontpath.d-updated-documentation.patch
-Patch27: 0027-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
-Patch28: 0028-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch29: 0029-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch30: 0030-Xvnc-support.patch
-Patch31: 0031-xvfb-run-support.patch
-Patch32: 0032-fixes-mdvbz-35912.patch
-Patch33: 0033-Update-keyboard-leds.patch
+# git-rebase on server-1.4-branch
+Patch23: 0023-This-is-a-set-of-patches-that-should-be-safe-to-appl.patch
+Patch24: 0024-reduce-wakeups-from-smart-scheduler.patch
+Patch25: 0025-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
+Patch26: 0026-Blue-background-custom-patch.patch
+Patch27: 0027-Fontpath.d-updated-documentation.patch
+Patch28: 0028-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
+Patch29: 0029-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch30: 0030-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch31: 0031-Xvnc-support.patch
+Patch32: 0032-xvfb-run-support.patch
+Patch33: 0033-fixes-mdvbz-35912.patch
+Patch34: 0034-Update-keyboard-leds.patch
 
 # Some cherry-picks from master
-Patch34: 0034-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
-Patch35: 0035-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
-Patch36: 0036-Fix-potential-crasher-in-xf86CrtcRotate.patch
-Patch37: 0037-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
-Patch38: 0038-mi-change-infamous-Tossed-event-.-error-for-som.patch
-Patch39: 0039-Don-t-break-grab-and-focus-state-for-a-window-when-r.patch
-Patch40: 0040-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
+Patch35: 0035-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
+Patch36: 0036-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
+Patch37: 0037-Fix-potential-crasher-in-xf86CrtcRotate.patch
+Patch38: 0038-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
+Patch39: 0039-mi-change-infamous-Tossed-event-.-error-for-som.patch
+Patch40: 0040-Don-t-break-grab-and-focus-state-for-a-window-when-r.patch
+Patch41: 0041-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
+Patch42: 0042-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
+Patch43: 0043-xkb-when-copying-the-keymap-make-sure-the-structs.patch
+Patch44: 0044-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
 
 
 Requires: %{name}-xorg
@@ -834,11 +838,15 @@ This KDrive server is targetted for VIA chipsets.
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
+%patch41 -p1
+%patch42 -p1
+%patch43 -p1
+%patch44 -p1
 
 %build
 autoreconf -ifs
 %if %{with_debug}
-CFLAGS='-DBUILDDEBUG -g' \
+CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 %configure	--with-log-dir=%{_logdir} \
 		--with-os-vendor="Mandriva" \
