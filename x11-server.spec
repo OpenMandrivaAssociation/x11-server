@@ -80,6 +80,7 @@ BuildRequires: libdmx-devel
 BuildRequires: libjpeg-devel
 %endif
 
+# git-format-patch xorg-server-1.4.0.90..origin/server-1.4-branch
 Patch1:  0001-Bug-13308-Verify-and-reject-obviously-broken-modes.patch
 Patch2:  0002-bgPixel-unsigned-long-is-64-bit-on-x86_64-so-1.patch
 Patch3:  0003-Xprint-Clean-up-generated-files.patch
@@ -102,33 +103,36 @@ Patch19: 0019-CVE-2007-6429-Don-t-spuriously-reject-8bpp-shm-pix.patch
 Patch20: 0020-dix-set-the-correct-number-of-valuators-in-valuator.patch
 Patch21: 0021-xkb-don-t-update-LEDs-if-they-don-t-exist.-Bug-13.patch
 Patch22: 0022-security-Fix-for-Bug-14480-untrusted-access-broke.patch
+Patch23: 0023-Resize-composite-overlay-window-when-the-root-window.patch
+Patch24: 0024-Fix-rotation-for-multi-monitor-situation.patch
+Patch25: 0025-Don-t-break-grab-and-focus-state-for-a-window-when-r.patch
+Patch26: 0026-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
 
-# git-rebase on server-1.4-branch
-Patch23: 0023-This-is-a-set-of-patches-that-should-be-safe-to-appl.patch
-Patch24: 0024-reduce-wakeups-from-smart-scheduler.patch
-Patch25: 0025-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
-Patch26: 0026-Blue-background-custom-patch.patch
-Patch27: 0027-Fontpath.d-updated-documentation.patch
-Patch28: 0028-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
-Patch29: 0029-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch30: 0030-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch31: 0031-Xvnc-support.patch
-Patch32: 0032-xvfb-run-support.patch
-Patch33: 0033-fixes-mdvbz-35912.patch
-Patch34: 0034-Update-keyboard-leds.patch
+# git-rebase origin/server-1.4-branch
+# git-format-patch --start-number 500 origin/server-1.4-branch..patches
+Patch500: 0500-This-is-a-set-of-patches-that-should-be-safe-to-appl.patch
+Patch501: 0501-reduce-wakeups-from-smart-scheduler.patch
+Patch502: 0502-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
+Patch503: 0503-Blue-background-custom-patch.patch
+Patch504: 0504-Fontpath.d-updated-documentation.patch
+Patch505: 0505-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
+Patch506: 0506-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch507: 0507-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch508: 0508-Xvnc-support.patch
+Patch509: 0509-xvfb-run-support.patch
+Patch510: 0510-fixes-mdvbz-35912.patch
+Patch511: 0511-Update-keyboard-leds.patch
 
 # Some cherry-picks from master
-Patch35: 0035-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
-Patch36: 0036-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
-Patch37: 0037-Fix-potential-crasher-in-xf86CrtcRotate.patch
-Patch38: 0038-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
-Patch39: 0039-mi-change-infamous-Tossed-event-.-error-for-som.patch
-Patch40: 0040-Don-t-break-grab-and-focus-state-for-a-window-when-r.patch
-Patch41: 0041-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
-Patch42: 0042-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
-Patch43: 0043-xkb-when-copying-the-keymap-make-sure-the-structs.patch
-Patch44: 0044-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
-
+Patch512: 0512-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
+Patch513: 0513-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
+Patch514: 0514-Fix-potential-crasher-in-xf86CrtcRotate.patch
+Patch515: 0515-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
+Patch516: 0516-mi-change-infamous-Tossed-event-.-error-for-som.patch
+Patch517: 0517-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
+Patch518: 0518-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
+Patch519: 0519-xkb-when-copying-the-keymap-make-sure-the-structs.patch
+Patch520: 0520-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -824,24 +828,28 @@ This KDrive server is targetted for VIA chipsets.
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
-%patch27 -p1
-%patch28 -p1
-%patch29 -p1
-%patch30 -p1
-%patch31 -p1
-%patch32 -p1 -b .drakx-xkb
-%patch33 -p1
-%patch34 -p1
-%patch35 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%patch41 -p1
-%patch42 -p1
-%patch43 -p1
-%patch44 -p1
+
+%patch500 -p1
+%patch501 -p1
+%patch502 -p1
+%patch503 -p1
+%patch504 -p1
+%patch505 -p1
+%patch506 -p1
+%patch507 -p1 -b .drakx-xkb
+%patch508 -p1
+%patch509 -p1
+%patch510 -p1
+%patch511 -p1
+%patch512 -p1
+%patch513 -p1
+%patch514 -p1
+%patch515 -p1
+%patch516 -p1
+%patch517 -p1
+%patch518 -p1
+%patch519 -p1
+%patch520 -p1
 
 %build
 autoreconf -ifs
