@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 7
+Release: %mkrel 8
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -107,6 +107,7 @@ Patch23: 0023-Resize-composite-overlay-window-when-the-root-window.patch
 Patch24: 0024-Fix-rotation-for-multi-monitor-situation.patch
 Patch25: 0025-Don-t-break-grab-and-focus-state-for-a-window-when-r.patch
 Patch26: 0026-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
+Patch27: 0027-Fix-context-sharing-between-direct-indirect-contexts.patch
 
 # git-rebase origin/server-1.4-branch
 # git-format-patch --start-number 500 origin/server-1.4-branch..patches
@@ -133,6 +134,7 @@ Patch517: 0517-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
 Patch518: 0518-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
 Patch519: 0519-xkb-when-copying-the-keymap-make-sure-the-structs.patch
 Patch520: 0520-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
+Patch521: 0521-Don-t-frob-timers-unless-SmartSchedule-is-running.patch 
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -828,6 +830,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
+%patch27 -p1
 
 %patch500 -p1
 %patch501 -p1
@@ -850,6 +853,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch518 -p1
 %patch519 -p1
 %patch520 -p1
+%patch521 -p1
 
 %build
 autoreconf -ifs
