@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 9
+Release: %mkrel 10
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -135,6 +135,16 @@ Patch518: 0518-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
 Patch519: 0519-xkb-when-copying-the-keymap-make-sure-the-structs.patch
 Patch520: 0520-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
 Patch521: 0521-Don-t-frob-timers-unless-SmartSchedule-is-running.patch 
+
+# Custom patch to not print information about pre-release version
+Patch522: 0522-Don-t-print-information-about-X-Server-being-a-pre-r.patch
+
+# More cherry-picks from master
+Patch523: 0523-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
+Patch524: 0524-RANDR-1.2-Inherit-PreferredMode-from-the-global-con.patch
+Patch525: 0525-XkbCopyKeymap-was-mangling-doodads-and-overlays.patch
+Patch526: 0526-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
+
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -854,6 +864,11 @@ This KDrive server is targetted for VIA chipsets.
 %patch519 -p1
 %patch520 -p1
 %patch521 -p1
+%patch522 -p1
+%patch523 -p1
+%patch524 -p1
+%patch525 -p1
+%patch526 -p1
 
 %build
 autoreconf -ifs
