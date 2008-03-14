@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 10
+Release: %mkrel 11
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -866,7 +866,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch521 -p1
 %patch522 -p1
 %patch523 -p1
-%patch524 -p1
+# %patch524 -p1
 %patch525 -p1
 %patch526 -p1
 
