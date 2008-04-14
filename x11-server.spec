@@ -1,13 +1,13 @@
 %define with_debug		0
 %define kdrive_builds_vesa	0
 %define enable_xvnc		1
-%define enable_dmx		0
+%define enable_dmx		1
 %define enable_hal		0
 %define enable_dbus		%{enable_hal}
 %define enable_builddocs	1
 
 %define mesasrcdir		%{_prefix}/src/Mesa
-%define mesaver			7.0.2
+%define mesaver			7.0.3
 
 %ifarch %{ix86} alpha
 %define kdrive_builds_vesa	1
@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 11
+Release: %mkrel 12
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -108,6 +108,8 @@ Patch24: 0024-Fix-rotation-for-multi-monitor-situation.patch
 Patch25: 0025-Don-t-break-grab-and-focus-state-for-a-window-when-r.patch
 Patch26: 0026-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
 Patch27: 0027-Fix-context-sharing-between-direct-indirect-contexts.patch
+Patch28: 0028-Add-some-more-support-for-DragonFly.-From-Joerg-Sonn.patch
+Patch29: 0029-configure.ac-DragonFly-BSD-support.patch
 
 # git-rebase origin/server-1.4-branch
 # git-format-patch --start-number 500 origin/server-1.4-branch..patches
@@ -144,7 +146,10 @@ Patch523: 0523-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
 Patch524: 0524-RANDR-1.2-Inherit-PreferredMode-from-the-global-con.patch
 Patch525: 0525-XkbCopyKeymap-was-mangling-doodads-and-overlays.patch
 Patch526: 0526-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
-
+Patch527: 0527-X86EMU-handle-CPUID-instruction.patch
+Patch528: 0528-Fail-CRTC-configuration-if-vtSema.patch
+Patch529: 0529-Bug-13962-Re-arm-the-DPMS-timer-when-re-enabling-D.patch
+Patch530: 0530-XKB-Fix-processInputProc-wrapping.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -841,6 +846,8 @@ This KDrive server is targetted for VIA chipsets.
 %patch25 -p1
 %patch26 -p1
 %patch27 -p1
+%patch28 -p1
+%patch29 -p1
 
 %patch500 -p1
 %patch501 -p1
@@ -869,6 +876,10 @@ This KDrive server is targetted for VIA chipsets.
 # %patch524 -p1
 %patch525 -p1
 %patch526 -p1
+%patch527 -p1
+%patch528 -p1
+%patch529 -p1
+%patch530 -p1
 
 %build
 autoreconf -ifs
