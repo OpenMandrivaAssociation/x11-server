@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 12
+Release: %mkrel 13
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -110,46 +110,47 @@ Patch26: 0026-CVE-2007-6429-Always-test-for-size-offset-wrapping.patch
 Patch27: 0027-Fix-context-sharing-between-direct-indirect-contexts.patch
 Patch28: 0028-Add-some-more-support-for-DragonFly.-From-Joerg-Sonn.patch
 Patch29: 0029-configure.ac-DragonFly-BSD-support.patch
+Patch30: 0030-Fixed-configure.ac-for-autoconf-2.62.patch
+Patch31: 0031-EXA-Fix-off-by-one-in-polyline-drawing.patch
+Patch32: 0032-XKB-Fix-processInputProc-wrapping.patch
+Patch33: 0033-xfree86-fix-AlwaysCore-handling.-Bug-14256.patch
 
+# git-checkout patches
 # git-rebase origin/server-1.4-branch
 # git-format-patch --start-number 500 origin/server-1.4-branch..patches
-Patch500: 0500-This-is-a-set-of-patches-that-should-be-safe-to-appl.patch
-Patch501: 0501-reduce-wakeups-from-smart-scheduler.patch
-Patch502: 0502-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
+Patch500: 0500-Move-around-a-list-traversal-while-free-ing-data.patch
+Patch501: 0501-Fix-a-crash-if-xorg.conf-doesn-t-have-a-Files-sectio.patch
+Patch502: 0502-Don-t-enable-mouse-keys-if-the-X-Server-was-not-star.patch
 Patch503: 0503-Blue-background-custom-patch.patch
-Patch504: 0504-Fontpath.d-updated-documentation.patch
-Patch505: 0505-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
-Patch506: 0506-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch507: 0507-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch508: 0508-Xvnc-support.patch
-Patch509: 0509-xvfb-run-support.patch
-Patch510: 0510-fixes-mdvbz-35912.patch
+Patch504: 0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
+Patch505: 0505-Xvnc-support.patch
+Patch506: 0506-fix-parsing-weird-EDID.patch
+Patch507: 0507-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
+Patch508: 0508-xvfb-run-support.patch
+Patch509: 0509-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch510: 0510-Fontpath.d-updated-documentation.patch
 Patch511: 0511-Update-keyboard-leds.patch
+Patch512: 0512-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch513: 0513-fixes-mdvbz-35912.patch
+Patch514: 0514-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 
 # Some cherry-picks from master
-Patch512: 0512-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
-Patch513: 0513-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
-Patch514: 0514-Fix-potential-crasher-in-xf86CrtcRotate.patch
-Patch515: 0515-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
-Patch516: 0516-mi-change-infamous-Tossed-event-.-error-for-som.patch
-Patch517: 0517-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
-Patch518: 0518-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
-Patch519: 0519-xkb-when-copying-the-keymap-make-sure-the-structs.patch
-Patch520: 0520-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
-Patch521: 0521-Don-t-frob-timers-unless-SmartSchedule-is-running.patch 
-
-# Custom patch to not print information about pre-release version
-Patch522: 0522-Don-t-print-information-about-X-Server-being-a-pre-r.patch
-
-# More cherry-picks from master
-Patch523: 0523-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
-Patch524: 0524-RANDR-1.2-Inherit-PreferredMode-from-the-global-con.patch
-Patch525: 0525-XkbCopyKeymap-was-mangling-doodads-and-overlays.patch
+Patch515: 0515-reduce-wakeups-from-smart-scheduler.patch
+Patch516: 0516-Don-t-frob-timers-unless-SmartSchedule-is-running.patch
+Patch517: 0517-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
+Patch518: 0518-xkb-when-copying-the-keymap-make-sure-the-structs.patch
+Patch519: 0519-XkbCopyKeymap-was-mangling-doodads-and-overlays.patch
+Patch520: 0520-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
+Patch521: 0521-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
+Patch522: 0522-Fix-potential-crasher-in-xf86CrtcRotate.patch
+Patch523: 0523-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
+Patch524: 0524-mi-change-infamous-Tossed-event-.-error-for-som.patch
+Patch525: 0525-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
 Patch526: 0526-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
-Patch527: 0527-X86EMU-handle-CPUID-instruction.patch
-Patch528: 0528-Fail-CRTC-configuration-if-vtSema.patch
-Patch529: 0529-Bug-13962-Re-arm-the-DPMS-timer-when-re-enabling-D.patch
-Patch530: 0530-XKB-Fix-processInputProc-wrapping.patch
+Patch527: 0527-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
+Patch528: 0528-X86EMU-handle-CPUID-instruction.patch
+Patch529: 0529-Fail-CRTC-configuration-if-vtSema.patch
+Patch530: 0530-Bug-13962-Re-arm-the-DPMS-timer-when-re-enabling-D.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -215,6 +216,8 @@ Conflicts: filesystem < 2.1.8
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
 
+Conflicts: x11-driver-video-fglrx <= 8.476-1mdv
+
 # xorgcfg requires these
 Requires: x11-data-bitmaps
 # xorgcfg requires bitmaps on this package...
@@ -229,15 +232,40 @@ X server common files
 # but there are scenarios where /usr/lib/X11 and /usr/X11R6/lib/X11 both
 # exist as directories.
 %pre common
-if [ -L %{_libdir}/X11 ]; then 
-	rm -f %{_libdir}/X11
-fi
-if [ -d /usr/X11R6/lib/X11 ]; then
-	mkdir -p %{_libdir}/X11
-	rm -f /usr/X11R6/lib/X11/fs # old symlink, already on the target dir
-	mv -f /usr/X11R6/lib/X11/* %{_libdir}/X11/ 2> /dev/null
-	rm -rf /usr/X11R6/lib/X11
-fi
+move () {
+    # This may cause some problems at first, but the mess of /etc/X11
+    # and /usr/lib/X11 should really be fixed at one time or another...
+    for file in `find $1 -maxdepth 1 -mindepth 1`; do
+	[ -L $file ] && rm -f $file
+	file=`basename $file`
+	if [ ! -e $2/$file -o -L $2/$file ]; then
+	    mv -f $1/$file $2
+	# Don't try to be too smart and recurse...
+	elif [ -d $2/$file -a -d $1/$file ]; then
+	    mv -f $1/$file/* $2/$file
+	    # Using possibly risky command to avoid failures due to
+	    # moving links to the real file
+	    rm -fr $1/$file
+	else
+	    mv -f $1/$file $2/$file.orig
+	fi
+    done
+}
+check () {
+    if [ -L $1 ]; then
+	rm -f $1
+	ln -sf $3$2 $1
+    elif [ -d $1 ]; then
+	move $1 $2 $3
+	rmdir $1
+	ln -s $3$2 $1
+    fi
+}
+check %{_libdir}/X11 %{_sysconfdir}/X11 ../..
+check %{_sysconfdir}/X11/app-defaults %{_datadir}/X11/app-defaults ../../..
+check %{_prefix}/X11R6/lib/X11 %{_sysconfdir}/X11 ../../..
+check %{_prefix}/X11R6/lib/modules %{_libdir}/xorg/modules ../..
+check %{_prefix}/X11R6/lib/modules/dri %{_libdir}/dri ../../..
 
 %post common
 %{_sbindir}/update-alternatives \
@@ -268,12 +296,13 @@ fi
 
 %files common
 %defattr(-,root,root)
+%{_libdir}/X11
 %dir %{_libdir}/xorg/modules
-%dir %{_libdir}/xserver
-%dir %{_libdir}/X11
 %dir %{_sysconfdir}/X11
-%dir %{_sysconfdir}/X11/app-defaults
+%dir %{_datadir}/X11/app-defaults
+%{_sysconfdir}/X11/app-defaults
 %dir %{_sysconfdir}/X11/fontpath.d
+%dir %{_sysconfdir}/X11/xserver
 %dir %{_sysconfdir}/ld.so.conf.d/GL
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
@@ -289,14 +318,14 @@ fi
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
-%{_libdir}/X11/Cards
-%{_libdir}/X11/Options
+%{_sysconfdir}/X11/Cards
+%{_sysconfdir}/X11/Options
 %{_libdir}/xorg/modules/*
 # (anssi) We do not want this file to really exist, it is empty.
 # This entry causes an rpm-build warning "file listed twice", but getting rid
 # of the warning would need us to list all the other extensions one-by-one.
 %ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%{_libdir}/xserver/SecurityPolicy
+%{_sysconfdir}/X11/xserver/SecurityPolicy
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/xorgcfg.*
 %{_mandir}/man1/xorgconfig.*
@@ -312,7 +341,9 @@ fi
 %{_mandir}/man5/SecurityPolicy.*
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
-%dir %{_prefix}/X11R6/lib/X11
+%{_prefix}/X11R6/lib/X11
+%{_prefix}/X11R6/lib/modules
+%{_prefix}/X11R6/lib/modules/dri
 # xorgcfg bitmaps/pixmaps
 %{_includedir}/X11/bitmaps/*.xbm
 %{_includedir}/X11/pixmaps/*.xpm
@@ -848,6 +879,10 @@ This KDrive server is targetted for VIA chipsets.
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
+%patch30 -p1
+%patch31 -p1
+%patch32 -p1
+%patch33 -p1
 
 %patch500 -p1
 %patch501 -p1
@@ -856,7 +891,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch504 -p1
 %patch505 -p1
 %patch506 -p1
-%patch507 -p1 -b .drakx-xkb
+%patch507 -p1
 %patch508 -p1
 %patch509 -p1
 %patch510 -p1
@@ -873,7 +908,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch521 -p1
 %patch522 -p1
 %patch523 -p1
-# %patch524 -p1
+%patch524 -p1
 %patch525 -p1
 %patch526 -p1
 %patch527 -p1
@@ -972,6 +1007,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%else
 		--disable-config-hal \
 		%endif
+		--with-serverconfig-path="%{_sysconfdir}/X11/xserver" \
 		--with-fontdir="%{_datadir}/fonts" \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
@@ -986,11 +1022,10 @@ ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
 ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
 
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-install -m 0644 %{_sourcedir}/xserver.pamd %{buildroot}%{_sysconfdir}/pam.d/xserver     
+install -m 0644 %{_sourcedir}/xserver.pamd %{buildroot}%{_sysconfdir}/pam.d/xserver
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
-mkdir -p %{buildroot}%{_sysconfdir}/X11/app-defaults
 mkdir -p %{buildroot}%{_sysconfdir}/X11/fontpath.d
 
 # move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
@@ -999,6 +1034,21 @@ mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_da
 # for compatibility with legacy applications (see #23423, for example)
 mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
 ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
+
+# These "compat" directories/links should be owned by xorg-common
+ln -s ../../%{_lib}/xorg/modules %{buildroot}%{_prefix}/X11R6/lib/modules
+ln -s ../../../%{_lib}/dri %{buildroot}%{_prefix}/X11R6/lib/modules/dri
+ln -s ..%{_datadir}/X11/app-defaults %{buildroot}%{_sysconfdir}/X11/app-defaults
+
+# Move anything that is still being installed in /usr/lib/X11 to /etc/X11
+# and adjust symbolic link
+if [ -d %{buildroot}%{_libdir}/X11 ]; then
+    for file in `find %{buildroot}%{_libdir}/X11 -maxdepth 1 -mindepth 1`; do
+	mv -f $file %{buildroot}%{_sysconfdir}/X11/`basename $f`
+    done
+    rmdir %{buildroot}%{_libdir}/X11
+fi
+ln -sf ../..%{_sysconfdir}/X11 %{buildroot}%{_libdir}/X11
 
 # create more module directories to be owned by x11-server-common
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
