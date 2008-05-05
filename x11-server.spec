@@ -216,7 +216,16 @@ Conflicts: filesystem < 2.1.8
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
 
+# Avoid upgrade or just install problems with symlinks
 Conflicts: x11-driver-video-fglrx <= 8.476-1mdv
+Conflicts: libx11 <= 1.1.4-1mdv
+
+#   Some of these are more broken than thinking the own {base-dir}/X11,
+# and should really be dropped from the distro, but adding a Conflicts
+# to avoid update problems where they could mess with the symlinks.
+Conflicts: groff-gxditview <= 1.19.1-8mdv
+Conflicts: xmris <= 4.0.5-4mdv
+Conflicts: xrn <= 9.02-16mdv
 
 # xorgcfg requires these
 Requires: x11-data-bitmaps
