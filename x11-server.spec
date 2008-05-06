@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 14
+Release: %mkrel 15
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -244,6 +244,7 @@ X server common files
 move () {
     # This may cause some problems at first, but the mess of /etc/X11
     # and /usr/lib/X11 should really be fixed at one time or another...
+    mkdir -p $2
     for file in `find $1 -maxdepth 1 -mindepth 1`; do
 	[ -L $file ] && rm -f $file
 	file=`basename $file`
@@ -261,20 +262,15 @@ move () {
     done
 }
 check () {
-    if [ -L $1 ]; then
-	rm -f $1
-	ln -sf $3$2 $1
-    elif [ -d $1 ]; then
-	move $1 $2 $3
+    if [ ! -L $1 -a -d $1 ]; then
+	move $1 $2
 	rmdir $1
-	ln -s $3$2 $1
     fi
 }
-check %{_libdir}/X11 %{_sysconfdir}/X11 ../..
-check %{_sysconfdir}/X11/app-defaults %{_datadir}/X11/app-defaults ../../..
-check %{_prefix}/X11R6/lib/X11 %{_sysconfdir}/X11 ../../..
-check %{_prefix}/X11R6/lib/modules %{_libdir}/xorg/modules ../..
-check %{_prefix}/X11R6/lib/modules/dri %{_libdir}/dri ../../..
+check %{_libdir}/X11 %{_sysconfdir}/X11
+check %{_sysconfdir}/X11/app-defaults %{_datadir}/X11/app-defaults
+check %{_prefix}/X11R6/lib/X11 %{_sysconfdir}/X11
+check %{_prefix}/X11R6/lib/modules %{_libdir}/xorg/modules
 
 %post common
 %{_sbindir}/update-alternatives \
@@ -352,7 +348,6 @@ fi
 %dir %{_prefix}/X11R6/lib
 %{_prefix}/X11R6/lib/X11
 %{_prefix}/X11R6/lib/modules
-%{_prefix}/X11R6/lib/modules/dri
 # xorgcfg bitmaps/pixmaps
 %{_includedir}/X11/bitmaps/*.xbm
 %{_includedir}/X11/pixmaps/*.xpm
@@ -1042,12 +1037,12 @@ mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_da
 
 # for compatibility with legacy applications (see #23423, for example)
 mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
-ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
+ln -s %{_libdir}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 # These "compat" directories/links should be owned by xorg-common
-ln -s ../../%{_lib}/xorg/modules %{buildroot}%{_prefix}/X11R6/lib/modules
-ln -s ../../../%{_lib}/dri %{buildroot}%{_prefix}/X11R6/lib/modules/dri
-ln -s ..%{_datadir}/X11/app-defaults %{buildroot}%{_sysconfdir}/X11/app-defaults
+ln -s %{_libdir}/xorg/modules %{buildroot}%{_prefix}/X11R6/lib/modules
+ln -s %{_libdir}/dri %{buildroot}%{_libdir}/xorg/modules/dri
+ln -s %{_datadir}/X11/app-defaults %{buildroot}%{_sysconfdir}/X11/app-defaults
 
 # Move anything that is still being installed in /usr/lib/X11 to /etc/X11
 # and adjust symbolic link
@@ -1057,7 +1052,7 @@ if [ -d %{buildroot}%{_libdir}/X11 ]; then
     done
     rmdir %{buildroot}%{_libdir}/X11
 fi
-ln -sf ../..%{_sysconfdir}/X11 %{buildroot}%{_libdir}/X11
+ln -sf %{_sysconfdir}/X11 %{buildroot}%{_libdir}/X11
 
 # create more module directories to be owned by x11-server-common
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
