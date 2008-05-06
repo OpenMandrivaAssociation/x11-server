@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 13
+Release: %mkrel 14
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -217,15 +217,15 @@ Conflicts: filesystem < 2.1.8
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
 
 # Avoid upgrade or just install problems with symlinks
-Conflicts: x11-driver-video-fglrx <= 8.476-1mdv
-Conflicts: libx11 <= 1.1.4-1mdv
+Conflicts: x11-driver-video-fglrx < 8.476-2
+Conflicts: libx11-common < 1.1.4-2
 
 #   Some of these are more broken than thinking the own {base-dir}/X11,
 # and should really be dropped from the distro, but adding a Conflicts
 # to avoid update problems where they could mess with the symlinks.
-Conflicts: groff-gxditview <= 1.19.1-8mdv
-Conflicts: xmris <= 4.0.5-4mdv
-Conflicts: xrn <= 9.02-16mdv
+Conflicts: groff-gxditview < 1.19.1-9
+Conflicts: xmris < 4.0.5-5
+Conflicts: xrn < 9.02-17
 
 # xorgcfg requires these
 Requires: x11-data-bitmaps
