@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 15
+Release: %mkrel 16
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -246,7 +246,7 @@ move () {
     # and /usr/lib/X11 should really be fixed at one time or another...
     mkdir -p $2
     for file in `find $1 -maxdepth 1 -mindepth 1`; do
-	[ -L $file ] && rm -f $file
+	[ -L $file ] && rm -f $file && continue
 	file=`basename $file`
 	if [ ! -e $2/$file -o -L $2/$file ]; then
 	    mv -f $1/$file $2
@@ -270,7 +270,7 @@ check () {
 check %{_libdir}/X11 %{_sysconfdir}/X11
 check %{_sysconfdir}/X11/app-defaults %{_datadir}/X11/app-defaults
 check %{_prefix}/X11R6/lib/X11 %{_sysconfdir}/X11
-check %{_prefix}/X11R6/lib/modules %{_libdir}/xorg/modules
+check %{_prefix}/X11R6/%{_lib}/modules %{_libdir}/xorg/modules
 
 %post common
 %{_sbindir}/update-alternatives \
@@ -347,7 +347,8 @@ fi
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %{_prefix}/X11R6/lib/X11
-%{_prefix}/X11R6/lib/modules
+%dir %{_prefix}/X11R6/%{_lib}
+%{_prefix}/X11R6/%{_lib}/modules
 # xorgcfg bitmaps/pixmaps
 %{_includedir}/X11/bitmaps/*.xbm
 %{_includedir}/X11/pixmaps/*.xpm
@@ -1037,10 +1038,11 @@ mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_da
 
 # for compatibility with legacy applications (see #23423, for example)
 mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
-ln -s %{_libdir}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
+ln -s %{_sysconfdir}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 # These "compat" directories/links should be owned by xorg-common
-ln -s %{_libdir}/xorg/modules %{buildroot}%{_prefix}/X11R6/lib/modules
+mkdir -p %{buildroot}%{_prefix}/X11R6/%{_lib}
+ln -s %{_libdir}/xorg/modules %{buildroot}%{_prefix}/X11R6/%{_lib}/modules
 ln -s %{_libdir}/dri %{buildroot}%{_libdir}/xorg/modules/dri
 ln -s %{_datadir}/X11/app-defaults %{buildroot}%{_sysconfdir}/X11/app-defaults
 
