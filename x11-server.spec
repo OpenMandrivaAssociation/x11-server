@@ -286,8 +286,6 @@ move () {
 check () {
     if [ ! -L $1 -a -d $1 ]; then
 	move $1 $2
-    elif [ -L $1 ]; then
-	rm $1
     fi
 }
 check %{_sysconfdir}/X11 %{_datadir}/X11
