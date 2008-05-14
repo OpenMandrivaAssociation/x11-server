@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 16
+Release: %mkrel 17
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -114,6 +114,17 @@ Patch30: 0030-Fixed-configure.ac-for-autoconf-2.62.patch
 Patch31: 0031-EXA-Fix-off-by-one-in-polyline-drawing.patch
 Patch32: 0032-XKB-Fix-processInputProc-wrapping.patch
 Patch33: 0033-xfree86-fix-AlwaysCore-handling.-Bug-14256.patch
+Patch34: 0034-Ignore-not-just-block-SIGALRM-around-Popen-Pcl.patch
+Patch35: 0035-Fix-build-on-FreeBSD-after-Popen-changes.patch
+Patch36: 0036-So-like-checking-return-codes-of-system-calls-sig.patch
+Patch37: 0037-Check-for-sys-sdt.h-as-well-when-determining-to-en.patch
+Patch38: 0038-dix-Always-add-valuator-information-if-present.patch
+Patch39: 0039-Bug-10324-dix-Allow-arbitrary-value-ranges-in-Ge.patch
+Patch40: 0040-Bug-10324-dix-Add-scaling-of-X-and-Y-on-the-repo.patch
+Patch41: 0041-dix-Skip-call-to-clipAxis-for-relative-core-events.patch
+Patch42: 0042-dix-Move-motion-history-update-until-after-screen-c.patch
+Patch43: 0043-XKB-Actually-explain-keymap-failures.patch
+Patch44: 0044-kdrive-allow-disabling-Composite.patch
 
 # git-checkout patches
 # git-rebase origin/server-1.4-branch
@@ -207,6 +218,7 @@ Requires: rgb
 Requires: x11-font-misc-misc
 Requires: x11-font-cursor-misc
 Requires: x11-font-alias
+Requires(pre): fontconfig
 Requires(post): update-alternatives >= 1.9.0
 Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
@@ -242,35 +254,48 @@ X server common files
 # exist as directories.
 %pre common
 move () {
-    # This may cause some problems at first, but the mess of /etc/X11
-    # and /usr/lib/X11 should really be fixed at one time or another...
-    mkdir -p $2
+    #  Only used by the call to make /usr/X11R6 a symlink to /usr. And
+    # in that case, don't remake /usr if it is a symlink.
+    if [ x$3 = x ]; then
+	[ -L $2 ] && rm $2
+	mkdir -p $2
+    fi
+    #  Need to recurse to move any links themselves and not just the
+    # parent directory, or broken symlinks may be left behind.
     for file in `find $1 -maxdepth 1 -mindepth 1`; do
-	[ -L $file ] && rm -f $file && continue
 	file=`basename $file`
-	if [ ! -e $2/$file -o -L $2/$file ]; then
-	    mv -f $1/$file $2
-	# Don't try to be too smart and recurse...
-	elif [ -d $2/$file -a -d $1/$file ]; then
-	    mv -f $1/$file/* $2/$file
-	    # Using possibly risky command to avoid failures due to
-	    # moving links to the real file
-	    rm -fr $1/$file
+	if [ -L $1/$file ]; then
+	    if [ ! -e $2/$file ]; then
+		ln -s `readlink -f $1/$file` $2/$file
+		rm $1/$file
+	    fi
+	elif [ -d $1/$file ]; then
+	    move $1/$file $2/$file
 	else
-	    mv -f $1/$file $2/$file.orig
+	    if [ -e $2/$file ]; then
+		mv $1/$file $2/$file.orig
+	    else
+		mv $1/$file $2
+	    fi
 	fi
     done
+    rmdir $1
+    # This cannot be done or would try to fix every symlink in %{_prefix}
+    # symlinks -c $2
 }
 check () {
     if [ ! -L $1 -a -d $1 ]; then
 	move $1 $2
-	rmdir $1
+    elif [ -L $1 ]; then
+	rm $1
     fi
 }
-check %{_libdir}/X11 %{_sysconfdir}/X11
-check %{_sysconfdir}/X11/app-defaults %{_datadir}/X11/app-defaults
-check %{_prefix}/X11R6/lib/X11 %{_sysconfdir}/X11
-check %{_prefix}/X11R6/%{_lib}/modules %{_libdir}/xorg/modules
+check %{_sysconfdir}/X11 %{_datadir}/X11
+check %{_libdir}/X11 %{_datadir}/X11
+#   Don't use %{_prefix} because of ending /
+check %{_prefix}/X11R6 `echo %{_prefix} | sed -e 's@/*$@@'` can-be-a-symlink
+#   Only really required if fontpath.d symlinks are remade.
+%{_bindir}/fc-cache
 
 %post common
 %{_sbindir}/update-alternatives \
@@ -301,13 +326,13 @@ fi
 
 %files common
 %defattr(-,root,root)
+%{_sysconfdir}/X11
 %{_libdir}/X11
 %dir %{_libdir}/xorg/modules
-%dir %{_sysconfdir}/X11
+%dir %{_datadir}/X11
 %dir %{_datadir}/X11/app-defaults
-%{_sysconfdir}/X11/app-defaults
-%dir %{_sysconfdir}/X11/fontpath.d
-%dir %{_sysconfdir}/X11/xserver
+%dir %{_datadir}/X11/fontpath.d
+%dir %{_datadir}/X11/xserver
 %dir %{_sysconfdir}/ld.so.conf.d/GL
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
@@ -323,14 +348,14 @@ fi
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
-%{_sysconfdir}/X11/Cards
-%{_sysconfdir}/X11/Options
+%{_datadir}/X11/Cards
+%{_datadir}/X11/Options
 %{_libdir}/xorg/modules/*
 # (anssi) We do not want this file to really exist, it is empty.
 # This entry causes an rpm-build warning "file listed twice", but getting rid
 # of the warning would need us to list all the other extensions one-by-one.
 %ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%{_sysconfdir}/X11/xserver/SecurityPolicy
+%{_datadir}/X11/xserver/SecurityPolicy
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/xorgcfg.*
 %{_mandir}/man1/xorgconfig.*
@@ -344,11 +369,7 @@ fi
 %{_mandir}/man4/fbdevhw.*
 %{_mandir}/man4/exa.*
 %{_mandir}/man5/SecurityPolicy.*
-%dir %{_prefix}/X11R6
-%dir %{_prefix}/X11R6/lib
-%{_prefix}/X11R6/lib/X11
-%dir %{_prefix}/X11R6/%{_lib}
-%{_prefix}/X11R6/%{_lib}/modules
+%{_prefix}/X11R6
 # xorgcfg bitmaps/pixmaps
 %{_includedir}/X11/bitmaps/*.xbm
 %{_includedir}/X11/pixmaps/*.xpm
@@ -380,7 +401,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_bindir}/X
 %{_bindir}/Xorg
 %attr(4755,root,root)%{_bindir}/Xwrapper
-%{_sysconfdir}/X11/X
+%{_datadir}/X11/X
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
 %{_datadir}/X11/app-defaults/XOrgCfg
@@ -888,6 +909,17 @@ This KDrive server is targetted for VIA chipsets.
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
+%patch34 -p1
+%patch35 -p1
+%patch36 -p1
+%patch37 -p1
+%patch38 -p1
+%patch39 -p1
+%patch40 -p1
+%patch41 -p1
+%patch42 -p1
+%patch43 -p1
+%patch44 -p1
 
 %patch500 -p1
 %patch501 -p1
@@ -1012,9 +1044,9 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%else
 		--disable-config-hal \
 		%endif
-		--with-serverconfig-path="%{_sysconfdir}/X11/xserver" \
+		--with-serverconfig-path="%{_datadir}/X11/xserver" \
 		--with-fontdir="%{_datadir}/fonts" \
-		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
+		--with-default-font-path="catalogue:%{_datadir}/X11/fontpath.d"
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 %make
 
@@ -1022,8 +1054,8 @@ pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 rm -rf %{buildroot}
 %makeinstall_std
 
-mkdir -p %{buildroot}%{_sysconfdir}/X11/
-ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
+mkdir -p %{buildroot}%{_datadir}/X11/
+ln -s %{_bindir}/Xorg %{buildroot}%{_datadir}/X11/X
 ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
 
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
@@ -1031,30 +1063,23 @@ install -m 0644 %{_sourcedir}/xserver.pamd %{buildroot}%{_sysconfdir}/pam.d/xser
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
-mkdir -p %{buildroot}%{_sysconfdir}/X11/fontpath.d
+mkdir -p %{buildroot}%{_datadir}/X11/fontpath.d
 
 # move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
 mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_datadir}/X11/xkb/
 
-# for compatibility with legacy applications (see #23423, for example)
-mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
-ln -s %{_sysconfdir}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
-
-# These "compat" directories/links should be owned by xorg-common
-mkdir -p %{buildroot}%{_prefix}/X11R6/%{_lib}
-ln -s %{_libdir}/xorg/modules %{buildroot}%{_prefix}/X11R6/%{_lib}/modules
-ln -s %{_libdir}/dri %{buildroot}%{_libdir}/xorg/modules/dri
-ln -s %{_datadir}/X11/app-defaults %{buildroot}%{_sysconfdir}/X11/app-defaults
-
-# Move anything that is still being installed in /usr/lib/X11 to /etc/X11
-# and adjust symbolic link
-if [ -d %{buildroot}%{_libdir}/X11 ]; then
-    for file in `find %{buildroot}%{_libdir}/X11 -maxdepth 1 -mindepth 1`; do
-	mv -f $file %{buildroot}%{_sysconfdir}/X11/`basename $f`
-    done
-    rmdir %{buildroot}%{_libdir}/X11
-fi
-ln -sf %{_sysconfdir}/X11 %{buildroot}%{_libdir}/X11
+ln -s %{_prefix} %{buildroot}%{_prefix}/X11R6
+# Move anything that is still being installed in /usr/lib/X11 or /etc/X11
+# to /usr/share/X11 and adjust symbolic link
+for dir in %{buildroot}{%{_libdir},%{_sysconfdir}}/X11; do
+    if [ -d $dir ]; then
+	for file in `find $dir -maxdepth 1 -mindepth 1`; do
+	    mv $file %{buildroot}%{_datadir}/X11/`basename $f`
+	done
+	rmdir $dir
+    fi
+    ln -sf %{_datadir}/X11 $dir
+done
 
 # create more module directories to be owned by x11-server-common
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
