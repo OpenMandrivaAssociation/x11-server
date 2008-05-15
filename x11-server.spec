@@ -18,7 +18,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 17
+Release: %mkrel 18
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -267,8 +267,8 @@ move () {
 	if [ -L $1/$file ]; then
 	    if [ ! -e $2/$file ]; then
 		ln -s `readlink -f $1/$file` $2/$file
-		rm $1/$file
 	    fi
+	    rm $1/$file
 	elif [ -d $1/$file ]; then
 	    move $1/$file $2/$file
 	else
