@@ -5,6 +5,8 @@
 %define enable_hal		0
 %define enable_dbus		%{enable_hal}
 %define enable_builddocs	1
+# Do magic with .rpmsave named links
+%define pre_post_trans		1
 
 %define mesasrcdir		%{_prefix}/src/Mesa
 %define mesaver			7.0.3
@@ -18,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 18
+Release: %mkrel 19
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -125,6 +127,21 @@ Patch41: 0041-dix-Skip-call-to-clipAxis-for-relative-core-events.patch
 Patch42: 0042-dix-Move-motion-history-update-until-after-screen-c.patch
 Patch43: 0043-XKB-Actually-explain-keymap-failures.patch
 Patch44: 0044-kdrive-allow-disabling-Composite.patch
+Patch45: 0045-When-XKB-fails-to-open-rules-file-log-the-file-name.patch
+Patch46: 0046-dmx-fix-build-by-adding-New-Delete-InputDeviceRequ.patch
+Patch47: 0047-dmx-link-in-XSERVER_LIBS.patch
+Patch48: 0048-xephyr-fix-linking-by-adding-pixman-and-using-XSERV.patch
+Patch49: 0049-xprint-fix-build-by-adding-New-Delete-InputDeviceR.patch
+Patch50: 0050-xprint-fix-linking-by-including-XSERVER_LIBS.patch
+Patch51: 0051-Fix-RandR-1.2-driver-interface-conversion-of-two-col.patch
+Patch52: 0052-Fix-overly-restrictive-integer-overflow-check-in-EXA.patch
+Patch53: 0053-Fix-hal-shutdown-crash.patch
+Patch54: 0054-Bump-DEFAULT_DPI-to-96.patch
+Patch55: 0055-Bug-13962-Re-arm-the-DPMS-timer-when-re-enabling-D.patch
+Patch56: 0056-Prevent-the-wm-command-line-option-from-causing-a-S.patch
+Patch57: 0057-EXA-Skip-empty-glyphs.-cherry-picked-from-commit-c.patch
+Patch58: 0058-xf86-Add-AutoConfig-driver-for-PCI-ID-1022-2081-to.patch
+Patch59: 0059-xkb-when-copying-the-keymap-make-sure-the-structs.patch
 
 # git-checkout patches
 # git-rebase origin/server-1.4-branch
@@ -136,32 +153,29 @@ Patch503: 0503-Blue-background-custom-patch.patch
 Patch504: 0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
 Patch505: 0505-Xvnc-support.patch
 Patch506: 0506-fix-parsing-weird-EDID.patch
-Patch507: 0507-Avoid-an-infinite-loop-at-initialization-if-Preferre.patch
-Patch508: 0508-xvfb-run-support.patch
-Patch509: 0509-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch510: 0510-Fontpath.d-updated-documentation.patch
-Patch511: 0511-Update-keyboard-leds.patch
-Patch512: 0512-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch513: 0513-fixes-mdvbz-35912.patch
-Patch514: 0514-Don-t-print-information-about-X-Server-being-a-pre-r.patch
+Patch507: 0507-xvfb-run-support.patch
+Patch508: 0508-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch509: 0509-Fontpath.d-updated-documentation.patch
+Patch510: 0510-Update-keyboard-leds.patch
+Patch511: 0511-Mouse-moves-slower-than-hand-movement-in-games.patch
+Patch512: 0512-fixes-mdvbz-35912.patch
+Patch513: 0513-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 
 # Some cherry-picks from master
-Patch515: 0515-reduce-wakeups-from-smart-scheduler.patch
-Patch516: 0516-Don-t-frob-timers-unless-SmartSchedule-is-running.patch
-Patch517: 0517-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
-Patch518: 0518-xkb-when-copying-the-keymap-make-sure-the-structs.patch
-Patch519: 0519-XkbCopyKeymap-was-mangling-doodads-and-overlays.patch
-Patch520: 0520-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
-Patch521: 0521-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
-Patch522: 0522-Fix-potential-crasher-in-xf86CrtcRotate.patch
-Patch523: 0523-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
-Patch524: 0524-mi-change-infamous-Tossed-event-.-error-for-som.patch
-Patch525: 0525-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
-Patch526: 0526-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
-Patch527: 0527-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
-Patch528: 0528-X86EMU-handle-CPUID-instruction.patch
-Patch529: 0529-Fail-CRTC-configuration-if-vtSema.patch
-Patch530: 0530-Bug-13962-Re-arm-the-DPMS-timer-when-re-enabling-D.patch
+Patch514: 0514-reduce-wakeups-from-smart-scheduler.patch
+Patch515: 0515-Don-t-frob-timers-unless-SmartSchedule-is-running.patch
+Patch516: 0516-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
+Patch517: 0517-XkbCopyKeymap-was-mangling-doodads-and-overlays.patch
+Patch518: 0518-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
+Patch519: 0519-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
+Patch520: 0520-Fix-potential-crasher-in-xf86CrtcRotate.patch
+Patch521: 0521-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
+Patch522: 0522-mi-change-infamous-Tossed-event-.-error-for-som.patch
+Patch523: 0523-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
+Patch524: 0524-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
+Patch525: 0525-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
+Patch526: 0526-X86EMU-handle-CPUID-instruction.patch
+Patch527: 0527-Fail-CRTC-configuration-if-vtSema.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -252,7 +266,7 @@ X server common files
 # package.  It now should be a compat symlink to the new path: /usr/lib/X11,
 # but there are scenarios where /usr/lib/X11 and /usr/X11R6/lib/X11 both
 # exist as directories.
-%pre common
+%pretrans common
 move () {
     #  Only used by the call to make /usr/X11R6 a symlink to /usr. And
     # in that case, don't remake /usr if it is a symlink.
@@ -264,6 +278,10 @@ move () {
     # parent directory, or broken symlinks may be left behind.
     for file in `find $1 -maxdepth 1 -mindepth 1`; do
 	file=`basename $file`
+	if [ `readlink -f $1/$file` = `readlink -f $2/$file` ]; then
+	    [ -L $1/$file ] && rm $1/$file
+	    continue
+	fi
 	if [ -L $1/$file ]; then
 	    if [ ! -e $2/$file ]; then
 		ln -s `readlink -f $1/$file` $2/$file
@@ -281,12 +299,19 @@ move () {
     done
     rmdir $1
     # This cannot be done or would try to fix every symlink in %{_prefix}
+    # ofcourse it could test for $3, but symlinks is too verbose and not
+    # in the "core packages".
     # symlinks -c $2
 }
 check () {
     if [ ! -L $1 -a -d $1 ]; then
 	move $1 $2
     fi
+    # Magic: Symlink to a directory ending in .rpmsave so that
+    # rpm will not attempt to remove newly installed files thinking
+    # they are old files...
+    [ ! -L $2.rpmsave ] && ln -sf $2 $2.rpmsave
+    ln -sf $2.rpmsave $1
 }
 check %{_sysconfdir}/X11 %{_datadir}/X11
 check %{_libdir}/X11 %{_datadir}/X11
@@ -294,6 +319,15 @@ check %{_libdir}/X11 %{_datadir}/X11
 check %{_prefix}/X11R6 `echo %{_prefix} | sed -e 's@/*$@@'` can-be-a-symlink
 #   Only really required if fontpath.d symlinks are remade.
 %{_bindir}/fc-cache
+
+%posttrans common
+# Remove .rpmsave symlinks
+rm %{_datadir}/X11.rpmsave
+rm /`echo %{_prefix} | sed -e 's@/*$@@'`.rpmsave
+# And directly link to the proper directory
+ln -sf %{_datadir}/X11 %{_sysconfdir}/X11
+ln -sf %{_datadir}/X11 %{_libdir}/X11
+ln -sf `echo %{_prefix} | sed -e 's@/*$@@'` %{_prefix}/X11R6
 
 %post common
 %{_sbindir}/update-alternatives \
@@ -324,8 +358,11 @@ fi
 
 %files common
 %defattr(-,root,root)
+%if ! %{pre_post_trans}
 %{_sysconfdir}/X11
 %{_libdir}/X11
+%{_prefix}/X11R6
+%endif
 %dir %{_libdir}/xorg/modules
 %dir %{_datadir}/X11
 %dir %{_datadir}/X11/app-defaults
@@ -367,7 +404,6 @@ fi
 %{_mandir}/man4/fbdevhw.*
 %{_mandir}/man4/exa.*
 %{_mandir}/man5/SecurityPolicy.*
-%{_prefix}/X11R6
 # xorgcfg bitmaps/pixmaps
 %{_includedir}/X11/bitmaps/*.xbm
 %{_includedir}/X11/pixmaps/*.xpm
@@ -918,6 +954,21 @@ This KDrive server is targetted for VIA chipsets.
 %patch42 -p1
 %patch43 -p1
 %patch44 -p1
+%patch45 -p1
+%patch46 -p1
+%patch47 -p1
+%patch48 -p1
+%patch49 -p1
+%patch50 -p1
+%patch51 -p1
+%patch52 -p1
+%patch53 -p1
+%patch54 -p1
+%patch55 -p1
+%patch56 -p1
+%patch57 -p1
+%patch58 -p1
+%patch59 -p1
 
 %patch500 -p1
 %patch501 -p1
@@ -947,9 +998,6 @@ This KDrive server is targetted for VIA chipsets.
 %patch525 -p1
 %patch526 -p1
 %patch527 -p1
-%patch528 -p1
-%patch529 -p1
-%patch530 -p1
 
 %build
 autoreconf -ifs
@@ -1066,7 +1114,9 @@ mkdir -p %{buildroot}%{_datadir}/X11/fontpath.d
 # move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
 mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_datadir}/X11/xkb/
 
+%if ! %{pre_post_trans}
 ln -s %{_prefix} %{buildroot}%{_prefix}/X11R6
+%endif
 # Move anything that is still being installed in /usr/lib/X11 or /etc/X11
 # to /usr/share/X11 and adjust symbolic link
 for dir in %{buildroot}{%{_libdir},%{_sysconfdir}}/X11; do
@@ -1076,7 +1126,9 @@ for dir in %{buildroot}{%{_libdir},%{_sysconfdir}}/X11; do
 	done
 	rmdir $dir
     fi
+%if ! %{pre_post_trans}
     ln -sf %{_datadir}/X11 $dir
+%endif
 done
 
 # create more module directories to be owned by x11-server-common
