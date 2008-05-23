@@ -20,7 +20,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 19
+Release: %mkrel 20
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -177,6 +177,9 @@ Patch525: 0525-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
 Patch526: 0526-X86EMU-handle-CPUID-instruction.patch
 Patch527: 0527-Fail-CRTC-configuration-if-vtSema.patch
 
+# (latest xserver segfaults when mplayer runs) #40959
+Patch528: 0528-Correct-a-NULL-pointer-deference.patch
+
 Requires: %{name}-xorg
 %if %enable_dmx
 Requires: %{name}-xdmx
@@ -232,7 +235,8 @@ Requires: rgb
 Requires: x11-font-misc-misc
 Requires: x11-font-cursor-misc
 Requires: x11-font-alias
-Requires(pre): fontconfig
+Requires(pretrans): fontconfig
+Requires(posttrans): symlinks
 Requires(post): update-alternatives >= 1.9.0
 Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
@@ -268,8 +272,7 @@ X server common files
 # exist as directories.
 %pretrans common
 move () {
-    #  Only used by the call to make /usr/X11R6 a symlink to /usr. And
-    # in that case, don't remake /usr if it is a symlink.
+    #  Don't modify /usr if it is a symlink
     if [ x$3 = x ]; then
 	[ -L $2 ] && rm $2
 	mkdir -p $2
@@ -298,20 +301,18 @@ move () {
 	fi
     done
     rmdir $1
-    # This cannot be done or would try to fix every symlink in %{_prefix}
-    # ofcourse it could test for $3, but symlinks is too verbose and not
-    # in the "core packages".
-    # symlinks -c $2
 }
 check () {
     if [ ! -L $1 -a -d $1 ]; then
-	move $1 $2
+	move $1 $2 $3
     fi
     # Magic: Symlink to a directory ending in .rpmsave so that
     # rpm will not attempt to remove newly installed files thinking
     # they are old files...
-    [ ! -L $2.rpmsave ] && ln -sf $2 $2.rpmsave
-    ln -sf $2.rpmsave $1
+    [ ! -L $2.rpmsave ] && ln -s $2 $2.rpmsave
+    # If the symlink already exists it was not removed
+    [ -L $1 ] && rm $1
+    ln -s $2.rpmsave $1
 }
 check %{_sysconfdir}/X11 %{_datadir}/X11
 check %{_libdir}/X11 %{_datadir}/X11
@@ -321,13 +322,15 @@ check %{_prefix}/X11R6 `echo %{_prefix} | sed -e 's@/*$@@'` can-be-a-symlink
 %{_bindir}/fc-cache
 
 %posttrans common
+usr=`echo %{_prefix} | sed -e 's@/*$@@'`
 # Remove .rpmsave symlinks
 rm %{_datadir}/X11.rpmsave
-rm /`echo %{_prefix} | sed -e 's@/*$@@'`.rpmsave
+rm $usr.rpmsave
 # And directly link to the proper directory
-ln -sf %{_datadir}/X11 %{_sysconfdir}/X11
-ln -sf %{_datadir}/X11 %{_libdir}/X11
-ln -sf `echo %{_prefix} | sed -e 's@/*$@@'` %{_prefix}/X11R6
+ln -sf ../../%{_datadir}/X11 %{_sysconfdir}/X11
+ln -sf ../../%{_datadir}/X11 %{_libdir}/X11
+ln -sf ../`echo %{_prefix} | sed -e 's@/*$@@'` %{_prefix}/X11R6
+symlinks -cr %{_datadir}/X11
 
 %post common
 %{_sbindir}/update-alternatives \
@@ -998,6 +1001,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch525 -p1
 %patch526 -p1
 %patch527 -p1
+%patch528 -p1
 
 %build
 autoreconf -ifs
