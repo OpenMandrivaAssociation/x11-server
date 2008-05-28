@@ -23,7 +23,7 @@
 
 Name: x11-server
 Version: 1.4.0.90
-Release: %mkrel 20
+Release: %mkrel 21
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -180,8 +180,10 @@ Patch525: 0525-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
 Patch526: 0526-X86EMU-handle-CPUID-instruction.patch
 Patch527: 0527-Fail-CRTC-configuration-if-vtSema.patch
 
+# More mandriva custom patches, to be reordered in next rebase
 # (latest xserver segfaults when mplayer runs) #40959
 Patch528: 0528-Correct-a-NULL-pointer-deference.patch
+Patch529: 0529-Autoconfigure-to-use-geode-driver-on-the-known-sup.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -313,7 +315,8 @@ check () {
     # rpm will not attempt to remove newly installed files thinking
     # they are old files...
     [ ! -L $2.rpmsave ] && ln -s $2 $2.rpmsave
-    # If the symlink already exists it was not removed
+    # If the symlink already exists it was not removed in a previous
+    # version of this script, or upgrade was cancelled.
     [ -L $1 ] && rm $1
     ln -s $2.rpmsave $1
 }
@@ -1005,6 +1008,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch526 -p1
 %patch527 -p1
 %patch528 -p1
+%patch529 -p1
 
 %build
 autoreconf -ifs
