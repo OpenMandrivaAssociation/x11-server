@@ -145,6 +145,7 @@ Patch56: 0056-Prevent-the-wm-command-line-option-from-causing-a-S.patch
 Patch57: 0057-EXA-Skip-empty-glyphs.-cherry-picked-from-commit-c.patch
 Patch58: 0058-xf86-Add-AutoConfig-driver-for-PCI-ID-1022-2081-to.patch
 Patch59: 0059-xkb-when-copying-the-keymap-make-sure-the-structs.patch
+Patch60: 0060-Fix-getValuatorEvents-to-compute-number-of-valuators.patch
 
 # git-checkout patches
 # git-rebase origin/server-1.4-branch
@@ -184,6 +185,7 @@ Patch527: 0527-Fail-CRTC-configuration-if-vtSema.patch
 # (latest xserver segfaults when mplayer runs) #40959
 Patch528: 0528-Correct-a-NULL-pointer-deference.patch
 Patch529: 0529-Autoconfigure-to-use-geode-driver-on-the-known-sup.patch
+Patch530: 0530-Fix-mandriva-bug-37514-vncserver-segfaults-when-con.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -978,6 +980,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch57 -p1
 %patch58 -p1
 %patch59 -p1
+%patch60 -p1
 
 %patch500 -p1
 %patch501 -p1
@@ -1009,6 +1012,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch527 -p1
 %patch528 -p1
 %patch529 -p1
+%patch530 -p1
 
 %build
 autoreconf -ifs
