@@ -205,6 +205,13 @@ X server common files
 # but there are scenarios where /usr/lib/X11 and /usr/X11R6/lib/X11 both
 # exist as directories.
 %pre common
+if [ -L /etc/X11 ] || [ -L /usr/lib/X11 ]; then
+	echo "/etc/X11 or /usr/lib/X11 is a symbolic link. You must run the"
+	echo "script in http://wiki.mandriva.com/en/CookerX11Upgrade before"
+	echo "continuing."
+	exit 1
+fi
+
 if [ -L %{_libdir}/X11 ]; then 
 	rm -f %{_libdir}/X11
 fi
