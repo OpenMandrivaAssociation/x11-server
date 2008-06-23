@@ -206,7 +206,7 @@ X server common files
 # exist as directories.
 %pre common
 for link in /etc/X11 /usr/lib/X11 /usr/X11R6; do
-	if [ -L /etc/X11 ]; then
+	if [ -L $link ]; then
 		echo "$link is a symbolic link. You must run the"
 		echo "script in http://wiki.mandriva.com/en/CookerX11Upgrade"
 		echo "before continuing."
