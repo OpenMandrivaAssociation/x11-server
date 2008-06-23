@@ -23,7 +23,7 @@
 
 Name: x11-server
 Version: 1.4.2
-Release: %mkrel 2
+Release: %mkrel 3
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -205,12 +205,14 @@ X server common files
 # but there are scenarios where /usr/lib/X11 and /usr/X11R6/lib/X11 both
 # exist as directories.
 %pre common
-if [ -L /etc/X11 ] || [ -L /usr/lib/X11 ] || [ -L /usr/X11R6 ]; then
-	echo "/etc/X11 or /usr/lib/X11 is a symbolic link. You must run the"
-	echo "script in http://wiki.mandriva.com/en/CookerX11Upgrade before"
-	echo "continuing."
-	exit 1
-fi
+for link in /etc/X11 /usr/lib/X11 /usr/X11R6; do
+	if [ -L /etc/X11 ]; then
+		echo "$link is a symbolic link. You must run the"
+		echo "script in http://wiki.mandriva.com/en/CookerX11Upgrade"
+		echo "before continuing."
+		exit 1
+	fi
+done
 
 if [ -L %{_libdir}/X11 ]; then 
 	rm -f %{_libdir}/X11
