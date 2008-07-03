@@ -126,6 +126,7 @@ Patch527: 0527-Fail-CRTC-configuration-if-vtSema.patch
 Patch528: 0528-Correct-a-NULL-pointer-deference.patch
 Patch529: 0529-Autoconfigure-to-use-geode-driver-on-the-known-sup.patch
 Patch530: 0530-Fix-mandriva-bug-37514-vncserver-segfaults-when-con.patch
+Patch531: 0531-XAA-Disable-offscreen-pixmaps-by-default.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -835,6 +836,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch528 -p1
 %patch529 -p1
 %patch530 -p1
+%patch531 -p1
 
 %build
 autoreconf -ifs
