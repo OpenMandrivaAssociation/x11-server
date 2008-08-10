@@ -23,7 +23,7 @@
 
 Name: x11-server
 Version: 1.4.2
-Release: %mkrel 4
+Release: %mkrel 5
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -191,6 +191,8 @@ Conflicts: filesystem < 2.1.8
 # Fix: missing conflicts to allow upgrade from 2008.0 to cooker
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
+# libdri.so alternativeszification:
+Conflicts: ati < 8.512-2
 
 # xorgcfg requires these
 Requires: x11-data-bitmaps
@@ -226,8 +228,11 @@ if [ -d /usr/X11R6/lib/X11 ]; then
 fi
 
 %post common
+# Remove non-alternativeszificated libdri.so
+[ -L %{_libdir}/xorg/modules/extensions/libdri.so ] || rm -f %{_libdir}/xorg/modules/extensions/libdri.so
 %{_sbindir}/update-alternatives \
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
+	--slave %{_libdir}/xorg/modules/extensions/libdri.so libdri.so %{_libdir}/xorg/modules/extensions/standard/libdri.so \
 	--slave %{_libdir}/xorg/modules/extensions/libglx.so libglx %{_libdir}/xorg/modules/extensions/standard/libglx.so
 
 # (anssi)
@@ -281,6 +286,7 @@ fi
 # (anssi) We do not want this file to really exist, it is empty.
 # This entry causes an rpm-build warning "file listed twice", but getting rid
 # of the warning would need us to list all the other extensions one-by-one.
+%ghost %{_libdir}/xorg/modules/extensions/libdri.so
 %ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %{_libdir}/xserver/SecurityPolicy
 %{_datadir}/X11/xkb/README.compiled
@@ -967,10 +973,14 @@ cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
 # path. Please do not remove this file.
 EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
+# Move libs that are provided by proprietary drivers away; libdri.so is
+# provided by fglrx and libglx.so by nvidia.
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/extensions/standard
-mv %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so \
-	%{buildroot}%{_libdir}/xorg/modules/extensions/standard/libglx.so
-touch %{buildroot}%{_libdir}/xorg/modules/extensions/libglx.so
+for lib in libdri.so libglx.so; do
+	mv %{buildroot}%{_libdir}/xorg/modules/extensions/$lib \
+  		%{buildroot}%{_libdir}/xorg/modules/extensions/standard/$lib
+	touch %{buildroot}%{_libdir}/xorg/modules/extensions/$lib
+done
 
 %clean
 rm -rf %{buildroot}
