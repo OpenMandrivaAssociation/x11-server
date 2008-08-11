@@ -914,6 +914,11 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-xfake \
 		--enable-xephyr \
 		--enable-xsdl \
+		%if %kdrive_builds_vesa
+		--enable-kdrive-vesa \
+		%else
+		--disable-kdrive-vesa \
+		%endif
 		--disable-freetype \
 		--disable-install-setuid \
 		--enable-secure-rpc \
