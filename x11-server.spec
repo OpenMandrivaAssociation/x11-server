@@ -14,10 +14,6 @@
 %define mesasrcdir		%{_prefix}/src/Mesa
 %define mesaver			7.0.3
 
-%ifarch %{ix86} alpha
-%define kdrive_builds_vesa	1
-%endif
-
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
 
@@ -453,6 +449,7 @@ VNC clients access to the 'virtual' display it provides.
 %endif
 #------------------------------------------------------------------------------
 
+%if %kdrive_builds_vesa
 %package xati
 Summary: KDrive ati X server
 Group: System/X11
@@ -467,7 +464,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for ATI chipsets.
 
-%if %kdrive_builds_vesa
 %files xati
 %defattr(-,root,root)
 %{_bindir}/Xati
@@ -475,6 +471,7 @@ This KDrive server is targetted for ATI chipsets.
 
 #------------------------------------------------------------------------------
 
+%if %kdrive_builds_vesa
 %package xchips
 Summary: KDrive chips X server
 Group: System/X11
@@ -489,7 +486,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for Chips chipsets.
 
-%if %kdrive_builds_vesa
 %files xchips
 %defattr(-,root,root)
 %{_bindir}/Xchips
@@ -528,6 +524,7 @@ Possible uses include;
 
 #------------------------------------------------------------------------------
 
+%if %kdrive_builds_vesa
 %package xepson
 Summary: KDrive epson X server
 Group: System/X11
@@ -542,7 +539,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for Epson chipsets.
 
-%if %kdrive_builds_vesa
 %files xepson
 %defattr(-,root,root)
 %{_bindir}/Xepson
@@ -590,6 +586,7 @@ This KDrive server is targetted for being used on top of linux framebuffer.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xi810
 Summary: KDrive i810 X server
 Group: System/X11
@@ -604,7 +601,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for Intel chipsets.
 
-%if %kdrive_builds_vesa
 %files xi810
 %defattr(-,root,root)
 %{_bindir}/Xi810
@@ -612,6 +608,7 @@ This KDrive server is targetted for Intel chipsets.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xmach64
 Summary: KDrive mach64 X server
 Group: System/X11
@@ -626,7 +623,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for mach64 chipsets.
 
-%if %kdrive_builds_vesa
 %files xmach64
 %defattr(-,root,root)
 %{_bindir}/Xmach64
@@ -634,6 +630,7 @@ This KDrive server is targetted for mach64 chipsets.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xmga
 Summary: KDrive mga X server
 Group: System/X11
@@ -648,7 +645,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for mga chipsets.
 
-%if %kdrive_builds_vesa
 %files xmga
 %defattr(-,root,root)
 %{_bindir}/Xmga
@@ -656,6 +652,7 @@ This KDrive server is targetted for mga chipsets.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xnvidia
 Summary: KDrive nvidia X server
 Group: System/X11
@@ -670,7 +667,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for nvidia chipsets.
 
-%if %kdrive_builds_vesa
 %files xnvidia
 %defattr(-,root,root)
 %{_bindir}/Xnvidia
@@ -678,6 +674,7 @@ This KDrive server is targetted for nvidia chipsets.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xpm2
 Summary: KDrive pm2 X server
 Group: System/X11
@@ -692,7 +689,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for Permedia2 chipsets.
 
-%if %kdrive_builds_vesa
 %files xpm2
 %defattr(-,root,root)
 %{_bindir}/Xpm2
@@ -700,6 +696,7 @@ This KDrive server is targetted for Permedia2 chipsets.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xr128
 Summary: KDrive r128 X server
 Group: System/X11
@@ -714,7 +711,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for rage128 chipsets.
 
-%if %kdrive_builds_vesa
 %files xr128
 %defattr(-,root,root)
 %{_bindir}/Xr128
@@ -742,6 +738,7 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xsmi
 Summary: KDrive smi X server
 Group: System/X11
@@ -756,7 +753,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for Silicon Motion chipsets.
 
-%if %kdrive_builds_vesa
 %files xsmi
 %defattr(-,root,root)
 %{_bindir}/Xsmi
@@ -764,6 +760,7 @@ This KDrive server is targetted for Silicon Motion chipsets.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xvesa
 Summary: KDrive vesa X server
 Group: System/X11
@@ -778,7 +775,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for VESA capable chipsets.
 
-%if %kdrive_builds_vesa
 %files xvesa
 %defattr(-,root,root)
 %{_bindir}/Xvesa
@@ -786,6 +782,7 @@ This KDrive server is targetted for VESA capable chipsets.
 
 #------------------------------------------------------------------------------
  
+%if %kdrive_builds_vesa
 %package xvia
 Summary: KDrive via X server
 Group: System/X11
@@ -800,7 +797,6 @@ and the video driver corresponding to your video card.
 
 This KDrive server is targetted for VIA chipsets.
 
-%if %kdrive_builds_vesa
 %files xvia
 %defattr(-,root,root)
 %{_bindir}/Xvia
