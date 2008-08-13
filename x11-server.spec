@@ -124,6 +124,7 @@ Patch529: 0529-Autoconfigure-to-use-geode-driver-on-the-known-sup.patch
 Patch530: 0530-Fix-mandriva-bug-37514-vncserver-segfaults-when-con.patch
 Patch531: 0531-XAA-Disable-offscreen-pixmaps-by-default.patch
 Patch532: 0532-Fix-incorrect-test-regarding-keyboard-map.patch
+Patch533: 0533-Fix-bug-41583.-The-crash-was-happening-because-the-l.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -841,6 +842,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch530 -p1
 %patch531 -p1
 %patch532 -p1
+%patch533 -p1
 
 %build
 autoreconf -ifs
