@@ -30,6 +30,21 @@ License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
 
+# vesa based kdrive X servers are not built anymore.
+# Obsoleted for clean upgraded
+Obsoletes: x11-server-xati	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xchips	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xepson	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xi810	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xmach64	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xmga	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xnvidia	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xpm2	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xr128	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xsmi	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xvesa	<= 1.4.2-4mdv2009.0
+Obsoletes: x11-server-xvia	<= 1.4.2-4mdv2009.0
+
 %if %enable_dmx
 BuildRequires: libdmx-devel >= 1.0.1
 %endif
