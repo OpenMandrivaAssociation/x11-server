@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.4.2
-Release: %mkrel 5
+Release: %mkrel 6
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
