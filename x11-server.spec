@@ -140,6 +140,7 @@ Patch530: 0530-Fix-mandriva-bug-37514-vncserver-segfaults-when-con.patch
 Patch531: 0531-XAA-Disable-offscreen-pixmaps-by-default.patch
 Patch532: 0532-Fix-incorrect-test-regarding-keyboard-map.patch
 Patch533: 0533-Fix-bug-41583.-The-crash-was-happening-because-the-l.patch
+Patch534: 0534-Add-swapped-dispatch-for-randr-1.2-requests.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -858,6 +859,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch531 -p1
 %patch532 -p1
 %patch533 -p1
+%patch534 -p1
 
 %build
 autoreconf -ifs
