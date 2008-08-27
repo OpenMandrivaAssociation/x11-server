@@ -107,7 +107,7 @@ Patch502: 0502-Don-t-enable-mouse-keys-if-the-X-Server-was-not-star.patch
 Patch503: 0503-Blue-background-custom-patch.patch
 Patch504: 0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
 Patch505: 0505-Xvnc-support.patch
-Patch506: 0506-fix-parsing-weird-EDID.patch
+# patch 506 ("fix parsing weird EDID" is now patchs 535-539
 Patch507: 0507-xvfb-run-support.patch
 Patch508: 0508-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch509: 0509-Fontpath.d-updated-documentation.patch
@@ -141,6 +141,14 @@ Patch531: 0531-XAA-Disable-offscreen-pixmaps-by-default.patch
 Patch532: 0532-Fix-incorrect-test-regarding-keyboard-map.patch
 Patch533: 0533-Fix-bug-41583.-The-crash-was-happening-because-the-l.patch
 Patch534: 0534-Add-swapped-dispatch-for-randr-1.2-requests.patch
+
+# Pixel's patch "fix parsing weird EDID" splitted in smaller patches
+# some are cherry-picks from server-1.5-branch
+Patch0535: 0535-Make-config-file-preferred-mode-override-monitor-pre.patch
+Patch0536: 0536-Take-width-into-account-when-choosing-default-mode.patch
+Patch0537: 0537-Quirk-Samsung-SyncMaster-205BW.patch
+Patch0538: 0538--EDID-Ignore-reserved-bits-in-deciding-monitor-vs-d.patch
+Patch0539: 0539-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -831,7 +839,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch503 -p1
 %patch504 -p1
 %patch505 -p1
-%patch506 -p1
+# patch 506 was splitted in patchs 535-539
 %patch507 -p1
 %patch508 -p1
 %patch509 -p1
@@ -860,6 +868,11 @@ This KDrive server is targetted for VIA chipsets.
 %patch532 -p1
 %patch533 -p1
 %patch534 -p1
+%patch535 -p1
+%patch536 -p1
+%patch537 -p1
+%patch538 -p1
+%patch539 -p1
 
 %build
 autoreconf -ifs
