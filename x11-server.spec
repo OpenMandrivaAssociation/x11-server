@@ -150,6 +150,9 @@ Patch0537: 0537-Quirk-Samsung-SyncMaster-205BW.patch
 Patch0538: 0538--EDID-Ignore-reserved-bits-in-deciding-monitor-vs-d.patch
 Patch0539: 0539-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
 
+# fix patch504 (should be merged in git)
+Patch0540: xorg-server-1.4.2-save_context_fix.patch
+
 Requires: %{name}-xorg
 %if %enable_dmx
 Requires: %{name}-xdmx
@@ -873,6 +876,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch537 -p1
 %patch538 -p1
 %patch539 -p1
+%patch540 -p1 -b .save_context_fix
 
 %build
 autoreconf -ifs
