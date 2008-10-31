@@ -153,6 +153,9 @@ Patch0539: 0539-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
 # fix patch504 (should be merged in git)
 Patch0540: xorg-server-1.4.2-save_context_fix.patch
 
+# use cache for xkb (rediffed from pcpa's patch)
+Patch0550: xorg-server-1.4.2-xkbcomp_cache.patch
+
 Requires: %{name}-xorg
 %if %enable_dmx
 Requires: %{name}-xdmx
@@ -877,6 +880,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch538 -p1
 %patch539 -p1
 %patch540 -p1 -b .save_context_fix
+%patch550 -p1 -b .xkbcomp_cache
 
 %build
 autoreconf -ifs
