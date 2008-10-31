@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.4.2
-Release: %mkrel 7
+Release: %mkrel 8
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -345,7 +345,7 @@ Summary: X.org X11 server
 Group: System/X11
 License: MIT
 Requires: x11-server-common = %{version}-%{release}
-Requires: x11-data-xkbdata >= 1.0.1 
+Requires: x11-data-xkbdata > 1.3-5
 Requires: x11-font-alias
 Requires: libx11-common
 Requires: x11-driver-input-mouse
