@@ -77,6 +77,8 @@ BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
 BuildRequires: libgii-devel
 BuildRequires: libpixman-1-devel >= 0.9.5
+# for xkbcomp patch
+BuildRequires: openssl-devel
 
 %if %{enable_hal}
 # For the moment only really required if compiling with --config-dbus
