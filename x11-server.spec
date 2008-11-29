@@ -1,8 +1,8 @@
 %define with_debug		0
 %define kdrive_builds_vesa	0
-%define enable_xvnc		1
+%define enable_xvnc		0
 %define enable_dmx		1
-%define enable_hal		0
+%define enable_hal		1
 %define enable_dbus		%{enable_hal}
 %define enable_builddocs	1
 # Do magic with .rpmsave named links
@@ -18,14 +18,15 @@
 %define priority 500
 
 Name: x11-server
-Version: 1.4.2
-Release: %mkrel 8
+Version: 1.5.3
+Release: %mkrel 1
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL: http://xorg.freedesktop.org
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 Source1: xserver.pamd
+Source2: xvfb-run.sh
 License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
@@ -98,65 +99,76 @@ BuildRequires: libdmx-devel
 BuildRequires: libjpeg-devel
 %endif
 
-# git-format-patch xorg-server-1.4.0.90..origin/server-1.4-branch
+# (cg) Notes on disabled patches
+# ==============================
+# The VNC series: This should be instead regenerated from the
+# upstream CVS/git tree. I need to look up where that git tree is
+# (it's not official location)
+#  0505-Xvnc-support.patch
+#  0530-Fix-mandriva-bug-37514-vncserver-segfaults-when-con.patch
+#  0533-Fix-bug-41583.-The-crash-was-happening-because-the-l.patch
 
-# git-checkout patches
-# git-rebase origin/server-1.4-branch
-# git-format-patch --start-number 500 origin/server-1.4-branch..patches
-Patch500: 0500-Move-around-a-list-traversal-while-free-ing-data.patch
-Patch501: 0501-Fix-a-crash-if-xorg.conf-doesn-t-have-a-Files-sectio.patch
-Patch502: 0502-Don-t-enable-mouse-keys-if-the-X-Server-was-not-star.patch
-Patch503: 0503-Blue-background-custom-patch.patch
-Patch504: 0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
-Patch505: 0505-Xvnc-support.patch
-# patch 506 ("fix parsing weird EDID" is now patchs 535-539
-Patch507: 0507-xvfb-run-support.patch
-Patch508: 0508-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch509: 0509-Fontpath.d-updated-documentation.patch
-Patch510: 0510-Update-keyboard-leds.patch
-Patch511: 0511-Mouse-moves-slower-than-hand-movement-in-games.patch
-Patch512: 0512-fixes-mdvbz-35912.patch
-Patch513: 0513-Don-t-print-information-about-X-Server-being-a-pre-r.patch
+# This no longer seems to apply:
+#  0512-fixes-mdvbz-35912.patch
 
-# Some cherry-picks from master
-Patch514: 0514-reduce-wakeups-from-smart-scheduler.patch
-Patch515: 0515-Don-t-frob-timers-unless-SmartSchedule-is-running.patch
-Patch516: 0516-xkb-when-copying-sections-make-sure-num_rows-is-se.patch
-Patch517: 0517-XkbCopyKeymap-was-mangling-doodads-and-overlays.patch
-Patch518: 0518-regenerated-adds-GL_MAX_3D_TEXTURE_SIZE-see-bug-13.patch
-Patch519: 0519-regenerated-to-add-framebuffer-object-tokens-bug-13.patch
-Patch520: 0520-Fix-potential-crasher-in-xf86CrtcRotate.patch
-Patch521: 0521-Document-the-AllowEmptyInput-AutoAddDevices-and-Aut.patch
-Patch522: 0522-mi-change-infamous-Tossed-event-.-error-for-som.patch
-Patch523: 0523-xfree86-don-t-call-xalloc-from-signal-handlers-when.patch
-Patch524: 0524-XKB-Always-set-size-correctly-in-XkbCopyKeymap-s-ge.patch
-Patch525: 0525-xf86DDCMonitorSet-Honor-the-DisplaySize-from-the-co.patch
-Patch526: 0526-X86EMU-handle-CPUID-instruction.patch
-Patch527: 0527-Fail-CRTC-configuration-if-vtSema.patch
+# This appears to be fixed in a different way upstream:
+#  0532-Fix-incorrect-test-regarding-keyboard-map.patch
 
-# More mandriva custom patches, to be reordered in next rebase
-# (latest xserver segfaults when mplayer runs) #40959
-Patch528: 0528-Correct-a-NULL-pointer-deference.patch
-Patch529: 0529-Autoconfigure-to-use-geode-driver-on-the-known-sup.patch
-Patch530: 0530-Fix-mandriva-bug-37514-vncserver-segfaults-when-con.patch
-Patch531: 0531-XAA-Disable-offscreen-pixmaps-by-default.patch
-Patch532: 0532-Fix-incorrect-test-regarding-keyboard-map.patch
-Patch533: 0533-Fix-bug-41583.-The-crash-was-happening-because-the-l.patch
-Patch534: 0534-Add-swapped-dispatch-for-randr-1.2-requests.patch
+# Paulo's save context stuff. This conflicts with some changes upstream
+# so is currently disabled. Some changes upstream may partly do the same
+# functionality (e.g. the moving of the backtrace generation code)
+#  0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
+#  xorg-server-1.4.2-save_context_fix.patch
 
-# Pixel's patch "fix parsing weird EDID" splitted in smaller patches
-# some are cherry-picks from server-1.5-branch
-Patch0535: 0535-Make-config-file-preferred-mode-override-monitor-pre.patch
-Patch0536: 0536-Take-width-into-account-when-choosing-default-mode.patch
-Patch0537: 0537-Quirk-Samsung-SyncMaster-205BW.patch
-Patch0538: 0538--EDID-Ignore-reserved-bits-in-deciding-monitor-vs-d.patch
-Patch0539: 0539-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
+# Blino's xkbcomp-cache patch.. need to convert this but it's not trivial
+#  xorg-server-1.4.2-xkbcomp_cache.patch
 
-# fix patch504 (should be merged in git)
-Patch0540: xorg-server-1.4.2-save_context_fix.patch
 
-# use cache for xkb (rediffed from pcpa's patch)
-Patch0550: xorg-server-1.4.2-xkbcomp_cache.patch
+
+# Instructions to setup your repository clone
+# git://anongit.freedesktop.org/git/xorg/xserver
+# git checkout xorg-server-1.5.3
+# git branch -b mdv-1.5.3-cherry-picks
+# git am ../01??-*.patch
+# git branch -b mdv-1.5.3-redhat
+# git am ../03??-*.patch
+# git branch -b mdv-1.5.3-xvnc
+# git am ../07??-*.patch
+# git branch -b mdv-1.5.3-patches
+# git am ../0*??-*.patch
+
+# Upstream cherry picks
+# git format-patch --start-number 100 xorg-server-1.5.3..mdv-1.5.3-cherry-picks
+
+# Patches "liberated" from Fedora: 
+# http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
+# git format-patch --start-number 300 mdv-1.5.3-cherry-picks..mdv-1.5.3-redhat
+Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-r1.2.patch
+Patch301: 0301-RH-xserver-1.4.99-dont-backfill-bg-none.patch-v1.1.patch
+Patch302: 0302-RH-xserver-1.5.2-exa-master-upgrade-v1.1.patch
+Patch303: 0303-RH-xserver-1.5.0-bg-none-root-v1.4.patch
+Patch304: 0304-RH-xserver-1.5.0-exa-master-fix-x11perf-crash-v1.1.patch
+Patch305: 0305-RH-xserver-1.5.1-exa-fix-glyph-segfault-v1.1.patch
+Patch306: 0306-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.1.patch
+Patch307: 0307-RH-xserver-1.5.0-force-SwitchCoreKeyboard-for-evdev.patch
+Patch308: 0308-RH-xserver-1.5.0-hide-cursor-v1.1.patch
+Patch309: 0309-RH-xserver-1.5.2-more-sanity-checks-v1.1.patch
+
+# Patches to make Xvnc work
+# git format-patch --start-number 700 mdv-1.5.3-redhat..mdv-1.5.3-xvnc
+
+# Mandriva patches
+# git format-patch --start-number 900 mdv-1.5.3-xvnc..mdv-1.5.3-patches
+Patch900: 0900-Move-around-a-list-traversal-while-free-ing-data.patch
+Patch901: 0901-Fix-a-crash-if-xorg.conf-doesn-t-have-a-Files-sectio.patch
+Patch902: 0902-Don-t-enable-mouse-keys-if-the-X-Server-was-not-star.patch
+Patch903: 0903-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch904: 0904-Don-t-print-information-about-X-Server-being-a-pre-r.patch
+Patch905: 0905-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
+Patch906: 0906-Take-width-into-account-when-choosing-default-mode.patch
+Patch907: 0907-Quirk-Samsung-SyncMaster-205BW.patch
+Patch908: 0908-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
+
 
 Requires: %{name}-xorg
 %if %enable_dmx
@@ -290,7 +302,6 @@ fi
 %files common
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
-%dir %{_libdir}/xserver
 %dir %{_libdir}/X11
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
@@ -298,6 +309,9 @@ fi
 %dir %{_sysconfdir}/ld.so.conf.d/GL
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
+%if %enable_dbus
+%{_sysconfdir}/dbus-1/system.d/xorg-server.conf
+%endif
 %{_bindir}/xorgcfg
 %{_bindir}/xorgconfig
 %{_bindir}/gtf
@@ -305,8 +319,6 @@ fi
 %{_bindir}/in*
 %{_bindir}/ioport
 %{_bindir}/out*
-%{_bindir}/pcitweak
-%{_bindir}/scanpci
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
@@ -318,20 +330,17 @@ fi
 # of the warning would need us to list all the other extensions one-by-one.
 %ghost %{_libdir}/xorg/modules/extensions/libdri.so
 %ghost %{_libdir}/xorg/modules/extensions/libglx.so
-%{_libdir}/xserver/SecurityPolicy
+%{_libdir}/xorg/protocol.txt
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/xorgcfg.*
 %{_mandir}/man1/xorgconfig.*
 %{_mandir}/man1/gtf.*
 %{_mandir}/man1/cvt.*
-%{_mandir}/man1/pcitweak.*
-%{_mandir}/man1/scanpci.*
 %if %enable_dmx
 %{_mandir}/man1/vdltodmx.*
 %endif
 %{_mandir}/man4/fbdevhw.*
 %{_mandir}/man4/exa.*
-%{_mandir}/man5/SecurityPolicy.*
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %dir %{_prefix}/X11R6/lib/X11
@@ -436,7 +445,8 @@ testing purposes).
 %package xvfb
 Summary: X virtual framebuffer server
 Group: System/X11
-License: MIT
+# xvfb-run is GPLv2, rest is MIT
+License: MIT and GPLv2
 Requires: x11-server-common = %{version}-%{release}
 Requires: xauth
 
@@ -462,7 +472,6 @@ install Xvfb for that purpose.
 %{_bindir}/Xvfb
 %{_bindir}/xvfb-run
 %{_mandir}/man1/Xvfb.*
-%{_mandir}/man1/xvfb-run.*
 
 #------------------------------------------------------------------------------
 
@@ -579,7 +588,9 @@ This KDrive server is targetted for Epson chipsets.
 %endif
 
 #------------------------------------------------------------------------------
- 
+
+# (cg) Disable temporarily due to build errors
+%if 0
 %package xfake
 Summary: KDrive fake X server
 Group: System/X11
@@ -597,6 +608,7 @@ This KDrive server is targetted for testing purposes.
 %files xfake
 %defattr(-,root,root)
 %{_bindir}/Xfake
+%endif
 
 #------------------------------------------------------------------------------
   
@@ -841,48 +853,26 @@ This KDrive server is targetted for VIA chipsets.
 %prep
 %setup -q -n xorg-server-%{version}
 
-%patch500 -p1
-%patch501 -p1
-%patch502 -p1
-%patch503 -p1
-%patch504 -p1
-%patch505 -p1
-# patch 506 was splitted in patchs 535-539
-%patch507 -p1
-%patch508 -p1
-%patch509 -p1
-%patch510 -p1
-%patch511 -p1
-%patch512 -p1
-%patch513 -p1
-%patch514 -p1
-%patch515 -p1
-%patch516 -p1
-%patch517 -p1
-%patch518 -p1
-%patch519 -p1
-%patch520 -p1
-%patch521 -p1
-%patch522 -p1
-%patch523 -p1
-%patch524 -p1
-%patch525 -p1
-%patch526 -p1
-%patch527 -p1
-%patch528 -p1
-%patch529 -p1
-%patch530 -p1
-%patch531 -p1
-%patch532 -p1
-%patch533 -p1
-%patch534 -p1
-%patch535 -p1
-%patch536 -p1
-%patch537 -p1
-%patch538 -p1
-%patch539 -p1
-%patch540 -p1 -b .save_context_fix
-%patch550 -p1 -b .xkbcomp_cache
+%patch300 -p1
+%patch301 -p1
+%patch302 -p1
+%patch303 -p1
+%patch304 -p1
+%patch305 -p1
+%patch306 -p1
+%patch307 -p1
+%patch308 -p1
+%patch309 -p1
+
+%patch900 -p1
+%patch901 -p1
+%patch902 -p1
+%patch903 -p1
+%patch904 -p1
+%patch905 -p1
+%patch906 -p1
+%patch907 -p1
+%patch908 -p1
 
 %build
 autoreconf -ifs
@@ -955,7 +945,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--disable-xglx \
 		--disable-xegl \
 		--enable-kdrive \
-		--enable-xfake \
+		--disable-xfake \
 		--enable-xephyr \
 		--enable-xsdl \
 		%if %kdrive_builds_vesa
@@ -1026,6 +1016,8 @@ for lib in libdri.so libglx.so; do
   		%{buildroot}%{_libdir}/xorg/modules/extensions/standard/$lib
 	touch %{buildroot}%{_libdir}/xorg/modules/extensions/$lib
 done
+
+install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
 
 %clean
 rm -rf %{buildroot}
