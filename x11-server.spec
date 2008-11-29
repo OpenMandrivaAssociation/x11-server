@@ -78,6 +78,7 @@ BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
 BuildRequires: libgii-devel
 BuildRequires: libpixman-1-devel >= 0.9.5
+BuildRequires: libpciaccess-devel
 # for xkbcomp patch
 BuildRequires: openssl-devel
 
