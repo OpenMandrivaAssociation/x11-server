@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.5.3
-Release: %mkrel 2
+Release: %mkrel 3
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -45,6 +45,9 @@ Obsoletes: x11-server-xr128	<= 1.4.2-4mdv2009.0
 Obsoletes: x11-server-xsmi	<= 1.4.2-4mdv2009.0
 Obsoletes: x11-server-xvesa	<= 1.4.2-4mdv2009.0
 Obsoletes: x11-server-xvia	<= 1.4.2-4mdv2009.0
+
+# die, Xgl, die - AdamW 2008/11
+Obsoletes: x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
 
 %if %enable_dmx
 BuildRequires: libdmx-devel >= 1.0.1
