@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.5.3
-Release: %mkrel 1
+Release: %mkrel 2
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -193,6 +193,8 @@ License: MIT
 Conflicts: %{oldxorgnamedevel}-devel < 7.0
 Obsoletes: x11-server13-devel <= 1.2.99.905
 Requires: libpixman-1-devel
+Requires: libpciaccess-devel
+Requires: libxkbfile-devel
 
 %description devel
 Development files for %{name}
