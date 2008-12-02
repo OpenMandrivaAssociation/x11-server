@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.5.3
-Release: %mkrel 3
+Release: %mkrel 4
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -368,6 +368,9 @@ Requires: x11-font-alias
 Requires: libx11-common
 Requires: x11-driver-input-mouse
 Requires: x11-driver-input-keyboard
+%if %{enable_hal}
+Requires: x11-driver-input-evdev
+%endif
 Conflicts: compiz < 0.5.0-1mdv2007.1
 Obsoletes: x11-server13-xorg <= 1.2.99.905
 
