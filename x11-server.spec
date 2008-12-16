@@ -174,6 +174,7 @@ Patch905: 0905-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
 Patch906: 0906-Take-width-into-account-when-choosing-default-mode.patch
 Patch907: 0907-Quirk-Samsung-SyncMaster-205BW.patch
 Patch908: 0908-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
+Patch909: 0909-Fix-compilation-with-Werror-format-security-thanks.patch
 
 
 Requires: %{name}-xorg
@@ -886,6 +887,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch906 -p1
 %patch907 -p1
 %patch908 -p1
+%patch909 -p1
 
 %build
 autoreconf -ifs
