@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.5.3
-Release: %mkrel 4
+Release: %mkrel 5
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -144,6 +144,7 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks
 # git format-patch --start-number 100 xorg-server-1.5.3..mdv-1.5.3-cherry-picks
+Patch100: 0100-xsync-Fix-wakeup-storm-in-idletime-counter.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
@@ -862,6 +863,8 @@ This KDrive server is targetted for VIA chipsets.
 
 %prep
 %setup -q -n xorg-server-%{version}
+
+%patch100 -p1
 
 %patch300 -p1
 %patch301 -p1
