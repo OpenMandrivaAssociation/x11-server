@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.5.3
-Release: %mkrel 5
+Release: %mkrel 6
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -175,6 +175,7 @@ Patch906: 0906-Take-width-into-account-when-choosing-default-mode.patch
 Patch907: 0907-Quirk-Samsung-SyncMaster-205BW.patch
 Patch908: 0908-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
 Patch909: 0909-Fix-compilation-with-Werror-format-security-thanks.patch
+Patch910: 0910-Pass-XTest-fake-key-events-through-mieq-as-generated.patch
 
 
 Requires: %{name}-xorg
@@ -888,6 +889,7 @@ This KDrive server is targetted for VIA chipsets.
 %patch907 -p1
 %patch908 -p1
 %patch909 -p1
+%patch910 -p1
 
 %build
 autoreconf -ifs
