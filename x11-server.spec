@@ -19,7 +19,7 @@
 
 Name: x11-server
 Version: 1.5.3
-Release: %mkrel 6
+Release: %mkrel 7
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -27,6 +27,8 @@ URL: http://xorg.freedesktop.org
 Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 Source1: xserver.pamd
 Source2: xvfb-run.sh
+Source3: 10-x11-keymap.fdi
+Source4: mandriva-setup-keyboard
 License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
@@ -329,6 +331,10 @@ fi
 %{_bindir}/in*
 %{_bindir}/ioport
 %{_bindir}/out*
+%if %enable_hal
+%{_bindir}/mandriva-setup-keyboard
+%{_datadir}/hal/fdi/policy/10osvendor/*.fdi
+%endif
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
@@ -373,6 +379,7 @@ Requires: x11-driver-input-mouse
 Requires: x11-driver-input-keyboard
 %if %{enable_hal}
 Requires: x11-driver-input-evdev
+Conflicts: drakx-kbd-mouse-x11 < 0.66
 %endif
 Conflicts: compiz < 0.5.0-1mdv2007.1
 Obsoletes: x11-server13-xorg <= 1.2.99.905
@@ -1035,6 +1042,13 @@ for lib in libdri.so libglx.so; do
 done
 
 install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
+
+%if %enable_hal
+# autoconfigure keyboard layout based on system settings
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
+install -m 0444 %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
+install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}
+%endif
 
 %clean
 rm -rf %{buildroot}
