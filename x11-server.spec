@@ -93,6 +93,7 @@ BuildRequires: libpixman-1-devel >= 0.9.5
 BuildRequires: libpciaccess-devel
 BuildRequires: libxv-devel
 BuildRequires: libxinerama-devel
+BuildRequires: byacc
 # for xkbcomp patch
 BuildRequires: openssl-devel
 
