@@ -94,6 +94,7 @@ BuildRequires: libpciaccess-devel
 BuildRequires: libxv-devel
 BuildRequires: libxinerama-devel
 BuildRequires: byacc
+BuildRequires: flex
 # for xkbcomp patch
 BuildRequires: openssl-devel
 
