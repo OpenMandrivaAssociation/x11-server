@@ -1,3 +1,5 @@
+%define git 20081222
+
 %define with_debug		0
 %define kdrive_builds_vesa	0
 %define enable_xvnc		0
@@ -18,13 +20,18 @@
 %define priority 500
 
 Name: x11-server
-Version: 1.5.3
-Release: %mkrel 8
+Version: 1.5.99.3
+# (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
+Release: %mkrel 1.%{git}.1
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL: http://xorg.freedesktop.org
-Source: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+%if %{git}
+Source0:	xorg-server-%{git}.tar.bz2
+%else
+Source0: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+%endif
 Source1: xserver.pamd
 Source2: xvfb-run.sh
 Source3: 10-x11-keymap.fdi
@@ -134,49 +141,41 @@ BuildRequires: libjpeg-devel
 
 # Instructions to setup your repository clone
 # git://anongit.freedesktop.org/git/xorg/xserver
-# git checkout xorg-server-1.5.3
-# git branch -b mdv-1.5.3-cherry-picks
+# git checkout origin/server-1.6-branch
+# git branch -b mdv-1.6-cherry-picks
 # git am ../01??-*.patch
-# git branch -b mdv-1.5.3-redhat
+# git branch -b mdv-1.6-redhat
 # git am ../03??-*.patch
-# git branch -b mdv-1.5.3-xvnc
+# git branch -b mdv-1.6-xvnc
 # git am ../07??-*.patch
-# git branch -b mdv-1.5.3-patches
-# git am ../0*??-*.patch
+# git branch -b mdv-1.6-patches
+# git am ../09??-*.patch
 
 # Upstream cherry picks
-# git format-patch --start-number 100 xorg-server-1.5.3..mdv-1.5.3-cherry-picks
-Patch100: 0100-xsync-Fix-wakeup-storm-in-idletime-counter.patch
+# git format-patch --start-number 100 origin/server-1.6-branch..mdv-1.6-cherry-picks
+Patch100: 0100-Fix-compilation-with-Werror-format-security.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
-# git format-patch --start-number 300 mdv-1.5.3-cherry-picks..mdv-1.5.3-redhat
-Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-r1.2.patch
-Patch301: 0301-RH-xserver-1.4.99-dont-backfill-bg-none.patch-v1.1.patch
-Patch302: 0302-RH-xserver-1.5.2-exa-master-upgrade-v1.1.patch
-Patch303: 0303-RH-xserver-1.5.0-bg-none-root-v1.4.patch
-Patch304: 0304-RH-xserver-1.5.0-exa-master-fix-x11perf-crash-v1.1.patch
-Patch305: 0305-RH-xserver-1.5.1-exa-fix-glyph-segfault-v1.1.patch
-Patch306: 0306-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.1.patch
-Patch307: 0307-RH-xserver-1.5.0-force-SwitchCoreKeyboard-for-evdev.patch
-Patch308: 0308-RH-xserver-1.5.0-hide-cursor-v1.1.patch
-Patch309: 0309-RH-xserver-1.5.2-more-sanity-checks-v1.1.patch
+# git format-patch --start-number 300 mdv-1.6-cherry-picks..mdv-1.6-redhat
+Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch                                                                                                 
+Patch301: 0301-RH-xserver-1.4.99-dont-backfill-bg-none.patch-v1.1.patch                                                                                           
+Patch302: 0302-RH-xserver-1.5.0-bg-none-root-v1.5.patch                                                                                                           
+Patch303: 0303-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch                                                                                                   
+Patch304: 0304-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
 
 # Patches to make Xvnc work
-# git format-patch --start-number 700 mdv-1.5.3-redhat..mdv-1.5.3-xvnc
+# git format-patch --start-number 700 mdv-1.6-redhat..mdv-1.6-xvnc
 
 # Mandriva patches
-# git format-patch --start-number 900 mdv-1.5.3-xvnc..mdv-1.5.3-patches
-Patch900: 0900-Move-around-a-list-traversal-while-free-ing-data.patch
-Patch901: 0901-Fix-a-crash-if-xorg.conf-doesn-t-have-a-Files-sectio.patch
-Patch902: 0902-Don-t-enable-mouse-keys-if-the-X-Server-was-not-star.patch
-Patch903: 0903-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch904: 0904-Don-t-print-information-about-X-Server-being-a-pre-r.patch
-Patch905: 0905-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
-Patch906: 0906-Take-width-into-account-when-choosing-default-mode.patch
-Patch907: 0907-Quirk-Samsung-SyncMaster-205BW.patch
-Patch908: 0908-Fix-an-off-by-one-read-error-in-drmSIGIOHandler.patch
-Patch909: 0909-Fix-compilation-with-Werror-format-security-thanks.patch
+# git format-patch --start-number 900 mdv-1.6-xvnc..mdv-1.6-patches
+Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
+Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
+Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
+Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
+Patch905: 0905-dix-don-t-set-the-child-window-for-non-virtual-Ente.patch
+Patch906: 0906-mi-force-CopyKeyClass-for-key-events.-19048.patch
 
 
 Requires: %{name}-xorg
@@ -214,8 +213,6 @@ fi
 %files devel
 %defattr(-,root,root)
 %dir %{_includedir}/xorg
-%dir %{_includedir}/X11/bitmaps
-%dir %{_includedir}/X11/pixmaps
 %{_includedir}/xorg/*.h
 %{_libdir}/pkgconfig/xorg-server.pc
 %{_datadir}/aclocal/xorg-server.m4
@@ -247,10 +244,6 @@ Conflicts: x11-driver-video-nvidia-current <= 100.14.19
 # libdri.so alternativeszification:
 Conflicts: ati < 8.512-2
 
-# xorgcfg requires these
-Requires: x11-data-bitmaps
-# xorgcfg requires bitmaps on this package...
-Requires: bitmap
 
 %description common
 X server common files
@@ -323,13 +316,8 @@ fi
 %if %enable_dbus
 %{_sysconfdir}/dbus-1/system.d/xorg-server.conf
 %endif
-%{_bindir}/xorgcfg
-%{_bindir}/xorgconfig
 %{_bindir}/gtf
 %{_bindir}/cvt
-%{_bindir}/in*
-%{_bindir}/ioport
-%{_bindir}/out*
 %if %enable_hal
 %{_bindir}/mandriva-setup-keyboard
 %{_datadir}/hal/fdi/policy/10osvendor/*.fdi
@@ -337,7 +325,6 @@ fi
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
-%{_libdir}/X11/Cards
 %{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
 # (anssi) We do not want this file to really exist, it is empty.
@@ -347,8 +334,6 @@ fi
 %ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %{_libdir}/xorg/protocol.txt
 %{_datadir}/X11/xkb/README.compiled
-%{_mandir}/man1/xorgcfg.*
-%{_mandir}/man1/xorgconfig.*
 %{_mandir}/man1/gtf.*
 %{_mandir}/man1/cvt.*
 %if %enable_dmx
@@ -359,9 +344,6 @@ fi
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %dir %{_prefix}/X11R6/lib/X11
-# xorgcfg bitmaps/pixmaps
-%{_includedir}/X11/bitmaps/*.xbm
-%{_includedir}/X11/pixmaps/*.xpm
 
 
 #------------------------------------------------------------------------------
@@ -397,7 +379,6 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
-%{_datadir}/X11/app-defaults/XOrgCfg
 %{_mandir}/man1/Xorg.*
 %{_mandir}/man1/Xserver.*
 %{_mandir}/man5/xorg.conf.*
@@ -583,6 +564,7 @@ Possible uses include;
 %files xephyr
 %defattr(-,root,root)
 %{_bindir}/Xephyr
+%{_mandir}/man1/Xephyr.1*
 
 #------------------------------------------------------------------------------
 
@@ -870,7 +852,11 @@ This KDrive server is targetted for VIA chipsets.
 #------------------------------------------------------------------------------
 
 %prep
+%if %{git}
+%setup -q -n xorg-server-%{git}
+%else
 %setup -q -n xorg-server-%{version}
+%endif
 
 %patch100 -p1
 
@@ -879,11 +865,6 @@ This KDrive server is targetted for VIA chipsets.
 %patch302 -p1
 %patch303 -p1
 %patch304 -p1
-%patch305 -p1
-%patch306 -p1
-%patch307 -p1
-%patch308 -p1
-%patch309 -p1
 
 %patch900 -p1
 %patch901 -p1
@@ -892,9 +873,6 @@ This KDrive server is targetted for VIA chipsets.
 %patch904 -p1
 %patch905 -p1
 %patch906 -p1
-%patch907 -p1
-%patch908 -p1
-%patch909 -p1
 
 %build
 autoreconf -ifs
@@ -978,7 +956,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--disable-freetype \
 		--disable-install-setuid \
 		--enable-secure-rpc \
-		--enable-xorgcfg \
 		--enable-kbd_mode \
 		--enable-xwrapper \
 		--enable-pam \
