@@ -1,4 +1,5 @@
 %define git 20081222
+%define applypatches() (for patch in $(awk '/^Patch.*:/ { print "%{_sourcedir}/"$2 }' %{_specdir}/%{name}.spec); do patch -p1 < $patch; done)
 
 %define with_debug		0
 %define kdrive_builds_vesa	0
@@ -22,7 +23,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.1
+Release: %mkrel 1.%{git}.2
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -157,15 +158,24 @@ BuildRequires: libjpeg-devel
 # Upstream cherry picks
 # git format-patch --start-number 100 origin/server-1.6-branch..mdv-1.6-cherry-picks
 Patch100: 0100-Fix-compilation-with-Werror-format-security.patch
+Patch101: 0101-Don-t-log-audit-messages-when-audit-0-specified.patch
+Patch102: 0102-mi-Clean-up-CopyGetMasterEvent-re-use-the-memory.patch
+Patch103: 0103-mi-Reuse-memory-in-mieqProcessInputEvents-rather-th.patch
+Patch104: 0104-randr-Consider-panned-crtc-s-when-calculating-xiner.patch
+Patch105: 0105-randr-xfree86-Fix-a-one-off-error-in-the-panning-ca.patch
+Patch106: 0106-exa-Allow-drivers-to-set-non-NULL-devPrivate.ptr-fo.patch
+Patch107: 0107-exa-preparing-as-source-and-finishing-access-as-mas.patch
+Patch108: 0108-dix-move-MAX_VALUATOR_EVENTS-into-include-input.h.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 300 mdv-1.6-cherry-picks..mdv-1.6-redhat
-Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch                                                                                                 
-Patch301: 0301-RH-xserver-1.4.99-dont-backfill-bg-none.patch-v1.1.patch                                                                                           
-Patch302: 0302-RH-xserver-1.5.0-bg-none-root-v1.5.patch                                                                                                           
-Patch303: 0303-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch                                                                                                   
+Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
+Patch301: 0301-RH-xserver-1.4.99-dont-backfill-bg-none.patch-v1.1.patch
+Patch302: 0302-RH-xserver-1.5.0-bg-none-root-v1.5.patch
+Patch303: 0303-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
 Patch304: 0304-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
+Patch305: 0305-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6-redhat..mdv-1.6-xvnc
@@ -179,6 +189,7 @@ Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
 Patch905: 0905-dix-don-t-set-the-child-window-for-non-virtual-Ente.patch
 Patch906: 0906-mi-force-CopyKeyClass-for-key-events.-19048.patch
+Patch907: 0907-Fix-segv-on-CopyKeyClass.patch
 
 
 Requires: %{name}-xorg
@@ -861,21 +872,7 @@ This KDrive server is targetted for VIA chipsets.
 %setup -q -n xorg-server-%{version}
 %endif
 
-%patch100 -p1
-
-%patch300 -p1
-%patch301 -p1
-%patch302 -p1
-%patch303 -p1
-%patch304 -p1
-
-%patch900 -p1
-%patch901 -p1
-%patch902 -p1
-%patch903 -p1
-%patch904 -p1
-%patch905 -p1
-%patch906 -p1
+%applypatches
 
 %build
 autoreconf -ifs
