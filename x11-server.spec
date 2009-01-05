@@ -23,7 +23,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.2
+Release: %mkrel 1.%{git}.3
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -969,6 +969,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%else
 		--disable-config-hal \
 		%endif
+		--disable-builtin-fonts \
 		--with-fontdir="%{_datadir}/fonts" \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
