@@ -23,7 +23,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.3
+Release: %mkrel 1.%{git}.4
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -166,6 +166,7 @@ Patch105: 0105-randr-xfree86-Fix-a-one-off-error-in-the-panning-ca.patch
 Patch106: 0106-exa-Allow-drivers-to-set-non-NULL-devPrivate.ptr-fo.patch
 Patch107: 0107-exa-preparing-as-source-and-finishing-access-as-mas.patch
 Patch108: 0108-dix-move-MAX_VALUATOR_EVENTS-into-include-input.h.patch
+Patch109: 0109-XAA-Disable-offscreen-pixmaps-by-default.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
