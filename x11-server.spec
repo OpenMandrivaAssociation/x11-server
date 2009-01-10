@@ -1,5 +1,5 @@
-%define git 20081222
-%define applypatches() (for patch in $(awk '/^Patch.*:/ { print "%{_sourcedir}/"$2 }' %{_specdir}/%{name}.spec); do patch -p1 < $patch; done)
+%define git 20090110
+%define applypatches() (for patch in %patches; do cat $patch | patch -p1; done)
 
 %define with_debug		0
 %define kdrive_builds_vesa	0
@@ -23,7 +23,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.4
+Release: %mkrel 1.%{git}.5
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -157,16 +157,7 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks
 # git format-patch --start-number 100 origin/server-1.6-branch..mdv-1.6-cherry-picks
-Patch100: 0100-Fix-compilation-with-Werror-format-security.patch
-Patch101: 0101-Don-t-log-audit-messages-when-audit-0-specified.patch
-Patch102: 0102-mi-Clean-up-CopyGetMasterEvent-re-use-the-memory.patch
-Patch103: 0103-mi-Reuse-memory-in-mieqProcessInputEvents-rather-th.patch
-Patch104: 0104-randr-Consider-panned-crtc-s-when-calculating-xiner.patch
-Patch105: 0105-randr-xfree86-Fix-a-one-off-error-in-the-panning-ca.patch
-Patch106: 0106-exa-Allow-drivers-to-set-non-NULL-devPrivate.ptr-fo.patch
-Patch107: 0107-exa-preparing-as-source-and-finishing-access-as-mas.patch
-Patch108: 0108-dix-move-MAX_VALUATOR_EVENTS-into-include-input.h.patch
-Patch109: 0109-XAA-Disable-offscreen-pixmaps-by-default.patch
+Patch100: 0100-randr-Consider-panned-crtc-s-when-calculating-xiner.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
@@ -188,9 +179,8 @@ Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
 Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
-Patch905: 0905-dix-don-t-set-the-child-window-for-non-virtual-Ente.patch
-Patch906: 0906-mi-force-CopyKeyClass-for-key-events.-19048.patch
-Patch907: 0907-Fix-segv-on-CopyKeyClass.patch
+Patch905: 0905-mi-force-CopyKeyClass-for-key-events.-19048.patch
+Patch906: 0906-Fix-segv-on-CopyKeyClass.patch
 
 
 Requires: %{name}-xorg
@@ -941,10 +931,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-xvfb \
 		--enable-xnest \
 		--disable-xwin \
-		--disable-xprint \
-		--disable-xgl \
-		--disable-xglx \
-		--disable-xegl \
 		--enable-kdrive \
 		--disable-xfake \
 		--enable-xephyr \
