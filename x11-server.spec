@@ -3,8 +3,8 @@
 
 %define with_debug		0
 %define kdrive_builds_vesa	0
-%define enable_xvnc		0
-%define enable_dmx		1
+%define enable_xvnc		1
+%define enable_dmx		0
 %define enable_hal		1
 %define enable_dbus		%{enable_hal}
 %define enable_builddocs	1
@@ -23,7 +23,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.6
+Release: %mkrel 1.%{git}.7
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -119,13 +119,6 @@ BuildRequires: libjpeg-devel
 
 # (cg) Notes on disabled patches
 # ==============================
-# The VNC series: This should be instead regenerated from the
-# upstream CVS/git tree. I need to look up where that git tree is
-# (it's not official location)
-#  0505-Xvnc-support.patch
-#  0530-Fix-mandriva-bug-37514-vncserver-segfaults-when-con.patch
-#  0533-Fix-bug-41583.-The-crash-was-happening-because-the-l.patch
-
 # This no longer seems to apply:
 #  0512-fixes-mdvbz-35912.patch
 
@@ -171,6 +164,12 @@ Patch305: 0305-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6-redhat..mdv-1.6-xvnc
+Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholso.patch
+Patch701: 0701-Fix-for-X-server-1.6-input-interface-changes.patch
+Patch702: 0702-Use-xorgVersion.h-instead-of-xf86Version.h.patch
+Patch703: 0703-Fix-for-DevPrivates-interface-changes.patch
+Patch704: 0704-Fix-compilation-Werror-format-security.patch
+Patch705: 0705-Fix-bug-41583.patch
 
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6-xvnc..mdv-1.6-patches
