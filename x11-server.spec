@@ -5,6 +5,8 @@
 %define kdrive_builds_vesa	0
 %define enable_xvnc		1
 %define enable_dmx		0
+# (cg) Disable xfake temporarily due to build errors
+%define enable_xfake		0
 %define enable_hal		1
 %define enable_dbus		%{enable_hal}
 %define enable_builddocs	1
@@ -23,7 +25,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.7
+Release: %mkrel 1.%{git}.8
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -59,9 +61,6 @@ Obsoletes: x11-server-xvia	<= 1.4.2-4mdv2009.0
 # die, Xgl, die - AdamW 2008/11
 Obsoletes: x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
 
-%if %enable_dmx
-BuildRequires: libdmx-devel >= 1.0.1
-%endif
 BuildRequires: libfontenc-devel >= 1.0.1
 BuildRequires: libmesagl-devel >= %{mesaver}
 BuildRequires: libxau-devel >= 1.0.0
@@ -185,11 +184,19 @@ Patch908: 0908-Automatically-IgnoreABI-for-nvidia-fglrx-vboxvideo-d.patch
 
 
 Requires: %{name}-xorg
-%if %enable_dmx
+%if %{enable_dmx}
 Requires: %{name}-xdmx
+%else
+Obsoletes: %{name}-xdmx < %{version}-%{release}
 %endif
 Requires: %{name}-xnest
 Requires: %{name}-xvfb
+%if !%{enable_xvnc}
+Obsoletes: %{name}-xvnc < %{version}-%{release}
+%endif
+%if !%{enable_xfake}
+Obsoletes: %{name}-xfake < %{version}-%{release}
+%endif
 
 %description
 X11 servers
@@ -596,8 +603,7 @@ This KDrive server is targetted for Epson chipsets.
 
 #------------------------------------------------------------------------------
 
-# (cg) Disable temporarily due to build errors
-%if 0
+%if %enable_xfake
 %package xfake
 Summary: KDrive fake X server
 Group: System/X11
@@ -933,7 +939,11 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-xnest \
 		--disable-xwin \
 		--enable-kdrive \
+		%if %enable_xfake
+		--enable-xfake \
+		%else
 		--disable-xfake \
+		%endif
 		--enable-xephyr \
 		--enable-xsdl \
 		%if %kdrive_builds_vesa
