@@ -25,7 +25,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.8
+Release: %mkrel 1.%{git}.9
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -179,7 +179,7 @@ Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
 Patch905: 0905-mi-force-CopyKeyClass-for-key-events.-19048.patch
 Patch906: 0906-Fix-segv-on-CopyKeyClass.patch
-Patch907: 0907-Apply-patch-from-fdo-19337-to-hopefully-fix-segv-o.patch
+Patch907: 0907-Fix-crash-on-startup-due-to-unallocated-private-in-x.patch
 Patch908: 0908-Automatically-IgnoreABI-for-nvidia-fglrx-vboxvideo-d.patch
 
 
