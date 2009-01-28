@@ -25,7 +25,7 @@
 Name: x11-server
 Version: 1.5.99.3
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.12
+Release: %mkrel 1.%{git}.13
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -181,10 +181,10 @@ Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
 Patch905: 0905-mi-force-CopyKeyClass-for-key-events.-19048.patch
 Patch906: 0906-Fix-segv-on-CopyKeyClass.patch
 Patch907: 0907-Fix-crash-on-startup-due-to-unallocated-private-in-x.patch
-Patch908: 0908-Automatically-IgnoreABI-for-nvidia-fglrx-vboxvideo-d.patch
 Patch909: 0909-mi-force-the-paired-kbd-device-before-CopyKeyClass.patch
 Patch910: 0910-Add-a-connect-retry-timer-to-interface-hal-daemon.patch
 Patch911: 0911-LED-behavior-fixes.patch
+Patch912: 0912-Add-noAutoAddDevices-command-line-option.patch
 
 
 Requires: %{name}-xorg
