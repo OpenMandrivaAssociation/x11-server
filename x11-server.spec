@@ -1,4 +1,4 @@
-%define git 20090110
+%define git 20090131
 %define applypatches() (for patch in %patches; do cat $patch | patch -p1; done)
 
 %define with_debug		0
@@ -23,9 +23,9 @@
 %define priority 500
 
 Name: x11-server
-Version: 1.5.99.3
+Version: 1.5.99.902
 # (cg) post-release so prefixing with 1.x.y.z rather than 0. Not sure if 1.6 will be 1.6 or 1.6.0
-Release: %mkrel 1.%{git}.13
+Release: %mkrel 1.%{git}.1
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -149,8 +149,7 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks
 # git format-patch --start-number 100 origin/server-1.6-branch..mdv-1.6-cherry-picks
-Patch100: 0100-randr-Consider-panned-crtc-s-when-calculating-xiner.patch
-Patch101: 0101-Default-to-use-standard-bitmap-fonts-with-builtins.patch
+Patch100: 0100-Default-to-use-standard-bitmap-fonts-with-builtins.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
@@ -161,6 +160,7 @@ Patch302: 0302-RH-xserver-1.5.0-bg-none-root-v1.5.patch
 Patch303: 0303-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
 Patch304: 0304-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
 Patch305: 0305-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
+Patch306: 0306-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6-redhat..mdv-1.6-xvnc
@@ -178,13 +178,11 @@ Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
 Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
-Patch905: 0905-mi-force-CopyKeyClass-for-key-events.-19048.patch
-Patch906: 0906-Fix-segv-on-CopyKeyClass.patch
-Patch907: 0907-Fix-crash-on-startup-due-to-unallocated-private-in-x.patch
-Patch909: 0909-mi-force-the-paired-kbd-device-before-CopyKeyClass.patch
-Patch910: 0910-Add-a-connect-retry-timer-to-interface-hal-daemon.patch
-Patch911: 0911-LED-behavior-fixes.patch
-Patch912: 0912-Add-noAutoAddDevices-command-line-option.patch
+Patch905: 0905-Fix-crash-on-startup-due-to-unallocated-private-in-x.patch
+Patch906: 0906-mi-force-the-paired-kbd-device-before-CopyKeyClass.patch
+Patch907: 0907-Add-a-connect-retry-timer-to-interface-hal-daemon.patch
+Patch908: 0908-LED-behavior-fixes.patch
+Patch909: 0909-Add-noAutoAddDevices-command-line-option.patch
 
 
 Requires: %{name}-xorg
