@@ -24,7 +24,7 @@
 
 Name: x11-server
 Version: 1.5.99.902
-Release: %mkrel 1.%{git}.3
+Release: %mkrel 1.%{git}.4
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -189,6 +189,7 @@ Patch905: 0905-mi-force-the-paired-kbd-device-before-CopyKeyClass.patch
 Patch906: 0906-Add-a-connect-retry-timer-to-interface-hal-daemon.patch
 Patch907: 0907-LED-behavior-fixes.patch
 Patch908: 0908-Add-noAutoAddDevices-command-line-option.patch
+Patch909: 0909-glx-Replace-broken-GLX-visual-setup-with-a-fixed-a.patch
 
 
 Requires: %{name}-xorg
