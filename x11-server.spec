@@ -24,7 +24,7 @@
 
 Name: x11-server
 Version: 1.5.99.902
-Release: %mkrel 1.%{git}.4
+Release: %mkrel 1.%{git}.5
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -162,7 +162,6 @@ Patch108: 0108-randr-Fix-initial-panning-border-copy.patch
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 300 mdv-1.6-cherry-picks..mdv-1.6-redhat
 Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
-Patch301: 0301-RH-xserver-1.4.99-dont-backfill-bg-none.patch-v1.1.patch
 Patch302: 0302-RH-xserver-1.5.0-bg-none-root-v1.5.patch
 Patch303: 0303-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
 Patch304: 0304-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
