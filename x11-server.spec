@@ -1,4 +1,4 @@
-%define git 20090131
+%define git 0
 %define applypatches() (for patch in %patches; do cat $patch | patch -p1; done)
 
 %define with_debug		0
@@ -22,9 +22,16 @@
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
 
+%define version 1.5.99.903
+%define rel	1
+
 Name: x11-server
-Version: 1.5.99.902
-Release: %mkrel 1.%{git}.5
+Version: %{version}
+%if %{git}
+Release: %mkrel 1.%{git}.%{rel}
+%else
+Release: %mkrel %{rel}
+%endif
 Summary:  X11 servers
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -148,25 +155,16 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks
 # git format-patch --start-number 100 origin/server-1.6-branch..mdv-1.6-cherry-picks
-Patch100: 0100-Default-to-use-standard-bitmap-fonts-with-builtins.patch
-Patch101: 0101-Make-crtc_notify-wrap-unwrap-code-do-nothing-unless.patch
-Patch102: 0102-glx-Don-t-match-fbconfigs-to-visuals-with-mismatche.patch
-Patch103: 0103-mi-don-t-call-UpdateSpriteForScreen-if-we-have-Xine.patch
-Patch104: 0104-randr-Add-monitor-option-Panning-for-initial-pann.patch
-Patch105: 0105-randr-Fix-error-message-for-bad-panning-config.patch
-Patch106: 0106-randr-Update-initial-screen-size-if-panning-informa.patch
-Patch107: 0107-randr-Oops-miscalculated-panning-rectangle-s-coord.patch
-Patch108: 0108-randr-Fix-initial-panning-border-copy.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 300 mdv-1.6-cherry-picks..mdv-1.6-redhat
 Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
-Patch302: 0302-RH-xserver-1.5.0-bg-none-root-v1.5.patch
-Patch303: 0303-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
-Patch304: 0304-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
-Patch305: 0305-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
-Patch306: 0306-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
+Patch302: 0301-RH-xserver-1.5.0-bg-none-root-v1.5.patch
+Patch303: 0302-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
+Patch304: 0303-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
+Patch305: 0304-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
+Patch306: 0305-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6-redhat..mdv-1.6-xvnc
@@ -184,11 +182,9 @@ Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
 Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
-Patch905: 0905-mi-force-the-paired-kbd-device-before-CopyKeyClass.patch
-Patch906: 0906-Add-a-connect-retry-timer-to-interface-hal-daemon.patch
-Patch907: 0907-LED-behavior-fixes.patch
-Patch908: 0908-Add-noAutoAddDevices-command-line-option.patch
-Patch909: 0909-glx-Replace-broken-GLX-visual-setup-with-a-fixed-a.patch
+Patch906: 0905-Add-a-connect-retry-timer-to-interface-hal-daemon.patch
+Patch907: 0906-LED-behavior-fixes.patch
+Patch908: 0907-Add-noAutoAddDevices-command-line-option.patch
 
 
 Requires: %{name}-xorg
