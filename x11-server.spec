@@ -23,7 +23,7 @@
 %define priority 500
 
 %define version 1.5.99.903
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -154,7 +154,11 @@ BuildRequires: libjpeg-devel
 # git am ../09??-*.patch
 
 # Upstream cherry picks
-# git format-patch --start-number 100 origin/server-1.6-branch..mdv-1.6-cherry-picks
+# git format-patch --start-number 100 eca523e7e7e267728a1f5ec346e012ada3debba0..mdv-1.6-cherry-picks
+Patch100: 0100-X11-fonts-fontmod.h-doesn-t-exist-anymore.patch
+Patch101: 0101-glx-Inialize-best_score-before-calculating-visual-s.patch
+
+Patch200: 0200-Revert-glx-fix-retval-checks-when-failures-occur-f.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
