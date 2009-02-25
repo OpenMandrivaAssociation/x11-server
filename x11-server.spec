@@ -22,8 +22,8 @@
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
 
-%define version 1.5.99.903
-%define rel	2
+%define version 1.6.0
+%define rel	1
 
 Name: x11-server
 Version: %{version}
@@ -154,9 +154,7 @@ BuildRequires: libjpeg-devel
 # git am ../09??-*.patch
 
 # Upstream cherry picks
-# git format-patch --start-number 100 eca523e7e7e267728a1f5ec346e012ada3debba0..mdv-1.6-cherry-picks
-Patch100: 0100-X11-fonts-fontmod.h-doesn-t-exist-anymore.patch
-Patch101: 0101-glx-Inialize-best_score-before-calculating-visual-s.patch
+# git format-patch --start-number 100 xorg-server-1.6.0..mdv-1.6-cherry-picks
 
 Patch200: 0200-Revert-glx-fix-retval-checks-when-failures-occur-f.patch
 
@@ -186,9 +184,8 @@ Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
 Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
-Patch906: 0905-Add-a-connect-retry-timer-to-interface-hal-daemon.patch
-Patch907: 0906-LED-behavior-fixes.patch
-Patch908: 0907-Add-noAutoAddDevices-command-line-option.patch
+Patch905: 0905-LED-behavior-fixes.patch
+Patch906: 0906-Add-noAutoAddDevices-command-line-option.patch
 
 
 Requires: %{name}-xorg
