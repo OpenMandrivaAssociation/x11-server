@@ -156,8 +156,6 @@ BuildRequires: libjpeg-devel
 # Upstream cherry picks
 # git format-patch --start-number 100 xorg-server-1.6.0..mdv-1.6-cherry-picks
 
-Patch200: 0200-Revert-glx-fix-retval-checks-when-failures-occur-f.patch
-
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 300 mdv-1.6-cherry-picks..mdv-1.6-redhat
