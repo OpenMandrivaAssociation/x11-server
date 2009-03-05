@@ -23,7 +23,7 @@
 %define priority 500
 
 %define version 1.6.0
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -184,6 +184,7 @@ Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
 Patch905: 0905-LED-behavior-fixes.patch
 Patch906: 0906-Add-noAutoAddDevices-command-line-option.patch
+Patch907: 0907-Honour-Option-DPMS-off-on-xorg.conf.patch
 
 
 Requires: %{name}-xorg
