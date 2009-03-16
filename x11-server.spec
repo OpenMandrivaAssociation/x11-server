@@ -23,7 +23,8 @@
 %define priority 500
 
 %define version 1.6.0
-%define rel	2
+%define major_minor 1.6
+%define rel	3
 
 Name: x11-server
 Version: %{version}
@@ -295,8 +296,8 @@ fi
 [ -L %{_libdir}/xorg/modules/extensions/libdri.so ] || rm -f %{_libdir}/xorg/modules/extensions/libdri.so
 %{_sbindir}/update-alternatives \
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
-	--slave %{_libdir}/xorg/modules/extensions/libdri.so libdri.so %{_libdir}/xorg/modules/extensions/standard/libdri.so \
-	--slave %{_libdir}/xorg/modules/extensions/libglx.so libglx %{_libdir}/xorg/modules/extensions/standard/libglx.so
+	--slave %{_bindir}/Xorg Xorg %{_bindir}/Xorg-%{major_minor} \
+	--slave %{_libdir}/xorg/extra-modules xorg_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
 # (anssi)
 %triggerun common -- %{name}-common < 1.3.0.0-17
@@ -323,6 +324,7 @@ fi
 %files common
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
+%dir %{_libdir}/xorg/xorg-1.6-extra-modules
 %dir %{_libdir}/X11
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
@@ -391,7 +393,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %files xorg
 %defattr(-,root,root)
 %{_bindir}/X
-%{_bindir}/Xorg
+%{_bindir}/Xorg-%{major_minor}
 %attr(4755,root,root)%{_bindir}/Xwrapper
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
@@ -1002,6 +1004,7 @@ ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 # create more module directories to be owned by x11-server-common
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
+install -d -m755 %{buildroot}%{_libdir}/xorg/xorg-1.6-extra-modules
 
 # (anssi) manage proprietary drivers
 install -d -m755 %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL
@@ -1018,6 +1021,9 @@ for lib in libdri.so libglx.so; do
   		%{buildroot}%{_libdir}/xorg/modules/extensions/standard/$lib
 	touch %{buildroot}%{_libdir}/xorg/modules/extensions/$lib
 done
+
+# Move binary to Xorg-%{major_minor} since we'll use alternatives for Xorg
+mv %{buildroot}%{_bindir}/Xorg %{buildroot}%{_bindir}/Xorg-%{major_minor}
 
 install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
 
