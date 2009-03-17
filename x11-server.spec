@@ -1,5 +1,5 @@
 %define git 0
-%define applypatches() (for patch in %patches; do cat $patch | patch -p1; done)
+%define applypatches() for patch in %patches; do cat $patch | patch -p1; done
 
 %define with_debug		0
 %define kdrive_builds_vesa	0
@@ -21,6 +21,11 @@
 
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
+
+# Search for modules in extra_module_dir before the default path.
+# This will allow fglrx to install its modified modules in more cleaner way.
+%define extra_module_dir        %{_libdir}/xorg/extra-modules
+%define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.0
 %define major_minor 1.6
@@ -186,6 +191,7 @@ Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
 Patch905: 0905-LED-behavior-fixes.patch
 Patch906: 0906-Add-noAutoAddDevices-command-line-option.patch
 Patch907: 0907-Honour-Option-DPMS-off-on-xorg.conf.patch
+Patch908: 0908-Xorg-add-an-extra-module-path.patch
 
 
 Requires: %{name}-xorg
@@ -297,7 +303,7 @@ fi
 %{_sbindir}/update-alternatives \
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
 	--slave %{_bindir}/Xorg Xorg %{_bindir}/Xorg-%{major_minor} \
-	--slave %{_libdir}/xorg/extra-modules xorg_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
+	--slave %{extra_module_dir} xorg_extra_modules %{xorg1_6_extra_modules}
 
 # (anssi)
 %triggerun common -- %{name}-common < 1.3.0.0-17
@@ -324,7 +330,7 @@ fi
 %files common
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
-%dir %{_libdir}/xorg/xorg-1.6-extra-modules
+%dir %{xorg1_6_extra_modules}
 %dir %{_libdir}/X11
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
@@ -887,6 +893,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--with-os-vendor="Mandriva" \
 		--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 		--with-vendor-web="http://qa.mandriva.com" \
+		--with-extra-module-dir=%{extra_module_dir} \
 		%if %{with_debug}
 		--enable-debug \
 		%else
@@ -1004,7 +1011,7 @@ ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 # create more module directories to be owned by x11-server-common
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
-install -d -m755 %{buildroot}%{_libdir}/xorg/xorg-1.6-extra-modules
+install -d -m755 %{buildroot}%{xorg1_6_extra_modules}
 
 # (anssi) manage proprietary drivers
 install -d -m755 %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL
