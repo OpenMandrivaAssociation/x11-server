@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	3
+%define rel	4
 
 Name: x11-server
 Version: %{version}
@@ -321,6 +321,19 @@ else
 	%{_sbindir}/update-alternatives --set gl_conf "${current_glconf}"
 fi
 true
+
+%triggerpostun common -- %{name}-xorg < 1.6.0-3
+[ $1 -eq 2 ] || exit 0 # do not run if downgrading
+# make sure /usr/bin/Xorg points to the correct location
+# since x11-server-common provides the link now, but it was contained in x11-server-xorg before,
+# the file is removed on update
+link_state=$(%{_sbindir}/update-alternatives --display gl_conf | head -1)
+link_state=$(expr match "$link_state" 'gl_conf - status is \(.*\).')
+
+if [ "$link_state" != "auto" ]; then
+	current_link=$(readlink %{_sysconfdir}/alternatives/gl_conf)
+	%{_sbindir}/update-alternatives --set gl_conf "$current_link"
+fi
 
 %postun common
 if [ ! -f %{_sysconfdir}/ld.so.conf.d/GL/standard.conf ]; then
