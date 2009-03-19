@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	5
+%define rel	6
 
 Name: x11-server
 Version: %{version}
@@ -265,8 +265,8 @@ Conflicts: filesystem < 2.1.8
 # Fix: missing conflicts to allow upgrade from 2008.0 to cooker
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
-# libdri.so alternativeszification:
-Conflicts: ati < 8.512-2
+# Xorg alternativeszification:
+Conflicts: ati < 8.582-4
 
 
 %description common
@@ -298,8 +298,6 @@ if [ -d /usr/X11R6/lib/X11 ]; then
 fi
 
 %post common
-# Remove non-alternativeszificated libdri.so
-[ -L %{_libdir}/xorg/modules/extensions/libdri.so ] || rm -f %{_libdir}/xorg/modules/extensions/libdri.so
 %{_sbindir}/update-alternatives \
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
 	--slave %{_bindir}/Xorg Xorg %{_bindir}/Xorg-%{major_minor} \
@@ -317,16 +315,13 @@ fi
 # (anssi)
 %triggerun common -- %{name}-common < 1.3.0.0-17
 [ $1 -eq 2 ] || exit 0 # do not run if downgrading
-[ -L %{_libdir}/xorg/modules/extensions/libglx.so ] || rm -f %{_libdir}/xorg/modules/extensions/libglx.so
 current_glconf="$(readlink -e %{_sysconfdir}/ld.so.conf.d/GL.conf)"
 if [ "${current_glconf#*mesa}" == "gl1.conf" ]; then
 	# This an upgrade of a system with no proprietary drivers enabled, update
 	# the link to point to the new standard.conf instead of libmesagl1.conf (2008.0 change).
-	# This also replaces old libglx.so with a symlink.
 	%{_sbindir}/update-alternatives --set gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 else
 	# XFdrake did not set symlink to manual mode before 2008.0, so we ensure it here.
-	# This also replaces old libglx.so with a symlink.
 	%{_sbindir}/update-alternatives --set gl_conf "${current_glconf}"
 fi
 true
@@ -374,11 +369,6 @@ fi
 %endif
 %{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
-# (anssi) We do not want this file to really exist, it is empty.
-# This entry causes an rpm-build warning "file listed twice", but getting rid
-# of the warning would need us to list all the other extensions one-by-one.
-%ghost %{_libdir}/xorg/modules/extensions/libdri.so
-%ghost %{_libdir}/xorg/modules/extensions/libglx.so
 %{_libdir}/xorg/protocol.txt
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/gtf.*
@@ -1042,14 +1032,6 @@ cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
 # path. Please do not remove this file.
 EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
-# Move libs that are provided by proprietary drivers away; libdri.so is
-# provided by fglrx and libglx.so by nvidia.
-install -d -m755 %{buildroot}%{_libdir}/xorg/modules/extensions/standard
-for lib in libdri.so libglx.so; do
-	mv %{buildroot}%{_libdir}/xorg/modules/extensions/$lib \
-  		%{buildroot}%{_libdir}/xorg/modules/extensions/standard/$lib
-	touch %{buildroot}%{_libdir}/xorg/modules/extensions/$lib
-done
 
 # Move binary to Xorg-%{major_minor} since we'll use alternatives for Xorg
 mv %{buildroot}%{_bindir}/Xorg %{buildroot}%{_bindir}/Xorg-%{major_minor}
