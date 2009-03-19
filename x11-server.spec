@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	4
+%define rel	5
 
 Name: x11-server
 Version: %{version}
@@ -304,6 +304,15 @@ fi
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
 	--slave %{_bindir}/Xorg Xorg %{_bindir}/Xorg-%{major_minor} \
 	--slave %{extra_module_dir} xorg_extra_modules %{xorg1_6_extra_modules}
+
+# run update-alternatives --set to force the links to be created if the links state is in manual
+link_state=$(%{_sbindir}/update-alternatives --display gl_conf | head -1)
+link_state=$(expr match "$link_state" 'gl_conf - status is \(.*\).')
+
+if [ "$link_state" != "auto" ]; then
+	current_link=$(readlink %{_sysconfdir}/alternatives/gl_conf)
+	%{_sbindir}/update-alternatives --set gl_conf "$current_link"
+fi
 
 # (anssi)
 %triggerun common -- %{name}-common < 1.3.0.0-17
