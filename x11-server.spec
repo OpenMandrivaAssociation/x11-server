@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	6
+%define rel	7
 
 Name: x11-server
 Version: %{version}
@@ -262,6 +262,7 @@ Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
 Conflicts: filesystem < 2.1.8
 
+Conflicts: x11-server-xorg < 1.6.0-3
 # Fix: missing conflicts to allow upgrade from 2008.0 to cooker
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
@@ -298,19 +299,11 @@ if [ -d /usr/X11R6/lib/X11 ]; then
 fi
 
 %post common
+[ -L %{_bindir}/Xorg ] || rm -f %{_bindir}/Xorg
 %{_sbindir}/update-alternatives \
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
 	--slave %{_bindir}/Xorg Xorg %{_bindir}/Xorg-%{major_minor} \
 	--slave %{extra_module_dir} xorg_extra_modules %{xorg1_6_extra_modules}
-
-# run update-alternatives --set to force the links to be created if the links state is in manual
-link_state=$(%{_sbindir}/update-alternatives --display gl_conf | head -1)
-link_state=$(expr match "$link_state" 'gl_conf - status is \(.*\).')
-
-if [ "$link_state" != "auto" ]; then
-	current_link=$(readlink %{_sysconfdir}/alternatives/gl_conf)
-	%{_sbindir}/update-alternatives --set gl_conf "$current_link"
-fi
 
 # (anssi)
 %triggerun common -- %{name}-common < 1.3.0.0-17
@@ -325,19 +318,6 @@ else
 	%{_sbindir}/update-alternatives --set gl_conf "${current_glconf}"
 fi
 true
-
-%triggerpostun common -- %{name}-xorg < 1.6.0-3
-[ $1 -eq 2 ] || exit 0 # do not run if downgrading
-# make sure /usr/bin/Xorg points to the correct location
-# since x11-server-common provides the link now, but it was contained in x11-server-xorg before,
-# the file is removed on update
-link_state=$(%{_sbindir}/update-alternatives --display gl_conf | head -1)
-link_state=$(expr match "$link_state" 'gl_conf - status is \(.*\).')
-
-if [ "$link_state" != "auto" ]; then
-	current_link=$(readlink %{_sysconfdir}/alternatives/gl_conf)
-	%{_sbindir}/update-alternatives --set gl_conf "$current_link"
-fi
 
 %postun common
 if [ ! -f %{_sysconfdir}/ld.so.conf.d/GL/standard.conf ]; then
@@ -367,6 +347,7 @@ fi
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
+%ghost %{_bindir}/Xorg
 %{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
 %{_libdir}/xorg/protocol.txt
@@ -1035,6 +1016,7 @@ touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
 # Move binary to Xorg-%{major_minor} since we'll use alternatives for Xorg
 mv %{buildroot}%{_bindir}/Xorg %{buildroot}%{_bindir}/Xorg-%{major_minor}
+touch %{buildroot}%{_bindir}/Xorg
 
 install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
 
