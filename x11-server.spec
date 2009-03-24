@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	7
+%define rel	8
 
 Name: x11-server
 Version: %{version}
@@ -133,17 +133,12 @@ BuildRequires: libjpeg-devel
 # This no longer seems to apply:
 #  0512-fixes-mdvbz-35912.patch
 
-# This appears to be fixed in a different way upstream:
-#  0532-Fix-incorrect-test-regarding-keyboard-map.patch
-
 # Paulo's save context stuff. This conflicts with some changes upstream
 # so is currently disabled. Some changes upstream may partly do the same
 # functionality (e.g. the moving of the backtrace generation code)
 #  0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
 #  xorg-server-1.4.2-save_context_fix.patch
 
-# Blino's xkbcomp-cache patch.. need to convert this but it's not trivial
-#  xorg-server-1.4.2-xkbcomp_cache.patch
 
 
 
@@ -192,6 +187,8 @@ Patch905: 0905-LED-behavior-fixes.patch
 Patch906: 0906-Add-noAutoAddDevices-command-line-option.patch
 Patch907: 0907-Honour-Option-DPMS-off-on-xorg.conf.patch
 Patch908: 0908-Xorg-add-an-extra-module-path.patch
+Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
+Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
 
 
 Requires: %{name}-xorg
