@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	8
+%define rel	9
 
 Name: x11-server
 Version: %{version}
@@ -156,6 +156,16 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks
 # git format-patch --start-number 100 xorg-server-1.6.0..mdv-1.6-cherry-picks
+Patch100: 0100-This-patch-changes-all-places-in-the-X-code-to-use-_.patch
+Patch101: 0101-randr-Fix-thinko-in-xf86TargetPreferred.patch
+Patch102: 0102-Xi-add-XIPropToInt-auxiliary-function.patch
+Patch103: 0103-Xi-add-XATOM_FLOAT-to-server-defined-properties.patch
+Patch104: 0104-Xi-don-t-crash-on-a-NULL-property-name-just-return.patch
+Patch105: 0105-xkb-Fix-wrong-colour-reference-in-XKB-geometry-copy.patch
+Patch106: 0106-selinux-Don-t-bother-relabeling-resources-that-are.patch
+Patch107: 0107-selinux-Add-support-for-avc_acquire_netlink_fd.patch
+Patch108: 0108-Fix-Changelog-generation.patch
+Patch109: 0109-Fix-distcheck-with-dolt.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
@@ -189,6 +199,7 @@ Patch907: 0907-Honour-Option-DPMS-off-on-xorg.conf.patch
 Patch908: 0908-Xorg-add-an-extra-module-path.patch
 Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
+Patch911: 0911-xfree86-Remove-device-from-inputInfo.devices-if-Act.patch
 
 
 Requires: %{name}-xorg
