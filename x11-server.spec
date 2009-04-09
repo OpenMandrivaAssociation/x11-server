@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	9
+%define rel	10
 
 Name: x11-server
 Version: %{version}
@@ -200,6 +200,7 @@ Patch908: 0908-Xorg-add-an-extra-module-path.patch
 Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
 Patch911: 0911-xfree86-Remove-device-from-inputInfo.devices-if-Act.patch
+Patch912: 0912-GLX-memory-leak-fix.patch
 
 
 Requires: %{name}-xorg
