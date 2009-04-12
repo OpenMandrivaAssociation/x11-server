@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	10
+%define rel	11
 
 Name: x11-server
 Version: %{version}
@@ -271,13 +271,11 @@ Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
 Conflicts: filesystem < 2.1.8
 
-Conflicts: x11-server-xorg < 1.6.0-3
 # Fix: missing conflicts to allow upgrade from 2008.0 to cooker
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
-# Xorg alternativeszification:
-Conflicts: ati < 8.582-4
 
+Conflicts: x11-xorg1_5-server < 1.5.3-4
 
 %description common
 X server common files
@@ -308,10 +306,8 @@ if [ -d /usr/X11R6/lib/X11 ]; then
 fi
 
 %post common
-[ -L %{_bindir}/Xorg ] || rm -f %{_bindir}/Xorg
 %{_sbindir}/update-alternatives \
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
-	--slave %{_bindir}/Xorg Xorg %{_bindir}/Xorg-%{major_minor} \
 	--slave %{extra_module_dir} xorg_extra_modules %{xorg1_6_extra_modules}
 
 # (anssi)
@@ -356,7 +352,6 @@ fi
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
-%ghost %{_bindir}/Xorg
 %{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
 %{_libdir}/xorg/protocol.txt
@@ -401,7 +396,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %files xorg
 %defattr(-,root,root)
 %{_bindir}/X
-%{_bindir}/Xorg-%{major_minor}
+%{_bindir}/Xorg
 %attr(4755,root,root)%{_bindir}/Xwrapper
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
@@ -1022,10 +1017,6 @@ cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
 # path. Please do not remove this file.
 EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
-
-# Move binary to Xorg-%{major_minor} since we'll use alternatives for Xorg
-mv %{buildroot}%{_bindir}/Xorg %{buildroot}%{_bindir}/Xorg-%{major_minor}
-touch %{buildroot}%{_bindir}/Xorg
 
 install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
 
