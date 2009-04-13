@@ -29,7 +29,7 @@
 
 %define version 1.6.0
 %define major_minor 1.6
-%define rel	11
+%define rel	12
 
 Name: x11-server
 Version: %{version}
@@ -270,7 +270,8 @@ Requires(post): update-alternatives >= 1.9.0
 Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
 Conflicts: filesystem < 2.1.8
-
+# nvidia-71xx does not support X.org >= 1.5
+Conflicts: x11-driver-video-nvidia71xx < 71.86.09-2
 # Fix: missing conflicts to allow upgrade from 2008.0 to cooker
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
