@@ -28,7 +28,6 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.1
-%define major_minor 1.6
 %define rel	1
 
 Name: x11-server
@@ -157,6 +156,10 @@ BuildRequires: libjpeg-devel
 # Upstream cherry picks
 # git format-patch --start-number 100 xorg-server-1.6.0..mdv-1.6-cherry-picks
 
+# Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
+Patch200: 0200-xfree86-Remove-device-from-inputInfo.devices-if-Act.patch
+Patch201: 0201-dix-ignore-non-pointer-events-in-XineramaCheckMotio.patch
+
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 300 mdv-1.6-cherry-picks..mdv-1.6-redhat
@@ -189,7 +192,6 @@ Patch907: 0907-Honour-Option-DPMS-off-on-xorg.conf.patch
 Patch908: 0908-Xorg-add-an-extra-module-path.patch
 Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
-Patch911: 0911-xfree86-Remove-device-from-inputInfo.devices-if-Act.patch
 
 
 Requires: %{name}-xorg
