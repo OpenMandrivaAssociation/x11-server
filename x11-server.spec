@@ -16,9 +16,6 @@
 # Need this for shared objects that reference X Server, or other modules symbols
 %define _disable_ld_no_undefined 1
 
-%define mesasrcdir		%{_prefix}/src/Mesa
-%define mesaver			7.0.3
-
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
 
@@ -73,7 +70,7 @@ Obsoletes: x11-server-xvia	<= 1.4.2-4mdv2009.0
 Obsoletes: x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
 
 BuildRequires: libfontenc-devel >= 1.0.1
-BuildRequires: libmesagl-devel >= %{mesaver}
+BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
 BuildRequires: libxdmcp-devel >= 1.0.0
@@ -92,7 +89,6 @@ BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxxf86misc-devel >= 1.0.0
 BuildRequires: libxxf86vm-devel >= 1.0.0
 BuildRequires: libxfont-devel >= 1.0.0
-BuildRequires: mesa-source >= %{mesaver}
 BuildRequires: x11-proto-devel >= 1.4.0
 BuildRequires: x11-util-macros >= 1.1.5
 BuildRequires: x11-xtrans-devel >= 1.0.3
@@ -909,7 +905,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-aiglx \
 		--enable-glx-tls \
 		--enable-dri \
-		--with-mesa-source=%{mesasrcdir} \
 		--enable-xinerama \
 		--enable-xf86vidmode \
 		--enable-xf86misc \
