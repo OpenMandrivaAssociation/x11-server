@@ -25,7 +25,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.1.901
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -151,6 +151,21 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks
 # git format-patch --start-number 100 xorg-server-1.6.0..mdv-1.6-cherry-picks
+Patch100: 0100-Replace-dixLookupResource-by-dixLookupResourceBy-Typ.patch
+
+# Patches from server-1.6-branch
+Patch200: 0200-XkbSetNamedIndicator-should-ignore-SD-s-without-LED-.patch
+Patch201: 0201-Remove-long-gone-co-option-from-Xserver-man-page.patch
+Patch202: 0202-Remove-references-to-rgb.txt-from-files-section-of-X.patch
+Patch203: 0203-Fix-byte-swapping-of-XF86VidMode-Get-Set-GammaRamp.patch
+Patch204: 0204-randr12-looking-up-these-bits-if-randr-isn-t-initial.patch
+Patch205: 0205-os-don-t-malloc-memory-in-LogVMessageVerb.patch
+Patch206: 0206-Xi-fix-copy-paste-error-causing-sizeof-against-wrong.patch
+Patch207: 0207-Xi-don-t-double-swap-the-XListDeviceProperties-reply.patch
+Patch208: 0208-Don-t-leak-canonical-module-name-and-patterns-if-mod.patch
+Patch209: 0209-Don-t-leak-default-font-path-when-appending-built-in.patch
+Patch210: 0210-xselinux-Relax-ownership-restriction-on-SetSelection.patch
+Patch211: 0211-xace-Fix-a-bad-device-access-hook-call.patch
 
 # Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
 
