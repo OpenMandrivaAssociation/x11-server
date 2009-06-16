@@ -25,7 +25,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.1.901
-%define rel	2
+%define rel	3
 
 Name: x11-server
 Version: %{version}
@@ -89,7 +89,7 @@ BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxxf86misc-devel >= 1.0.0
 BuildRequires: libxxf86vm-devel >= 1.0.0
 BuildRequires: libxfont-devel >= 1.0.0
-BuildRequires: x11-proto-devel >= 1.4.0
+BuildRequires: x11-proto-devel >= 7.4-18
 BuildRequires: x11-util-macros >= 1.1.5
 BuildRequires: x11-xtrans-devel >= 1.0.3
 BuildRequires: libpam-devel
@@ -152,22 +152,36 @@ BuildRequires: libjpeg-devel
 # Upstream cherry picks
 # git format-patch --start-number 100 xorg-server-1.6.0..mdv-1.6-cherry-picks
 Patch100: 0100-Replace-dixLookupResource-by-dixLookupResourceBy-Typ.patch
+Patch101: 0101-XkbSetNamedIndicator-should-ignore-SD-s-without-LED-.patch
+Patch102: 0102-Remove-long-gone-co-option-from-Xserver-man-page.patch
+Patch103: 0103-Remove-references-to-rgb.txt-from-files-section-of-X.patch
+Patch104: 0104-Fix-byte-swapping-of-XF86VidMode-Get-Set-GammaRamp.patch
+Patch105: 0105-randr12-looking-up-these-bits-if-randr-isn-t-initial.patch
+Patch106: 0106-os-don-t-malloc-memory-in-LogVMessageVerb.patch
+Patch107: 0107-Xi-fix-copy-paste-error-causing-sizeof-against-wrong.patch
+Patch108: 0108-Xi-don-t-double-swap-the-XListDeviceProperties-reply.patch
+Patch109: 0109-Don-t-leak-canonical-module-name-and-patterns-if-mod.patch
+Patch110: 0110-Don-t-leak-default-font-path-when-appending-built-in.patch
+Patch111: 0111-xselinux-Relax-ownership-restriction-on-SetSelection.patch
+Patch112: 0112-xace-Fix-a-bad-device-access-hook-call.patch
+Patch113: 0113-vfb-Fix-depth-setup.patch
+Patch114: 0114-EDID-Be-more-cautious-about-finding-vendor-blocks.patch
+Patch115: 0115-EDID-Add-modes-from-Established-Timings-III-descript.patch
+Patch116: 0116-DRI2-Add-fake-front-buffer-to-request-list-for-windo.patch
+Patch117: 0117-DRI2-Do-not-send-the-real-front-buffer-of-a-window-t.patch
+Patch118: 0118-DRI2-Synchronize-the-contents-of-the-real-and-fake-f.patch
+Patch119: 0119-DRI2-Don-t-leave-empty-entries-in-private-buffers.patch
+Patch120: 0120-DRI2-Add-missing-front-buffer-flush-callback.patch
+Patch121: 0121-DRI2-Add-interface-for-drivers-to-query-DRI2-extensi.patch
+Patch122: 0122-DRI2-Implement-protocol-for-DRI2GetBuffersWithFormat.patch
+Patch123: 0123-DRI2-Force-allocation-of-real-front-buffer-for-non-w.patch
+Patch124: 0124-DRI2-update-DRI2-private-drawable-width-height-accor.patch
+Patch125: 0125-Use-a-define-instead-of-a-magic-number.patch
 
 # Patches from server-1.6-branch
-Patch200: 0200-XkbSetNamedIndicator-should-ignore-SD-s-without-LED-.patch
-Patch201: 0201-Remove-long-gone-co-option-from-Xserver-man-page.patch
-Patch202: 0202-Remove-references-to-rgb.txt-from-files-section-of-X.patch
-Patch203: 0203-Fix-byte-swapping-of-XF86VidMode-Get-Set-GammaRamp.patch
-Patch204: 0204-randr12-looking-up-these-bits-if-randr-isn-t-initial.patch
-Patch205: 0205-os-don-t-malloc-memory-in-LogVMessageVerb.patch
-Patch206: 0206-Xi-fix-copy-paste-error-causing-sizeof-against-wrong.patch
-Patch207: 0207-Xi-don-t-double-swap-the-XListDeviceProperties-reply.patch
-Patch208: 0208-Don-t-leak-canonical-module-name-and-patterns-if-mod.patch
-Patch209: 0209-Don-t-leak-default-font-path-when-appending-built-in.patch
-Patch210: 0210-xselinux-Relax-ownership-restriction-on-SetSelection.patch
-Patch211: 0211-xace-Fix-a-bad-device-access-hook-call.patch
 
 # Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
+Patch200: 0200-xfree86-restore-default-off-for-DontZap.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
