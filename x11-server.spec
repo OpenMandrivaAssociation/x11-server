@@ -148,9 +148,8 @@ BuildRequires: libjpeg-devel
 # git branch -b mdv-1.6-patches
 # git am ../09??-*.patch
 
-# Upstream cherry picks
-# git format-patch --start-number 100 xorg-server-1.6.0..mdv-1.6-cherry-picks
-Patch100: 0100-Replace-dixLookupResource-by-dixLookupResourceBy-Typ.patch
+# Sync with server-1.6-branch
+# git format-patch --start-number 100 xorg-server-1.6.1.901..server-1.6-branch
 Patch101: 0101-XkbSetNamedIndicator-should-ignore-SD-s-without-LED-.patch
 Patch102: 0102-Remove-long-gone-co-option-from-Xserver-man-page.patch
 Patch103: 0103-Remove-references-to-rgb.txt-from-files-section-of-X.patch
@@ -177,20 +176,22 @@ Patch123: 0123-DRI2-Force-allocation-of-real-front-buffer-for-non-w.patch
 Patch124: 0124-DRI2-update-DRI2-private-drawable-width-height-accor.patch
 Patch125: 0125-Use-a-define-instead-of-a-magic-number.patch
 
-# Patches from server-1.6-branch
-
 # Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
 Patch200: 0200-xfree86-restore-default-off-for-DontZap.patch
 
+# Upstream cherry picks from master branch
+# git format-patch --start-number 300 server-1.6-branch..mdv-1.6-cherry-picks
+Patch300: 0300-Replace-dixLookupResource-by-dixLookupResourceBy-Typ.patch
+
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
-# git format-patch --start-number 300 mdv-1.6-cherry-picks..mdv-1.6-redhat
-Patch300: 0300-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
-Patch301: 0301-RH-xserver-1.5.0-bg-none-root-v1.5.patch
-Patch302: 0302-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
-Patch303: 0303-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
-Patch304: 0304-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
-Patch305: 0305-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
+# git format-patch --start-number 400 mdv-1.6-cherry-picks..mdv-1.6-redhat
+Patch400: 0400-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
+Patch401: 0401-RH-xserver-1.5.0-bg-none-root-v1.5.patch
+Patch402: 0402-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
+Patch403: 0403-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
+Patch404: 0404-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
+Patch405: 0405-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6-redhat..mdv-1.6-xvnc
