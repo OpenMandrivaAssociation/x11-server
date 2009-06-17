@@ -1,5 +1,4 @@
 %define git 0
-%define applypatches() for patch in %patches; do cat $patch | patch -p1; done
 
 %define with_debug		0
 %define kdrive_builds_vesa	0
@@ -895,7 +894,7 @@ This KDrive server is targetted for VIA chipsets.
 %setup -q -n xorg-server-%{version}
 %endif
 
-%applypatches
+%apply_patches
 
 %build
 autoreconf -ifs
