@@ -23,7 +23,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.6.1.901
+%define version 1.6.1.902
 %define rel	4
 
 Name: x11-server
@@ -149,35 +149,10 @@ BuildRequires: libjpeg-devel
 # git am ../09??-*.patch
 
 # Sync with server-1.6-branch
-# git format-patch --start-number 100 xorg-server-1.6.1.901..server-1.6-branch
-Patch101: 0101-XkbSetNamedIndicator-should-ignore-SD-s-without-LED-.patch
-Patch102: 0102-Remove-long-gone-co-option-from-Xserver-man-page.patch
-Patch103: 0103-Remove-references-to-rgb.txt-from-files-section-of-X.patch
-Patch104: 0104-Fix-byte-swapping-of-XF86VidMode-Get-Set-GammaRamp.patch
-Patch105: 0105-randr12-looking-up-these-bits-if-randr-isn-t-initial.patch
-Patch106: 0106-os-don-t-malloc-memory-in-LogVMessageVerb.patch
-Patch107: 0107-Xi-fix-copy-paste-error-causing-sizeof-against-wrong.patch
-Patch108: 0108-Xi-don-t-double-swap-the-XListDeviceProperties-reply.patch
-Patch109: 0109-Don-t-leak-canonical-module-name-and-patterns-if-mod.patch
-Patch110: 0110-Don-t-leak-default-font-path-when-appending-built-in.patch
-Patch111: 0111-xselinux-Relax-ownership-restriction-on-SetSelection.patch
-Patch112: 0112-xace-Fix-a-bad-device-access-hook-call.patch
-Patch113: 0113-vfb-Fix-depth-setup.patch
-Patch114: 0114-EDID-Be-more-cautious-about-finding-vendor-blocks.patch
-Patch115: 0115-EDID-Add-modes-from-Established-Timings-III-descript.patch
-Patch116: 0116-DRI2-Add-fake-front-buffer-to-request-list-for-windo.patch
-Patch117: 0117-DRI2-Do-not-send-the-real-front-buffer-of-a-window-t.patch
-Patch118: 0118-DRI2-Synchronize-the-contents-of-the-real-and-fake-f.patch
-Patch119: 0119-DRI2-Don-t-leave-empty-entries-in-private-buffers.patch
-Patch120: 0120-DRI2-Add-missing-front-buffer-flush-callback.patch
-Patch121: 0121-DRI2-Add-interface-for-drivers-to-query-DRI2-extensi.patch
-Patch122: 0122-DRI2-Implement-protocol-for-DRI2GetBuffersWithFormat.patch
-Patch123: 0123-DRI2-Force-allocation-of-real-front-buffer-for-non-w.patch
-Patch124: 0124-DRI2-update-DRI2-private-drawable-width-height-accor.patch
-Patch125: 0125-Use-a-define-instead-of-a-magic-number.patch
+# git format-patch --start-number 100 xorg-server-1.6.1.902..server-1.6-branch
+Patch100: 0100-Build-against-DRI_TEX_BUFFER_VERSION-1.patch
 
 # Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
-Patch200: 0200-xfree86-restore-default-off-for-DontZap.patch
 
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 server-1.6-branch..mdv-1.6-cherry-picks
