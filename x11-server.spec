@@ -23,7 +23,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.6.1.902
+%define version 1.6.2
 %define rel	1
 
 Name: x11-server
@@ -149,8 +149,7 @@ BuildRequires: libjpeg-devel
 # git am ../09??-*.patch
 
 # Sync with server-1.6-branch
-# git format-patch --start-number 100 xorg-server-1.6.1.902..server-1.6-branch
-Patch100: 0100-Build-against-DRI_TEX_BUFFER_VERSION-1.patch
+# git format-patch --start-number 100 xorg-server-1.6.2..server-1.6-branch
 
 # Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
 
@@ -190,8 +189,7 @@ Patch907: 0907-Honour-Option-DPMS-off-on-xorg.conf.patch
 Patch908: 0908-Xorg-add-an-extra-module-path.patch
 Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
-Patch911: 0911-Remove-headers-listed-twice.patch
-Patch912: 0912-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
+Patch912: 0911-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 
 
 Requires: %{name}-xorg
