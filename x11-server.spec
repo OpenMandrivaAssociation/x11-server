@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.2
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -150,6 +150,8 @@ BuildRequires: libjpeg-devel
 
 # Sync with server-1.6-branch
 # git format-patch --start-number 100 xorg-server-1.6.2..server-1.6-branch
+Patch100: 0100-Fix-build-of-drivers-with-1.6.2-when-not-using-insta.patch
+Patch101: 0101-xdmcp-Don-t-crash-on-X-query-with-more-than-255-IP-a.patch
 
 # Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
 
