@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.2
-%define rel	2
+%define rel	3
 
 Name: x11-server
 Version: %{version}
@@ -68,6 +68,9 @@ Obsoletes: x11-server-xvia	<= 1.4.2-4mdv2009.0
 # die, Xgl, die - AdamW 2008/11
 Obsoletes: x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
 
+# FIXME: build with systemtap installed is broken
+BuildConflicts: systemtap
+
 BuildRequires: libfontenc-devel >= 1.0.1
 BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: libxau-devel >= 1.0.0
@@ -88,7 +91,7 @@ BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxxf86misc-devel >= 1.0.0
 BuildRequires: libxxf86vm-devel >= 1.0.0
 BuildRequires: libxfont-devel >= 1.0.0
-BuildRequires: x11-proto-devel >= 7.4-18
+BuildRequires: x11-proto-devel >= 7.4-24
 BuildRequires: x11-util-macros >= 1.1.5
 BuildRequires: x11-xtrans-devel >= 1.0.3
 BuildRequires: libpam-devel
@@ -140,9 +143,9 @@ BuildRequires: libjpeg-devel
 # git://anongit.freedesktop.org/git/xorg/xserver
 # git checkout origin/server-1.6-branch
 # git branch -b mdv-1.6-cherry-picks
-# git am ../01??-*.patch
-# git branch -b mdv-1.6-redhat
 # git am ../03??-*.patch
+# git branch -b mdv-1.6-redhat
+# git am ../04??-*.patch
 # git branch -b mdv-1.6-xvnc
 # git am ../07??-*.patch
 # git branch -b mdv-1.6-patches
@@ -156,8 +159,9 @@ Patch101: 0101-xdmcp-Don-t-crash-on-X-query-with-more-than-255-IP-a.patch
 # Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
 
 # Upstream cherry picks from master branch
-# git format-patch --start-number 300 server-1.6-branch..mdv-1.6-cherry-picks
+# git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6-cherry-picks
 Patch300: 0300-Replace-dixLookupResource-by-dixLookupResourceBy-Typ.patch
+Patch301: 0301-EXA-Only-pass-CT_YXBANDED-to-RECTS_TO_REGION-if-that.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
