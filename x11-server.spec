@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.2
-%define rel	3
+%define rel	4
 
 Name: x11-server
 Version: %{version}
