@@ -23,8 +23,8 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.6.2
-%define rel	4
+%define version 1.6.3
+%define rel	1
 
 Name: x11-server
 Version: %{version}
@@ -152,20 +152,15 @@ BuildRequires: libjpeg-devel
 # git am ../09??-*.patch
 
 # Sync with server-1.6-branch
-# git format-patch --start-number 100 xorg-server-1.6.2..server-1.6-branch
-Patch100: 0100-Fix-build-of-drivers-with-1.6.2-when-not-using-insta.patch
-Patch101: 0101-xdmcp-Don-t-crash-on-X-query-with-more-than-255-IP-a.patch
-
-# Some patches nominated to 1.6 branch (i.e. no yet acknoledged by the release manager)
+# git format-patch --start-number 100 xorg-server-1.6.3..server-1.6-branch
 
 # Upstream cherry picks from master branch
-# git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6-cherry-picks
-Patch300: 0300-Replace-dixLookupResource-by-dixLookupResourceBy-Typ.patch
-Patch301: 0301-EXA-Only-pass-CT_YXBANDED-to-RECTS_TO_REGION-if-that.patch
+# git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.3-cherry-picks
+Patch300: 0300-Xext-fix-up-wrong-conditions-for-negative-sync-trans.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
-# git format-patch --start-number 400 mdv-1.6-cherry-picks..mdv-1.6-redhat
+# git format-patch --start-number 400 mdv-1.6.3-cherry-picks..mdv-1.6.3-redhat
 Patch400: 0400-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
 Patch401: 0401-RH-xserver-1.5.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
@@ -174,8 +169,8 @@ Patch404: 0404-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 Patch405: 0405-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
-# git format-patch --start-number 700 mdv-1.6-redhat..mdv-1.6-xvnc
-Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholso.patch
+# git format-patch --start-number 700 mdv-1.6.3-redhat..mdv-1.6.3-xvnc
+Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholson-p.patch
 Patch701: 0701-Fix-for-X-server-1.6-input-interface-changes.patch
 Patch702: 0702-Use-xorgVersion.h-instead-of-xf86Version.h.patch
 Patch703: 0703-Fix-for-DevPrivates-interface-changes.patch
@@ -183,7 +178,7 @@ Patch704: 0704-Fix-compilation-Werror-format-security.patch
 Patch705: 0705-Fix-bug-41583.patch
 
 # Mandriva patches
-# git format-patch --start-number 900 mdv-1.6-xvnc..mdv-1.6-patches
+# git format-patch --start-number 900 mdv-1.6.3-xvnc..mdv-1.6.3-patches
 Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
