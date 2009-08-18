@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.3
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -157,6 +157,7 @@ BuildRequires: libjpeg-devel
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.3-cherry-picks
 Patch300: 0300-Xext-fix-up-wrong-conditions-for-negative-sync-trans.patch
+Patch301: 0301-randr-bug-21554-re-probe-outputs-when-coming-back-fr.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
