@@ -23,8 +23,8 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.6.3
-%define rel	2
+%define version 1.6.3.901
+%define rel	1
 
 Name: x11-server
 Version: %{version}
@@ -152,12 +152,12 @@ BuildRequires: libjpeg-devel
 # git am ../09??-*.patch
 
 # Sync with server-1.6-branch
-# git format-patch --start-number 100 xorg-server-1.6.3..server-1.6-branch
+# git format-patch --start-number 100 xorg-server-1.6.3.901..server-1.6-branch
 
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.3-cherry-picks
-Patch300: 0300-Xext-fix-up-wrong-conditions-for-negative-sync-trans.patch
-Patch301: 0301-randr-bug-21554-re-probe-outputs-when-coming-back-fr.patch
+Patch300: 0300-randr-bug-21554-re-probe-outputs-when-coming-back-fr.patch
+Patch301: 0301-Don-t-reset-the-lastDeviceEventTime-when-doing-DPMS-.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
