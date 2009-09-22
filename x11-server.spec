@@ -90,7 +90,6 @@ BuildRequires: libxres-devel >= 1.0.0
 BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxxf86misc-devel >= 1.0.0
 BuildRequires: libxxf86vm-devel >= 1.0.0
-BuildRequires: libxfont-devel >= 1.0.0
 BuildRequires: x11-proto-devel >= 7.4-24
 BuildRequires: x11-util-macros >= 1.1.5
 BuildRequires: x11-xtrans-devel >= 1.0.3
