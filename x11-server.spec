@@ -23,13 +23,13 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.6.3.901
-%define rel	2
+%define version 1.6.4
+%define rel	1
 
 Name: x11-server
 Version: %{version}
 %if %{git}
-Release: %mkrel 1.%{git}.%{rel}
+Release: %mkrel 0.%{git}.%{rel}
 %else
 Release: %mkrel %{rel}
 %endif
@@ -151,16 +151,15 @@ BuildRequires: libjpeg-devel
 # git am ../09??-*.patch
 
 # Sync with server-1.6-branch
-# git format-patch --start-number 100 xorg-server-1.6.3.901..server-1.6-branch
+# git format-patch --start-number 100 xorg-server-1.6.4..server-1.6-branch
 
 # Upstream cherry picks from master branch
-# git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.3-cherry-picks
+# git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
 Patch300: 0300-randr-bug-21554-re-probe-outputs-when-coming-back-fr.patch
-Patch301: 0301-Don-t-reset-the-lastDeviceEventTime-when-doing-DPMS-.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
-# git format-patch --start-number 400 mdv-1.6.3-cherry-picks..mdv-1.6.3-redhat
+# git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
 Patch400: 0400-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
 Patch401: 0401-RH-xserver-1.5.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
@@ -169,7 +168,7 @@ Patch404: 0404-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 Patch405: 0405-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
-# git format-patch --start-number 700 mdv-1.6.3-redhat..mdv-1.6.3-xvnc
+# git format-patch --start-number 700 mdv-1.6.4-redhat..mdv-1.6.4-xvnc
 Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholson-p.patch
 Patch701: 0701-Fix-for-X-server-1.6-input-interface-changes.patch
 Patch702: 0702-Use-xorgVersion.h-instead-of-xf86Version.h.patch
@@ -178,7 +177,7 @@ Patch704: 0704-Fix-compilation-Werror-format-security.patch
 Patch705: 0705-Fix-bug-41583.patch
 
 # Mandriva patches
-# git format-patch --start-number 900 mdv-1.6.3-xvnc..mdv-1.6.3-patches
+# git format-patch --start-number 900 mdv-1.6.4-xvnc..mdv-1.6.4-patches
 Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
@@ -191,6 +190,8 @@ Patch908: 0908-Xorg-add-an-extra-module-path.patch
 Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
 Patch911: 0911-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
+# (cg) This patch will likely be added to create 1.6.5 but not in any branch yet.
+Patch912: 0912-xorg-server-1.6.4.patch
 
 
 Requires: %{name}-xorg
