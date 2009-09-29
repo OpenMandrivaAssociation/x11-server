@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.6.4
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -191,7 +191,7 @@ Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
 Patch911: 0911-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 # (cg) This patch will likely be added to create 1.6.5 but not in any branch yet.
-Patch912: 0912-xorg-server-1.6.4.patch
+Patch912: 0912-1.6.4-brown-bag-DGA-fixes.patch
 
 
 Requires: %{name}-xorg
