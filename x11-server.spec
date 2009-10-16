@@ -403,6 +403,9 @@ Group: System/X11
 License: MIT
 Requires: x11-server-common = %{version}-%{release}
 
+# This package was used in the transition to modular:
+Obsoletes: xorg-x11-Xdmx
+
 %description xdmx
 Xdmx is a proxy X server that uses one or more other X servers
 as its display devices. It provides multi-head X functionality
