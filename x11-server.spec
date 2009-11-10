@@ -2,8 +2,8 @@
 
 %define with_debug		0
 %define kdrive_builds_vesa	0
-%define enable_xvnc		1
-%define enable_dmx		0
+%define enable_xvnc		0
+%define enable_dmx		1
 # (cg) Disable xfake temporarily due to build errors
 %define enable_xfake		0
 %define enable_hal		1
@@ -23,7 +23,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.6.5
+%define version 1.7.1
 %define rel	1
 
 Name: x11-server
@@ -76,7 +76,7 @@ BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
 BuildRequires: libxdmcp-devel >= 1.0.0
-BuildRequires: libxext-devel >= 1.0.0
+BuildRequires: libxext-devel >= 1.1
 BuildRequires: libxfont-devel >= 1.2.8-2mdv
 BuildRequires: libxfixes-devel
 BuildRequires: libxi-devel >= 1.1.3
@@ -90,7 +90,7 @@ BuildRequires: libxres-devel >= 1.0.0
 BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxxf86misc-devel >= 1.0.0
 BuildRequires: libxxf86vm-devel >= 1.0.0
-BuildRequires: x11-proto-devel >= 7.4-24
+BuildRequires: x11-proto-devel >= 7.5
 BuildRequires: x11-util-macros >= 1.1.5
 BuildRequires: x11-xtrans-devel >= 1.0.3
 BuildRequires: libpam-devel
@@ -118,6 +118,7 @@ BuildRequires: libdbus-devel
 
 %if %{enable_dmx}
 BuildRequires: libdmx-devel
+BuildRequires: libxtst-devel >= 1.1
 %endif
 
 %if %{enable_xvnc}
@@ -140,14 +141,14 @@ BuildRequires: libjpeg-devel
 
 # Instructions to setup your repository clone
 # git://anongit.freedesktop.org/git/xorg/xserver
-# git checkout origin/server-1.6-branch
-# git branch -b mdv-1.6-cherry-picks
+# git checkout origin/server-1.7-branch
+# git checkout -b mdv-1.7-cherry-picks
 # git am ../03??-*.patch
-# git branch -b mdv-1.6-redhat
+# git checkout -b mdv-1.7-redhat
 # git am ../04??-*.patch
-# git branch -b mdv-1.6-xvnc
+# git checkout -b mdv-1.7-xvnc
 # git am ../07??-*.patch
-# git branch -b mdv-1.6-patches
+# git checkout -b mdv-1.7-patches
 # git am ../09??-*.patch
 
 # Sync with server-1.6-branch
@@ -155,41 +156,39 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
-Patch300: 0300-randr-bug-21554-re-probe-outputs-when-coming-back-fr.patch
 
 # Patches "liberated" from Fedora: 
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
 Patch400: 0400-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
 Patch401: 0401-RH-xserver-1.5.0-bg-none-root-v1.5.patch
-Patch402: 0402-RH-xserver-1.5.0-bad-fbdev-thats-mine-v1.2.patch
-Patch403: 0403-RH-xserver-1.5.99.3-dmx-xcalloc-v1.1.patch
-Patch404: 0404-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
-Patch405: 0405-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
+Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
+Patch403: 0403-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6.4-redhat..mdv-1.6.4-xvnc
+%if %enable_xvnc
 Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholson-p.patch
 Patch701: 0701-Fix-for-X-server-1.6-input-interface-changes.patch
 Patch702: 0702-Use-xorgVersion.h-instead-of-xf86Version.h.patch
 Patch703: 0703-Fix-for-DevPrivates-interface-changes.patch
 Patch704: 0704-Fix-compilation-Werror-format-security.patch
 Patch705: 0705-Fix-bug-41583.patch
+%endif
 
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6.4-xvnc..mdv-1.6.4-patches
 Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
-Patch902: 0902-Autoconfigure-to-use-geode-driver-on-the-known-suppo.patch
-Patch903: 0903-Take-width-into-account-when-choosing-default-mode.patch
-Patch904: 0904-Quirk-Samsung-SyncMaster-205BW.patch
-Patch905: 0905-LED-behavior-fixes.patch
-Patch906: 0906-Add-noAutoAddDevices-command-line-option.patch
-Patch907: 0907-Honour-Option-DPMS-off-on-xorg.conf.patch
-Patch908: 0908-Xorg-add-an-extra-module-path.patch
-Patch909: 0909-Revert-drop-xprint-remnants-InitGlobals.patch
-Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
-Patch911: 0911-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
+Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
+Patch903: 0903-Quirk-Samsung-SyncMaster-205BW.patch
+Patch904: 0904-LED-behavior-fixes.patch
+Patch905: 0905-Add-noAutoDevices-command-line-option.patch
+Patch906: 0906-Xorg-add-an-extra-module-path.patch
+Patch907: 0907-Revert-drop-xprint-remnants-InitGlobals.patch
+Patch908: 0908-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
+# XXX: integrate this one into server 1.7
+#Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
 
 Requires: %{name}-xorg
 %if %{enable_dmx}
@@ -222,6 +221,7 @@ Obsoletes: x11-server13-devel <= 1.2.99.905
 Requires: libpixman-1-devel
 Requires: libpciaccess-devel
 Requires: libxkbfile-devel
+Requires: libxext6-devel >= 1.1
 
 %description devel
 Development files for %{name}
@@ -322,7 +322,6 @@ fi
 %defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
 %dir %{xorg1_6_extra_modules}
-%dir %{_libdir}/X11
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
 %dir %{_sysconfdir}/X11/fontpath.d
@@ -341,7 +340,6 @@ fi
 %if %enable_dmx
 %{_bindir}/vdltodmx
 %endif
-%{_libdir}/X11/Options
 %{_libdir}/xorg/modules/*
 %{_libdir}/xorg/protocol.txt
 %{_datadir}/X11/xkb/README.compiled
