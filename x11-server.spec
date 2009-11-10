@@ -167,6 +167,7 @@ Patch403: 0403-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6.4-redhat..mdv-1.6.4-xvnc
+# (tv) this is dangerous as it makes 'mdvsys sync' remove those patches:
 %if %enable_xvnc
 Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholson-p.patch
 Patch701: 0701-Fix-for-X-server-1.6-input-interface-changes.patch
