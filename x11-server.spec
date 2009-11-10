@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.1
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -221,7 +221,7 @@ Obsoletes: x11-server13-devel <= 1.2.99.905
 Requires: libpixman-1-devel
 Requires: libpciaccess-devel
 Requires: libxkbfile-devel
-Requires: libxext6-devel >= 1.1
+Requires: libxext-devel >= 1.1
 
 %description devel
 Development files for %{name}
