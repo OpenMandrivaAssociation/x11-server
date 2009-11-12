@@ -1,7 +1,6 @@
 %define git 0
 
 %define with_debug		0
-%define kdrive_builds_vesa	0
 %define enable_xvnc		0
 %define enable_dmx		1
 # (cg) Disable xfake temporarily due to build errors
@@ -505,50 +504,6 @@ VNC clients access to the 'virtual' display it provides.
 %endif
 #------------------------------------------------------------------------------
 
-%if %kdrive_builds_vesa
-%package xati
-Summary: KDrive ati X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xati
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for ATI chipsets.
-
-%files xati
-%defattr(-,root,root)
-%{_bindir}/Xati
-%endif
-
-#------------------------------------------------------------------------------
-
-%if %kdrive_builds_vesa
-%package xchips
-Summary: KDrive chips X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xchips
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for Chips chipsets.
-
-%files xchips
-%defattr(-,root,root)
-%{_bindir}/Xchips
-%endif
-
-#------------------------------------------------------------------------------
-
 %package xephyr
 Summary: KDrive Xephyr X server
 Group: System/X11
@@ -578,28 +533,6 @@ Possible uses include;
 %defattr(-,root,root)
 %{_bindir}/Xephyr
 %{_mandir}/man1/Xephyr.1*
-
-#------------------------------------------------------------------------------
-
-%if %kdrive_builds_vesa
-%package xepson
-Summary: KDrive epson X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xepson
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for Epson chipsets.
-
-%files xepson
-%defattr(-,root,root)
-%{_bindir}/Xepson
-%endif
 
 #------------------------------------------------------------------------------
 
@@ -645,138 +578,6 @@ This KDrive server is targetted for being used on top of linux framebuffer.
 
 #------------------------------------------------------------------------------
  
-%if %kdrive_builds_vesa
-%package xi810
-Summary: KDrive i810 X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xi810
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for Intel chipsets.
-
-%files xi810
-%defattr(-,root,root)
-%{_bindir}/Xi810
-%endif
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xmach64
-Summary: KDrive mach64 X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xmach64
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for mach64 chipsets.
-
-%files xmach64
-%defattr(-,root,root)
-%{_bindir}/Xmach64
-%endif
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xmga
-Summary: KDrive mga X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xmga
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for mga chipsets.
-
-%files xmga
-%defattr(-,root,root)
-%{_bindir}/Xmga
-%endif
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xnvidia
-Summary: KDrive nvidia X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xnvidia
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for nvidia chipsets.
-
-%files xnvidia
-%defattr(-,root,root)
-%{_bindir}/Xnvidia
-%endif
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xpm2
-Summary: KDrive pm2 X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xpm2
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for Permedia2 chipsets.
-
-%files xpm2
-%defattr(-,root,root)
-%{_bindir}/Xpm2
-%endif
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xr128
-Summary: KDrive r128 X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xr128
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for rage128 chipsets.
-
-%files xr128
-%defattr(-,root,root)
-%{_bindir}/Xr128
-%endif
-
-#------------------------------------------------------------------------------
- 
 %package xsdl
 Summary: KDrive sdl X server
 Group: System/X11
@@ -794,72 +595,6 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %files xsdl
 %defattr(-,root,root)
 %{_bindir}/Xsdl
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xsmi
-Summary: KDrive smi X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xsmi
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for Silicon Motion chipsets.
-
-%files xsmi
-%defattr(-,root,root)
-%{_bindir}/Xsmi
-%endif
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xvesa
-Summary: KDrive vesa X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xvesa
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for VESA capable chipsets.
-
-%files xvesa
-%defattr(-,root,root)
-%{_bindir}/Xvesa
-%endif
-
-#------------------------------------------------------------------------------
- 
-%if %kdrive_builds_vesa
-%package xvia
-Summary: KDrive via X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xvia
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for VIA chipsets.
-
-%files xvia
-%defattr(-,root,root)
-%{_bindir}/Xvia
-%endif
 
 #------------------------------------------------------------------------------
 
@@ -946,11 +681,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%endif
 		--enable-xephyr \
 		--enable-xsdl \
-		%if %kdrive_builds_vesa
-		--enable-kdrive-vesa \
-		%else
-		--disable-kdrive-vesa \
-		%endif
 		--disable-freetype \
 		--disable-install-setuid \
 		--enable-secure-rpc \
