@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.1
-%define rel	4
+%define rel	5
 
 Name: x11-server
 Version: %{version}
@@ -376,6 +376,9 @@ Obsoletes: x11-server13-xorg <= 1.2.99.905
 
 # because of fontpath.d support
 Requires: libxfont >= 1.2.8-2mdv
+
+# This package was used in the transition to modular:
+Obsoletes: xorg-x11-server
 
 %description xorg
 x11-server-xorg is the new generation of X server from X.Org.
