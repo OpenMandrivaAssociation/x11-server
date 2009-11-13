@@ -629,9 +629,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%endif
 		--disable-install-libxf86config \
 		--enable-composite \
-		--enable-shm \
 		--enable-xres \
-		--enable-xtrap \
 		--enable-record \
 		--enable-xv \
 		--enable-xvmc \
@@ -645,20 +643,13 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-dri \
 		--enable-xinerama \
 		--enable-xf86vidmode \
-		--enable-xf86misc \
 		--enable-xace \
 		--enable-xcsecurity \
-		--enable-xevie \
-		--enable-appgroup \
-		--enable-cup \
-		--enable-evi \
 		--enable-xf86bigfont \
 		--enable-dpms \
-		--enable-xinput \
 		--disable-xcalibrate \
 		--disable-tslib \
 		--enable-multibuffer \
-		--enable-fontcache \
 		--enable-dbe \
 		--enable-xfree86-utils \
 		--enable-xorg \
@@ -681,10 +672,8 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%endif
 		--enable-xephyr \
 		--enable-xsdl \
-		--disable-freetype \
 		--disable-install-setuid \
 		--enable-secure-rpc \
-		--enable-kbd_mode \
 		--enable-xwrapper \
 		--enable-pam \
 		%if %{enable_dbus}
@@ -697,7 +686,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%else
 		--disable-config-hal \
 		%endif
-		--disable-builtin-fonts \
 		--with-fontdir="%{_datadir}/fonts" \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
