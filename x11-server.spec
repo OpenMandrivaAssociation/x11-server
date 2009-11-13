@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.1
-%define rel	3
+%define rel	4
 
 Name: x11-server
 Version: %{version}
@@ -436,6 +436,9 @@ Group: System/X11
 License: MIT
 Requires: x11-server-common = %{version}-%{release}
 
+# This package was used in the transition to modular:
+Obsoletes: xorg-x11-Xnest
+
 %description xnest
 Xnest is an X Window System server which runs in an X window.
 Xnest is a 'nested' window server, actually a client of the
@@ -461,6 +464,9 @@ Group: System/X11
 License: MIT and GPLv2
 Requires: x11-server-common = %{version}-%{release}
 Requires: xauth
+
+# This package was used in the transition to modular:
+Obsoletes: xorg-x11-Xvfb
 
 %description xvfb
 Xvfb (X Virtual Frame Buffer) is an X Windows System server
