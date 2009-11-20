@@ -80,7 +80,6 @@ BuildRequires: libxfont-devel >= 1.2.8-2mdv
 BuildRequires: libxfixes-devel
 BuildRequires: libxi-devel >= 1.1.3
 BuildRequires: libxkbfile-devel >= 1.0.4
-BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxkbui-devel >= 1.0.1
 BuildRequires: libxmu-devel >= 1.0.0
 BuildRequires: libxpm-devel >= 3.5.4.2
