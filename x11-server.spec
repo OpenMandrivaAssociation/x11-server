@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.1
-%define rel	5
+%define rel	6
 
 Name: x11-server
 Version: %{version}
@@ -165,15 +165,12 @@ Patch403: 0403-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6.4-redhat..mdv-1.6.4-xvnc
-# (tv) this is dangerous as it makes 'mdvsys sync' remove those patches:
-%if %enable_xvnc
 Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholson-p.patch
 Patch701: 0701-Fix-for-X-server-1.6-input-interface-changes.patch
 Patch702: 0702-Use-xorgVersion.h-instead-of-xf86Version.h.patch
 Patch703: 0703-Fix-for-DevPrivates-interface-changes.patch
 Patch704: 0704-Fix-compilation-Werror-format-security.patch
 Patch705: 0705-Fix-bug-41583.patch
-%endif
 
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6.4-xvnc..mdv-1.6.4-patches
@@ -186,8 +183,7 @@ Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 Patch907: 0907-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch908: 0908-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
-# XXX: integrate this one into server 1.7
-#Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
+Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
 
 Requires: %{name}-xorg
 %if %{enable_dmx}
@@ -613,7 +609,31 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %setup -q -n xorg-server-%{version}
 %endif
 
-%apply_patches
+%patch400 -p1
+%patch401 -p1
+%patch402 -p1
+%patch403 -p1
+
+%if %enable_xvnc
+%patch700 -p1
+%patch701 -p1
+%patch702 -p1
+%patch703 -p1
+%patch704 -p1
+%patch705 -p1
+%endif
+
+%patch900 -p1
+%patch901 -p1
+%patch902 -p1
+%patch903 -p1
+%patch904 -p1
+%patch905 -p1
+%patch906 -p1
+%patch907 -p1
+%patch908 -p1
+# XXX: redo and enable this one to make X start faster
+#%patch910 -p1
 
 %build
 autoreconf -ifs
