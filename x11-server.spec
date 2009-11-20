@@ -128,7 +128,7 @@ BuildRequires: libjpeg-devel
 # This no longer seems to apply:
 #  0512-fixes-mdvbz-35912.patch
 
-# Paulo's save context stuff. This conflicts with some changes upstream
+# PCPA's save context stuff. This conflicts with some changes upstream
 # so is currently disabled. Some changes upstream may partly do the same
 # functionality (e.g. the moving of the backtrace generation code)
 #  0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
