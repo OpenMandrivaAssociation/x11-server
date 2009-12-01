@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.2
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -183,7 +183,7 @@ Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 Patch907: 0907-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch908: 0908-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
-Patch910: 0910-Port-of-pcpa-s-xkb-compile-cache-patch-to-X-server-1.patch
+Patch909: 0909-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 
 Requires: %{name}-xorg
 %if %{enable_dmx}
@@ -632,8 +632,7 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %patch906 -p1
 %patch907 -p1
 %patch908 -p1
-# XXX: redo and enable this one to make X start faster
-#%patch910 -p1
+%patch909 -p1
 
 %build
 autoreconf -ifs
