@@ -632,7 +632,7 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %patch906 -p1
 %patch907 -p1
 %patch908 -p1
-#%patch909 -p1
+%patch909 -p1
 
 %build
 autoreconf -ifs
