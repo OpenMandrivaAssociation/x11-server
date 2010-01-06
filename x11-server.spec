@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.3
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -249,6 +249,8 @@ Requires: rgb
 Requires: x11-font-misc-misc
 Requires: x11-font-cursor-misc
 Requires: x11-font-alias
+Requires: x11-data-xkbdata
+Requires: xkbcomp
 Requires(post): update-alternatives >= 1.9.0
 Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
