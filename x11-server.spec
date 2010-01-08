@@ -181,7 +181,6 @@ Patch903: 0903-Quirk-Samsung-SyncMaster-205BW.patch
 Patch904: 0904-LED-behavior-fixes.patch
 Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
-Patch907: 0907-Revert-drop-xprint-remnants-InitGlobals.patch
 Patch908: 0908-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 Patch909: 0909-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 
@@ -632,7 +631,6 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %patch904 -p1
 %patch905 -p1
 %patch906 -p1
-%patch907 -p1
 %patch908 -p1
 %patch909 -p1
 
