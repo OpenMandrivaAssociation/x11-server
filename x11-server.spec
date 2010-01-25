@@ -6,6 +6,7 @@
 # (cg) Disable xfake temporarily due to build errors
 %define enable_xfake		0
 %define enable_hal		1
+%define enable_udev		0
 %define enable_dbus		%{enable_hal}
 %define enable_builddocs	1
 # Do magic with .rpmsave named links
@@ -44,7 +45,9 @@ Source0: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{v
 Source1: xserver.pamd
 Source2: xvfb-run.sh
 Source3: 10-x11-keymap.fdi
-Source4: mandriva-setup-keyboard
+Source4: mandriva-setup-keyboard-hal
+Source5: mandriva-setup-keyboard-udev
+Source6: 61-x11-input.rules
 License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
@@ -110,6 +113,10 @@ BuildRequires: openssl-devel
 BuildRequires: libhal-devel
 %endif
 
+%if %{enable_udev}
+BuildRequires: libudev-devel
+%endif
+
 %if %{enable_dbus}
 BuildRequires: libdbus-devel
 %endif
@@ -162,6 +169,11 @@ Patch400: 0400-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
 Patch401: 0401-RH-xserver-1.5.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 Patch403: 0403-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
+
+# Udev patches stolen from Debian sid 22/jan/2010:
+Patch500: 11-Move-config_init-after-CreateWellKnownSockets-and-In.diff
+Patch501: 12-Add-libudev-input-hotplug-backend.diff
+Patch502: 13-configure-config-udev-defaults-to-off-for-now.diff
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6.4-redhat..mdv-1.6.4-xvnc
@@ -250,6 +262,9 @@ Requires: x11-font-cursor-misc
 Requires: x11-font-alias
 Requires: x11-data-xkbdata
 Requires: xkbcomp
+%if %enable_udev
+Requires: udev
+%endif
 Requires(post): update-alternatives >= 1.9.0
 Requires(postun): update-alternatives
 # see comment about /usr/X11R6/lib below
@@ -332,6 +347,10 @@ fi
 %if %enable_hal
 %{_bindir}/mandriva-setup-keyboard
 %{_datadir}/hal/fdi/policy/10osvendor/*.fdi
+%endif
+%if %enable_udev
+/sbin/mandriva-setup-keyboard
+%{_sysconfdir}/udev/rules.d/61-x11-input.rules
 %endif
 %if %enable_dmx
 %{_bindir}/vdltodmx
@@ -615,6 +634,10 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %patch402 -p1
 %patch403 -p1
 
+%patch500 -p1
+%patch501 -p1
+%patch502 -p1
+
 %if %enable_xvnc
 %patch700 -p1
 %patch701 -p1
@@ -653,6 +676,11 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-builddocs \
 		%else
 		--disable-builddocs \
+		%endif
+		%if %{enable_udev}
+		--enable-config-udev \
+		%else
+		--disable-config-udev \
 		%endif
 		--disable-install-libxf86config \
 		--enable-composite \
@@ -759,8 +787,16 @@ install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
 # autoconfigure keyboard layout based on system settings
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
 install -m 0444 %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
-install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}
+install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}/mandriva-setup-keyboard
 %endif
+
+%if %enable_udev
+mkdir -p $RPM_BUILD_ROOT/sbin
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
+install -m 0755 %{SOURCE5} $RPM_BUILD_ROOT/sbin/mandriva-setup-keyboard
+install -m 0644 %{SOURCE6} $RPM_BUILD_ROOT/%{_sysconfdir}/udev/rules.d
+%endif
+
 
 %clean
 rm -rf %{buildroot}
