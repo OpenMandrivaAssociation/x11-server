@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.5
-%define rel	2
+%define rel	3
 
 Name: x11-server
 Version: %{version}
@@ -706,7 +706,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-dpms \
 		--disable-xcalibrate \
 		--disable-tslib \
-		--enable-multibuffer \
 		--enable-dbe \
 		--enable-xfree86-utils \
 		--enable-xorg \
