@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.6
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -162,7 +162,7 @@ BuildRequires: libjpeg-devel
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
 
-# Patches "liberated" from Fedora: 
+# Patches "liberated" from Fedora:
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
 Patch400: 0400-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
@@ -298,7 +298,7 @@ for link in /etc/X11 /usr/lib/X11 /usr/X11R6; do
 	fi
 done
 
-if [ -L %{_libdir}/X11 ]; then 
+if [ -L %{_libdir}/X11 ]; then
 	rm -f %{_libdir}/X11
 fi
 if [ -d /usr/X11R6/lib/X11 ]; then
@@ -522,13 +522,14 @@ License: GPL
 Requires: x11-server-common = %{version}-%{release}
 
 %description xvnc
-Xvnc is a virtual X Windows System server like Xvfb, but it allows 
+Xvnc is a virtual X Windows System server like Xvfb, but it allows
 VNC clients access to the 'virtual' display it provides.
 
 %files xvnc
 %defattr(-,root,root)
 %{_bindir}/Xvnc
 %endif
+
 #------------------------------------------------------------------------------
 
 %package xephyr
@@ -549,10 +550,10 @@ if host server doesn't ) such as Composite, Damage, randr etc. It uses SHM
 Images and shadow framebuffer updates to provide good performance. It also
 has a visual debugging mode for observing screen updates.
 
-Possible uses include; 
+Possible uses include:
 - Xnest replacement - Window manager, Composite 'gadget', etc development tool.
 - Toolkit debugging - rendundant toolkit paints can be observered easily via
-  the debugging mode. 
+  the debugging mode.
 - X Server internals development - develop without the need for an extra
   machine
 
@@ -584,7 +585,7 @@ This KDrive server is targetted for testing purposes.
 %endif
 
 #------------------------------------------------------------------------------
-  
+
 %package xfbdev
 Summary: KDrive fbdev X server
 Group: System/X11
@@ -604,7 +605,7 @@ This KDrive server is targetted for being used on top of linux framebuffer.
 %{_bindir}/Xfbdev
 
 #------------------------------------------------------------------------------
- 
+
 %package xsdl
 Summary: KDrive sdl X server
 Group: System/X11
@@ -622,6 +623,23 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %files xsdl
 %defattr(-,root,root)
 %{_bindir}/Xsdl
+
+#------------------------------------------------------------------------------
+
+%define xserver_source_dir %{_datadir}/%{name}-source
+%define inst_srcdir %{buildroot}/%{xserver_source_dir}
+
+%package source
+Summary: Xserver source code required to build unofficial servers
+Group: Development/Libraries
+BuildArch: noarch
+
+%description source
+Xserver source code needed to build unofficial servers, like Xvnc
+
+%files source
+%defattr(-, root, root, -)
+%{xserver_source_dir}
 
 #------------------------------------------------------------------------------
 
@@ -760,7 +778,7 @@ ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
 ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
 
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-install -m 0644 %{_sourcedir}/xserver.pamd %{buildroot}%{_sysconfdir}/pam.d/xserver     
+install -m 0644 %{_sourcedir}/xserver.pamd %{buildroot}%{_sysconfdir}/pam.d/xserver
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
@@ -801,6 +819,18 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
 install -m 0755 %{SOURCE5} $RPM_BUILD_ROOT/sbin/mandriva-setup-keyboard
 install -m 0644 %{SOURCE6} $RPM_BUILD_ROOT/%{_sysconfdir}/udev/rules.d
 %endif
+
+# Make the source package (from Fedora)
+mkdir -p %{inst_srcdir}/{Xext,xkb,GL,hw/{xquartz/bundle,xfree86/common}}
+cp cpprules.in shave.in shave-libtool.in %{inst_srcdir}
+cp {,%{inst_srcdir}/}hw/xquartz/bundle/cpprules.in
+cp xkb/README.compiled %{inst_srcdir}/xkb
+cp hw/xfree86/xorgconf.cpp %{inst_srcdir}/hw/xfree86
+cp hw/xfree86/common/{vesamodes,extramodes} %{inst_srcdir}/hw/xfree86/common
+find . -type f | egrep '\.(c|h|am|ac|inc|m4|h.in|pc.in|man.pre|pl|txt|conf|l|[1-9])$' |
+xargs tar cf - | (cd %{inst_srcdir} && tar xf -)
+# SLEDGEHAMMER
+find %{inst_srcdir}/hw/xfree86 -name \*.c -delete
 
 
 %clean
