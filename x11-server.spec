@@ -631,7 +631,7 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 
 %package source
 Summary: Xserver source code required to build unofficial servers
-Group: Development/Libraries
+Group: Development/X11
 BuildArch: noarch
 
 %description source
