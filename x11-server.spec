@@ -23,8 +23,8 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.7.5
-%define rel	4
+%define version 1.7.6
+%define rel	1
 
 Name: x11-server
 Version: %{version}
@@ -637,9 +637,11 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %patch402 -p1
 %patch403 -p1
 
+%if %enable_udev
 %patch500 -p1
 %patch501 -p1
 %patch502 -p1
+%endif
 
 %if %enable_xvnc
 %patch700 -p1
