@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.6
-%define rel	2
+%define rel	3
 
 Name: x11-server
 Version: %{version}
@@ -632,7 +632,9 @@ This KDriver server runs on top of the Simple DirectMedia Layer.
 %package source
 Summary: Xserver source code required to build unofficial servers
 Group: Development/X11
-BuildArch: noarch
+License: MIT
+# (pz) our build system doesn't like mixing arch with noarch yet
+#BuildArch: noarch
 
 %description source
 Xserver source code needed to build unofficial servers, like Xvnc
