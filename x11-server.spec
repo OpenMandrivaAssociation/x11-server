@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.6
-%define rel	3
+%define rel	4
 
 Name: x11-server
 Version: %{version}
@@ -272,8 +272,8 @@ Requires(postun): update-alternatives
 Conflicts: filesystem < 2.1.8
 # nvidia-71xx does not support X.org server >= 1.5
 Conflicts: x11-driver-video-nvidia71xx < 71.86.09-2
-# fglrx does not support X.org server >= 1.7
-Conflicts: x11-driver-video-fglrx
+# old fglrx does not support X.org server >= 1.7
+Conflicts: x11-driver-video-fglrx < 8.720
 # Fix: missing conflicts to allow upgrade from 2008.0 to cooker
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
