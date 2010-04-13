@@ -24,7 +24,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.6
-%define rel	5
+%define rel	6
 
 Name: x11-server
 Version: %{version}
@@ -48,6 +48,7 @@ Source3: 10-x11-keymap.fdi
 Source4: mandriva-setup-keyboard-hal
 Source5: mandriva-setup-keyboard-udev
 Source6: 61-x11-input.rules
+Source7: 11-x11-mouse-quirks.fdi
 License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
@@ -812,6 +813,7 @@ install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
 # autoconfigure keyboard layout based on system settings
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
 install -m 0444 %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
+install -m 0444 %{SOURCE7} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
 install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}/mandriva-setup-keyboard
 %endif
 
