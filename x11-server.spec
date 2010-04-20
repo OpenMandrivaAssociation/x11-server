@@ -73,37 +73,40 @@ Obsoletes: x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
 # FIXME: build with systemtap installed is broken
 BuildConflicts: systemtap
 
-BuildRequires: libfontenc-devel >= 1.0.1
+#BuildRequires: libfontenc-devel >= 1.0.1
+#BuildRequires: libgii-devel
+#BuildRequires: libgpm-devel
 BuildRequires: libmesagl-devel >= 7.1
+BuildRequires: libpam-devel
+BuildRequires: libpciaccess-devel
+BuildRequires: libpixman-1-devel >= 0.9.5
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
 BuildRequires: libxdmcp-devel >= 1.0.0
 BuildRequires: libxext-devel >= 1.1
-BuildRequires: libxfont-devel >= 1.2.8-2mdv
 BuildRequires: libxfixes-devel
+BuildRequires: libxfont-devel >= 1.2.8-2mdv
 BuildRequires: libxi-devel >= 1.1.3
+#BuildRequires: libxinerama-devel
 BuildRequires: libxkbfile-devel >= 1.0.4
-BuildRequires: libxkbui-devel >= 1.0.1
+#BuildRequires: libxkbui-devel >= 1.0.1
 BuildRequires: libxmu-devel >= 1.0.0
 BuildRequires: libxpm-devel >= 3.5.4.2
 BuildRequires: libxrender-devel >= 0.9.4
 BuildRequires: libxres-devel >= 1.0.0
-BuildRequires: libxtst-devel >= 1.0.1
-BuildRequires: libxxf86misc-devel >= 1.0.0
-BuildRequires: libxxf86vm-devel >= 1.0.0
+#BuildRequires: libxtst-devel >= 1.0.1
+BuildRequires: libxv-devel
+#BuildRequires: libxxf86misc-devel >= 1.0.0
+#BuildRequires: libxxf86vm-devel >= 1.0.0
 BuildRequires: x11-proto-devel >= 7.5
 BuildRequires: x11-util-macros >= 1.1.5
 BuildRequires: x11-xtrans-devel >= 1.0.3
-BuildRequires: libpam-devel
-BuildRequires: libgpm-devel
 BuildRequires: SDL-devel
-BuildRequires: libgii-devel
-BuildRequires: libpixman-1-devel >= 0.9.5
-BuildRequires: libpciaccess-devel
-BuildRequires: libxv-devel
-BuildRequires: libxinerama-devel
+
+# Probably only needed if we change .l or .y files, but let's have them anyway:
 BuildRequires: byacc
 BuildRequires: flex
+
 # for xkbcomp patch
 BuildRequires: openssl-devel
 
