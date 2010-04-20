@@ -3,8 +3,7 @@
 %define with_debug		0
 %define enable_xvnc		0
 %define enable_dmx		1
-# (cg) Disable xfake temporarily due to build errors
-%define enable_xfake		0
+%define enable_xfake		1
 %define enable_hal		1
 %define enable_udev		0
 %define enable_dbus		%{enable_hal}
