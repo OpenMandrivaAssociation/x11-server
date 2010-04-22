@@ -22,8 +22,8 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.7.6
-%define rel	6
+%define version 1.7.6.902
+%define rel	1
 
 Name: x11-server
 Version: %{version}
@@ -198,7 +198,6 @@ Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 Patch907: 0907-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 Patch908: 0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
-Patch909: 0909-dix-be-more-verbose-when-we-run-out-of-opcodes.patch
 
 Requires: %{name}-xorg
 %if %{enable_dmx}
@@ -684,7 +683,6 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch906 -p1
 %patch907 -p1
 %patch908 -p1
-%patch909 -p1
 
 %build
 autoreconf -ifs
