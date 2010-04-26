@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.7.6.902
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -164,6 +164,8 @@ BuildRequires: libjpeg-devel
 
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
+Patch300: 0300-revert-mi-dont-thrash-resources.patch
+Patch301: 0301-exa-check-sys-ptr-isnt-null.patch
 
 # Patches "liberated" from Fedora:
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
@@ -653,6 +655,9 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %else
 %setup -q -n xorg-server-%{version}
 %endif
+
+%patch300 -p1
+%patch301 -p1
 
 %patch400 -p1
 %patch401 -p1
