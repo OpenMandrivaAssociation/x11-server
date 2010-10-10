@@ -4,8 +4,8 @@
 %define enable_xvnc		0
 %define enable_dmx		1
 %define enable_xfake		1
-%define enable_hal		1
-%define enable_udev		0
+%define enable_hal		0
+%define enable_udev		1
 %define enable_dbus		%{enable_hal}
 %define enable_builddocs	1
 # Do magic with .rpmsave named links
@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.9.0
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -408,6 +408,9 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_mandir}/man1/Xorg.*
 %{_mandir}/man1/Xserver.*
 %{_mandir}/man5/xorg.conf.*
+%if %{enable_udev}
+%{_datadir}/X11/xorg.conf.d/10-evdev.conf
+%endif
 
 #------------------------------------------------------------------------------
 
