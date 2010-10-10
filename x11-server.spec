@@ -22,7 +22,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.7.7
+%define version 1.9.0
 %define rel	1
 
 Name: x11-server
@@ -100,6 +100,7 @@ BuildRequires: libxv-devel
 #BuildRequires: libxxf86vm-devel >= 1.0.0
 BuildRequires: x11-proto-devel >= 7.5
 BuildRequires: x11-util-macros >= 1.1.5
+BuildRequires: x11-font-util >= 1.1
 BuildRequires: x11-xtrans-devel >= 1.0.3
 BuildRequires: SDL-devel
 
@@ -168,15 +169,8 @@ BuildRequires: libjpeg-devel
 # Patches "liberated" from Fedora:
 # http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
 # git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
-Patch400: 0400-RH-xorg-x11-server-1.1.0-no-move-damage-v1.3.patch
-Patch401: 0401-RH-xserver-1.5.0-bg-none-root-v1.5.patch
+Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
-Patch403: 0403-RH-xserver-1.5.99.3-broken-mtrr-header-v1.3.patch
-
-# Udev patches stolen from Debian sid 22/jan/2010:
-Patch500: 11-Move-config_init-after-CreateWellKnownSockets-and-In.diff
-Patch501: 12-Add-libudev-input-hotplug-backend.diff
-Patch502: 13-configure-config-udev-defaults-to-off-for-now.diff
 
 # Patches to make Xvnc work
 # git format-patch --start-number 700 mdv-1.6.4-redhat..mdv-1.6.4-xvnc
@@ -394,8 +388,8 @@ Conflicts: drakx-kbd-mouse-x11 < 0.66
 Conflicts: compiz < 0.5.0-1mdv2007.1
 Obsoletes: x11-server13-xorg <= 1.2.99.905
 
-# because of fontpath.d support
-Requires: libxfont >= 1.2.8-2mdv
+# minimum libxfont needed for xserver-1.9:
+Requires: libxfont >= 1.4.2
 
 # This package was used in the transition to modular:
 Obsoletes: xorg-x11-server
@@ -608,26 +602,6 @@ This KDrive server is targetted for being used on top of linux framebuffer.
 
 #------------------------------------------------------------------------------
 
-%package xsdl
-Summary: KDrive sdl X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-
-%description xsdl
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDriver server runs on top of the Simple DirectMedia Layer.
-
-%files xsdl
-%defattr(-,root,root)
-%{_bindir}/Xsdl
-
-#------------------------------------------------------------------------------
-
 %define xserver_source_dir %{_datadir}/%{name}-source
 %define inst_srcdir %{buildroot}/%{xserver_source_dir}
 
@@ -654,16 +628,8 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %setup -q -n xorg-server-%{version}
 %endif
 
-%patch400 -p1
 %patch401 -p1
 %patch402 -p1
-%patch403 -p1
-
-%if %enable_udev
-%patch500 -p1
-%patch501 -p1
-%patch502 -p1
-%endif
 
 %if %enable_xvnc
 %patch700 -p1
@@ -752,7 +718,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--disable-xfake \
 		%endif
 		--enable-xephyr \
-		--enable-xsdl \
 		--disable-install-setuid \
 		--enable-secure-rpc \
 		--enable-xwrapper \
@@ -826,7 +791,7 @@ install -m 0644 %{SOURCE6} $RPM_BUILD_ROOT/%{_sysconfdir}/udev/rules.d
 
 # Make the source package (from Fedora)
 mkdir -p %{inst_srcdir}/{Xext,xkb,GL,hw/{xquartz/bundle,xfree86/common}}
-cp cpprules.in shave.in shave-libtool.in %{inst_srcdir}
+cp cpprules.in %{inst_srcdir}
 cp {,%{inst_srcdir}/}hw/xquartz/bundle/cpprules.in
 cp xkb/README.compiled %{inst_srcdir}/xkb
 cp hw/xfree86/xorgconf.cpp %{inst_srcdir}/hw/xfree86
