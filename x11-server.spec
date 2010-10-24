@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.9.1
-%define rel	1
+%define rel	2
 
 Name: x11-server
 Version: %{version}
@@ -379,11 +379,12 @@ Requires: x11-server-common = %{version}-%{release}
 Requires: x11-data-xkbdata > 1.3-5
 Requires: x11-font-alias
 Requires: libx11-common
-Requires: x11-driver-input-mouse
-Requires: x11-driver-input-keyboard
 %if %{enable_udev} || %{enable_hal}
 Requires: x11-driver-input-evdev
 Conflicts: drakx-kbd-mouse-x11 < 0.66
+%else
+Requires: x11-driver-input-mouse
+Requires: x11-driver-input-keyboard
 %endif
 Conflicts: compiz < 0.5.0-1mdv2007.1
 Obsoletes: x11-server13-xorg <= 1.2.99.905
