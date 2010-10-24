@@ -25,6 +25,18 @@
 %define version 1.9.1
 %define rel	2
 
+
+# ABI versions.  Have to keep these manually in sync with the source
+# because rpm is a terrible language.  HTFU.
+%define ansic_major 0
+%define ansic_minor 4
+%define videodrv_major 8
+%define videodrv_minor 0
+%define xinput_major 11
+%define xinput_minor 0
+%define extension_major 4
+%define extension_minor 0
+
 Name: x11-server
 Version: %{version}
 %if %{git}
@@ -48,6 +60,9 @@ Source4: mandriva-setup-keyboard-hal
 Source5: mandriva-setup-keyboard-udev
 Source6: 61-x11-input.rules
 Source7: 11-x11-mouse-quirks.fdi
+# from RH/FC:
+# for requires generation in drivers
+Source30:  xserver-sdk-abi-requires
 License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
@@ -237,6 +252,7 @@ fi
 %files devel
 %defattr(-,root,root)
 %dir %{_includedir}/xorg
+%{_bindir}/xserver-sdk-abi-requires
 %{_includedir}/xorg/*.h
 %{_libdir}/pkgconfig/xorg-server.pc
 %{_datadir}/aclocal/xorg-server.m4
@@ -275,6 +291,12 @@ Conflicts: x11-driver-video-fglrx < 8.720
 Conflicts: x11-driver-video-nvidia-current <= 100.14.19
 
 Conflicts: x11-xorg1_5-server < 1.5.3-4
+
+
+Provides: xserver-abi(ansic-%{ansic_major}) = %{ansic_minor}
+Provides: xserver-abi(videodrv-%{videodrv_major}) = %{videodrv_minor}
+Provides: xserver-abi(xinput-%{xinput_major}) = %{xinput_minor}
+Provides: xserver-abi(extension-%{extension_major}) = %{extension_minor}
 
 %description common
 X server common files
@@ -654,6 +676,28 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch907 -p1
 %patch908 -p1
 
+
+# check the ABI in the source against what we expect.
+getmajor() {
+   grep -i ^#define.ABI.$1_VERSION hw/xfree86/common/xf86Module.h |
+   tr '(),' '   ' | awk '{ print $4 }'
+}
+
+getminor() {
+   grep -i ^#define.ABI.$1_VERSION hw/xfree86/common/xf86Module.h |
+   tr '(),' '   ' | awk '{ print $5 }'
+}
+
+test `getmajor ansic` == %{ansic_major}
+test `getminor ansic` == %{ansic_minor}
+test `getmajor videodrv` == %{videodrv_major}
+test `getminor videodrv` == %{videodrv_minor}
+test `getmajor xinput` == %{xinput_major}
+test `getminor xinput` == %{xinput_minor}
+test `getmajor extension` == %{extension_major}
+test `getminor extension` == %{extension_minor}
+
+
 %build
 autoreconf -if
 %if %{with_debug}
@@ -805,6 +849,7 @@ xargs tar cf - | (cd %{inst_srcdir} && tar xf -)
 # SLEDGEHAMMER
 find %{inst_srcdir}/hw/xfree86 -name \*.c -delete
 
+install -m 755 %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf %{buildroot}
