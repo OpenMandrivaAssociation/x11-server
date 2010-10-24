@@ -22,8 +22,8 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.9.0.902
-%define rel	2
+%define version 1.9.1
+%define rel	1
 
 Name: x11-server
 Version: %{version}
@@ -654,7 +654,7 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch908 -p1
 
 %build
-autoreconf -ifs
+autoreconf -if
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
@@ -735,7 +735,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%else
 		--disable-config-hal \
 		%endif
-		--with-fontdir="%{_datadir}/fonts" \
+		--with-sha1=libcrypto \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 %make
