@@ -201,7 +201,6 @@ Patch705: 0705-Fix-bug-41583.patch
 Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
-Patch903: 0903-Quirk-Samsung-SyncMaster-205BW.patch
 Patch904: 0904-LED-behavior-fixes.patch
 Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
@@ -669,7 +668,6 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch900 -p1
 %patch901 -p1
 %patch902 -p1
-%patch903 -p1
 %patch904 -p1
 %patch905 -p1
 %patch906 -p1
