@@ -22,7 +22,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.9.2.901
+%define version 1.9.2.902
 %define rel	1
 
 
