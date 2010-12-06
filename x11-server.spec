@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.9.2.902
-%define rel	2
+%define rel	3
 
 
 # ABI versions.  Have to keep these manually in sync with the source
@@ -628,7 +628,6 @@ This KDrive server is targetted for being used on top of linux framebuffer.
 #------------------------------------------------------------------------------
 
 %define xserver_source_dir %{_datadir}/%{name}-source
-%define inst_srcdir %{buildroot}/%{xserver_source_dir}
 
 %package source
 Summary: Xserver source code required to build unofficial servers
@@ -698,6 +697,13 @@ test `getminor extension` == %{extension_minor}
 
 %build
 autoreconf -if
+
+# Copy the clean dir to a 'source' directory that will be used to make the
+# x11-server-source subpackage
+mkdir source
+find . -maxdepth 1 ! -name source ! -name '\.' -exec cp -r '{}' source \;
+
+
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
@@ -835,21 +841,8 @@ install -m 0755 %{SOURCE5} $RPM_BUILD_ROOT/sbin/mandriva-setup-keyboard
 install -m 0644 %{SOURCE6} $RPM_BUILD_ROOT/%{_sysconfdir}/udev/rules.d
 %endif
 
-# Make the source package (from Fedora)
-mkdir -p %{inst_srcdir}/{doc/xml{,/dtrace},Xext,xkb,GL,hw/{xquartz/bundle,xfree86/common}}
-cp cpprules.in %{inst_srcdir}
-cp {,%{inst_srcdir}/}doc/xml/xmlrules.in
-cp {,%{inst_srcdir}/}doc/xml/xserver.ent.in
-cp {,%{inst_srcdir}/}doc/xml/Xserver-spec.xml
-cp {,%{inst_srcdir}/}doc/xml/dtrace/Xserver-DTrace.xml
-cp {,%{inst_srcdir}/}hw/xquartz/bundle/cpprules.in
-cp xkb/README.compiled %{inst_srcdir}/xkb
-cp hw/xfree86/xorgconf.cpp %{inst_srcdir}/hw/xfree86
-cp hw/xfree86/common/{vesamodes,extramodes} %{inst_srcdir}/hw/xfree86/common
-find . -type f | egrep '\.(c|h|am|ac|inc|m4|h.in|pc.in|man.pre|pl|txt|conf|l|[1-9])$' |
-xargs tar cf - | (cd %{inst_srcdir} && tar xf -)
-# SLEDGEHAMMER
-find %{inst_srcdir}/hw/xfree86 -name \*.c -delete
+# Make the source package
+cp -r source %{buildroot}/%{xserver_source_dir}
 
 install -m 755 %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}
 
