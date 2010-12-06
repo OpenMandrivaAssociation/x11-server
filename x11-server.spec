@@ -23,7 +23,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.9.2.902
-%define rel	1
+%define rel	2
 
 
 # ABI versions.  Have to keep these manually in sync with the source
@@ -836,8 +836,12 @@ install -m 0644 %{SOURCE6} $RPM_BUILD_ROOT/%{_sysconfdir}/udev/rules.d
 %endif
 
 # Make the source package (from Fedora)
-mkdir -p %{inst_srcdir}/{Xext,xkb,GL,hw/{xquartz/bundle,xfree86/common}}
+mkdir -p %{inst_srcdir}/{doc/xml{,/dtrace},Xext,xkb,GL,hw/{xquartz/bundle,xfree86/common}}
 cp cpprules.in %{inst_srcdir}
+cp {,%{inst_srcdir}/}doc/xml/xmlrules.in
+cp {,%{inst_srcdir}/}doc/xml/xserver.ent.in
+cp {,%{inst_srcdir}/}doc/xml/Xserver-spec.xml
+cp {,%{inst_srcdir}/}doc/xml/dtrace/Xserver-DTrace.xml
 cp {,%{inst_srcdir}/}hw/xquartz/bundle/cpprules.in
 cp xkb/README.compiled %{inst_srcdir}/xkb
 cp hw/xfree86/xorgconf.cpp %{inst_srcdir}/hw/xfree86
