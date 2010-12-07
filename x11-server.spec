@@ -85,12 +85,24 @@ Obsoletes: x11-server-xvia	<= 1.4.2-4mdv2009.0
 # die, Xgl, die - AdamW 2008/11
 Obsoletes: x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
 
+Requires: %{name}-xorg
+%if %{enable_dmx}
+Requires: %{name}-xdmx
+%else
+Obsoletes: %{name}-xdmx < %{version}-%{release}
+%endif
+Requires: %{name}-xnest
+Requires: %{name}-xvfb
+%if !%{enable_xvnc}
+Obsoletes: %{name}-xvnc < %{version}-%{release}
+%endif
+%if !%{enable_xfake}
+Obsoletes: %{name}-xfake < %{version}-%{release}
+%endif
+
 # FIXME: build with systemtap installed is broken
 BuildConflicts: systemtap
 
-#BuildRequires: libfontenc-devel >= 1.0.1
-#BuildRequires: libgii-devel
-#BuildRequires: libgpm-devel
 BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: libpam-devel
 BuildRequires: libpciaccess-devel
@@ -102,22 +114,16 @@ BuildRequires: libxext-devel >= 1.1
 BuildRequires: libxfixes-devel
 BuildRequires: libxfont-devel >= 1.2.8-2mdv
 BuildRequires: libxi-devel >= 1.1.3
-#BuildRequires: libxinerama-devel
 BuildRequires: libxkbfile-devel >= 1.0.4
-#BuildRequires: libxkbui-devel >= 1.0.1
 BuildRequires: libxmu-devel >= 1.0.0
 BuildRequires: libxpm-devel >= 3.5.4.2
 BuildRequires: libxrender-devel >= 0.9.4
 BuildRequires: libxres-devel >= 1.0.0
-#BuildRequires: libxtst-devel >= 1.0.1
 BuildRequires: libxv-devel
-#BuildRequires: libxxf86misc-devel >= 1.0.0
-#BuildRequires: libxxf86vm-devel >= 1.0.0
+BuildRequires: x11-font-util >= 1.1
 BuildRequires: x11-proto-devel >= 7.5
 BuildRequires: x11-util-macros >= 1.1.5
-BuildRequires: x11-font-util >= 1.1
 BuildRequires: x11-xtrans-devel >= 1.0.3
-BuildRequires: SDL-devel
 
 # Probably only needed if we change .l or .y files, but let's have them anyway:
 BuildRequires: byacc
@@ -149,19 +155,12 @@ BuildRequires: libxtst-devel >= 1.1
 BuildRequires: libjpeg-devel
 %endif
 
-# (cg) Notes on disabled patches
-# ==============================
-# This no longer seems to apply:
-#  0512-fixes-mdvbz-35912.patch
-
-# PCPA's save context stuff. This conflicts with some changes upstream
-# so is currently disabled. Some changes upstream may partly do the same
-# functionality (e.g. the moving of the backtrace generation code)
-#  0504-SAVE_CONTEXT-Mandriva-Custom-X-Server-patch.patch
-#  xorg-server-1.4.2-save_context_fix.patch
-
-
-
+%if %{enable_builddocs}
+BuildRequires: doxygen
+BuildRequires: fop
+BuildRequires: xmlto
+BuildRequires: x11-sgml-doctools
+%endif
 
 # Instructions to setup your repository clone
 # git://anongit.freedesktop.org/git/xorg/xserver
@@ -182,7 +181,7 @@ BuildRequires: libjpeg-devel
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
 
 # Patches "liberated" from Fedora:
-# http://cvs.fedoraproject.org/viewvc/rpms/xorg-x11-server/devel/
+# http://pkgs.fedoraproject.org/gitweb/?p=xorg-x11-server.git
 # git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
 Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
@@ -206,21 +205,6 @@ Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 Patch907: 0907-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 Patch908: 0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
-
-Requires: %{name}-xorg
-%if %{enable_dmx}
-Requires: %{name}-xdmx
-%else
-Obsoletes: %{name}-xdmx < %{version}-%{release}
-%endif
-Requires: %{name}-xnest
-Requires: %{name}-xvfb
-%if !%{enable_xvnc}
-Obsoletes: %{name}-xvnc < %{version}-%{release}
-%endif
-%if !%{enable_xfake}
-Obsoletes: %{name}-xfake < %{version}-%{release}
-%endif
 
 %description
 X11 servers
