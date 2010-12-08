@@ -812,23 +812,23 @@ install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
 
 %if %enable_hal
 # autoconfigure keyboard layout based on system settings
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
-install -m 0444 %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
-install -m 0444 %{SOURCE7} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/10osvendor
-install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}/mandriva-setup-keyboard
+mkdir -p %{buildroot}%{_datadir}/hal/fdi/policy/10osvendor
+install -m 0444 %{SOURCE3} %{buildroot}%{_datadir}/hal/fdi/policy/10osvendor
+install -m 0444 %{SOURCE7} %{buildroot}%{_datadir}/hal/fdi/policy/10osvendor
+install -m 0755 %{SOURCE4} %{buildroot}%{_bindir}/mandriva-setup-keyboard
 %endif
 
 %if %enable_udev
-mkdir -p $RPM_BUILD_ROOT/sbin
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/udev/rules.d/
-install -m 0755 %{SOURCE5} $RPM_BUILD_ROOT/sbin/mandriva-setup-keyboard
-install -m 0644 %{SOURCE6} $RPM_BUILD_ROOT/%{_sysconfdir}/udev/rules.d
+mkdir -p %{buildroot}/sbin
+mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d/
+install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
+install -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/udev/rules.d
 %endif
 
 # Make the source package
 cp -r source %{buildroot}/%{xserver_source_dir}
 
-install -m 755 %{SOURCE30} $RPM_BUILD_ROOT%{_bindir}
+install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
 
 %clean
 rm -rf %{buildroot}
