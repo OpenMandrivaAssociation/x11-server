@@ -1,7 +1,6 @@
 %define git 0
 
 %define with_debug		0
-%define enable_xvnc		0
 %define enable_dmx		1
 %define enable_xfake		1
 %define enable_hal		0
@@ -93,9 +92,10 @@ Obsoletes: %{name}-xdmx < %{version}-%{release}
 %endif
 Requires: %{name}-xnest
 Requires: %{name}-xvfb
-%if !%{enable_xvnc}
+
+# This should be removed when any of the vnc packages provide x11-server-xvnc:
 Obsoletes: %{name}-xvnc < %{version}-%{release}
-%endif
+
 %if !%{enable_xfake}
 Obsoletes: %{name}-xfake < %{version}-%{release}
 %endif
@@ -151,10 +151,6 @@ BuildRequires: libdmx-devel
 BuildRequires: libxtst-devel >= 1.1
 %endif
 
-%if %{enable_xvnc}
-BuildRequires: libjpeg-devel
-%endif
-
 %if %{enable_builddocs}
 BuildRequires: doxygen
 BuildRequires: fop
@@ -169,8 +165,6 @@ BuildRequires: x11-sgml-doctools
 # git am ../03??-*.patch
 # git checkout -b mdv-1.7-redhat
 # git am ../04??-*.patch
-# git checkout -b mdv-1.7-xvnc
-# git am ../07??-*.patch
 # git checkout -b mdv-1.7-patches
 # git am ../09??-*.patch
 
@@ -186,17 +180,8 @@ BuildRequires: x11-sgml-doctools
 Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 
-# Patches to make Xvnc work
-# git format-patch --start-number 700 mdv-1.6.4-redhat..mdv-1.6.4-xvnc
-Patch700: 0700-Rediff-of-http-www.linuxfromscratch.org-dnicholson-p.patch
-Patch701: 0701-Fix-for-X-server-1.6-input-interface-changes.patch
-Patch702: 0702-Use-xorgVersion.h-instead-of-xf86Version.h.patch
-Patch703: 0703-Fix-for-DevPrivates-interface-changes.patch
-Patch704: 0704-Fix-compilation-Werror-format-security.patch
-Patch705: 0705-Fix-bug-41583.patch
-
 # Mandriva patches
-# git format-patch --start-number 900 mdv-1.6.4-xvnc..mdv-1.6.4-patches
+# git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
 Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
@@ -519,24 +504,6 @@ install Xvfb for that purpose.
 
 #------------------------------------------------------------------------------
 
-%if %enable_xvnc
-%package xvnc
-Summary: X VNC server
-Group: System/X11
-License: GPL
-Requires: x11-server-common = %{version}-%{release}
-
-%description xvnc
-Xvnc is a virtual X Windows System server like Xvfb, but it allows
-VNC clients access to the 'virtual' display it provides.
-
-%files xvnc
-%defattr(-,root,root)
-%{_bindir}/Xvnc
-%endif
-
-#------------------------------------------------------------------------------
-
 %package xephyr
 Summary: KDrive Xephyr X server
 Group: System/X11
@@ -639,15 +606,6 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch401 -p1
 %patch402 -p1
 
-%if %enable_xvnc
-%patch700 -p1
-%patch701 -p1
-%patch702 -p1
-%patch703 -p1
-%patch704 -p1
-%patch705 -p1
-%endif
-
 %patch900 -p1
 %patch901 -p1
 %patch902 -p1
@@ -736,9 +694,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-dbe \
 		--enable-xfree86-utils \
 		--enable-xorg \
-		%if %enable_xvnc
-		--enable-xvnc \
-		%endif
 		%if %enable_dmx
 		--enable-dmx \
 		%else
