@@ -22,7 +22,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.9.3
-%define rel	2
+%define rel	3
 
 
 # ABI versions.  Have to keep these manually in sync with the source
@@ -328,6 +328,7 @@ fi
 %dir %{_sysconfdir}/X11/app-defaults
 %dir %{_sysconfdir}/X11/fontpath.d
 %dir %{_sysconfdir}/ld.so.conf.d/GL
+%dir %{_sysconfdir}/X11/xorg.conf.d
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 %if %enable_dbus
@@ -788,6 +789,9 @@ install -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/udev/rules.d
 cp -r source %{buildroot}/%{xserver_source_dir}
 
 install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
+
+# Create xorg.conf.d
+install -d -m 755 %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
 
 %clean
 rm -rf %{buildroot}
