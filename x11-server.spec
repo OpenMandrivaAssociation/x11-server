@@ -22,7 +22,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.9.4
-%define rel	1
+%define rel	2
 
 
 # ABI versions.  Have to keep these manually in sync with the source
@@ -190,6 +190,8 @@ Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 Patch907: 0907-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 Patch908: 0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
+
+Patch1000: fdo33929.diff
 
 %description
 X11 servers
@@ -615,6 +617,7 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch906 -p1
 %patch907 -p1
 %patch908 -p1
+%patch1000 -p1
 
 
 # check the ABI in the source against what we expect.
