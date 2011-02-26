@@ -22,7 +22,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.9.4
-%define rel	2
+%define rel	3
 
 
 # ABI versions.  Have to keep these manually in sync with the source
