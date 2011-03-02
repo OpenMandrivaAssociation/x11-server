@@ -21,7 +21,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.10.0
+%define version 1.10.0.Please.dont.submit.this.package.yet.as.it.will.break.some.stuff.Talk.to.pzanoni.Anssi.Colin.or.TV.before
 %define rel	1
 
 
