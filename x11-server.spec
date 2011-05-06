@@ -22,7 +22,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.10.0.Please.dont.submit.this.package.yet.as.it.will.break.some.stuff.Talk.to.pzanoni.Anssi.Colin.or.TV.before
-%define rel	1
+%define rel	2
 
 
 # ABI versions.  Have to keep these manually in sync with the source
