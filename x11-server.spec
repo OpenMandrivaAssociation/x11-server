@@ -153,7 +153,7 @@ BuildRequires: libxtst-devel >= 1.1
 
 %if %{enable_builddocs}
 BuildRequires: doxygen
-BuildRequires: fop
+#BuildRequires: fop
 BuildRequires: xmlto
 BuildRequires: x11-sgml-doctools
 %endif
