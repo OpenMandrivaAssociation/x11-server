@@ -21,19 +21,19 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.10.0.Please.dont.submit.this.package.yet.as.it.will.break.some.stuff.Talk.to.pzanoni.Anssi.Colin.or.TV.before
-%define rel	2
+%define version 1.9.4
+%define rel 4
 
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 10
+%define videodrv_major 8
 %define videodrv_minor 0
-%define xinput_major 12
-%define xinput_minor 2
-%define extension_major 5
+%define xinput_major 11
+%define xinput_minor 0
+%define extension_major 4
 %define extension_minor 0
 
 Name: x11-server
@@ -174,31 +174,24 @@ BuildRequires: x11-sgml-doctools
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
 
+# Patches "liberated" from Fedora:
+# http://pkgs.fedoraproject.org/gitweb/?p=xorg-x11-server.git
+# git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
+Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
+Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
+
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
 Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
-Patch903: 0903-LED-behavior-fixes.patch
-Patch904: 0904-Add-noAutoDevices-command-line-option.patch
-Patch905: 0905-Xorg-add-an-extra-module-path.patch
-Patch906: 0906-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
-Patch907: 0907-Add-nr-argument-for-backwards-compatibility.patch
+Patch904: 0904-LED-behavior-fixes.patch
+Patch905: 0905-Add-noAutoDevices-command-line-option.patch
+Patch906: 0906-Xorg-add-an-extra-module-path.patch
+Patch907: 0907-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 Patch908: 0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 
-# Candidates for dropping:
-# 902: Why is this needed?
-# 903: Input subsystem has changed *a lot* since this patch was written... I
-#      fear it might break things now
-# 904: Who uses this option? GDM? KDM?
-# 906: All this patch does is force users to hit ctrl+alt+bksp twice (with
-#      an annoying sound) IF the hotkey is enabled. If the user chooses to
-#      enable ctrk+alt+bksp, why force him to hit twice? OTOH, the sound is
-#      annoying, and it should teach users to not use ctrl+alt+bksp =D
-# 907: we should make whoever-uses-this-option go for "-background none", which
-#      is the upstream-supported option. Then we kill the patch.
-# 908: This gives us at most 0.6s in boot, but upstream will never accept it.
-#      When we change to libxkbcommon we'll have to drop this anyway.
+Patch1000: fdo33929.diff
 
 %description
 X11 servers
@@ -613,15 +606,18 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %setup -q -n xorg-server-%{version}
 %endif
 
+%patch401 -p1
+%patch402 -p1
+
 %patch900 -p1
 %patch901 -p1
 %patch902 -p1
-%patch903 -p1
 %patch904 -p1
 %patch905 -p1
 %patch906 -p1
 %patch907 -p1
 %patch908 -p1
+%patch1000 -p1
 
 
 # check the ABI in the source against what we expect.
