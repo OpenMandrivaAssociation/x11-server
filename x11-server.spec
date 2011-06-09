@@ -21,7 +21,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.9.5
+%define version 1.10.2
 %define rel 1
 
 
@@ -29,11 +29,11 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 8
+%define videodrv_major 10
 %define videodrv_minor 0
-%define xinput_major 11
-%define xinput_minor 0
-%define extension_major 4
+%define xinput_major 12
+%define xinput_minor 2
+%define extension_major 5
 %define extension_minor 0
 
 Name: x11-server
@@ -177,7 +177,8 @@ BuildRequires: x11-sgml-doctools
 # Patches "liberated" from Fedora:
 # http://pkgs.fedoraproject.org/gitweb/?p=xorg-x11-server.git
 # git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
-Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
+# (eugeni) obsoleted with '-background none' option
+# Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 
 # Mandriva patches
@@ -188,8 +189,6 @@ Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-LED-behavior-fixes.patch
 Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
-Patch907: 0907-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
-Patch908: 0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 
 %description
 X11 servers
@@ -604,7 +603,6 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %setup -q -n xorg-server-%{version}
 %endif
 
-%patch401 -p1
 %patch402 -p1
 
 %patch900 -p1
@@ -613,8 +611,6 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch904 -p1
 %patch905 -p1
 %patch906 -p1
-%patch907 -p1
-%patch908 -p1
 
 
 # check the ABI in the source against what we expect.
