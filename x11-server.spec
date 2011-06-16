@@ -648,7 +648,7 @@ find . -maxdepth 1 ! -name source ! -name '\.' -exec cp -r '{}' source \;
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 %configure2_5x	--with-log-dir=%{_logdir} \
-		--with-os-vendor="Mandriva" \
+		--with-os-vendor="%_vendor" \
 		--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 		--with-vendor-web="http://qa.mandriva.com" \
 		--with-extra-module-dir=%{extra_module_dir} \
