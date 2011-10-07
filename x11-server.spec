@@ -21,7 +21,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.10.4
+%define version 1.11.1
 %define rel 1
 
 
@@ -29,11 +29,11 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 10
+%define videodrv_major 11
 %define videodrv_minor 0
-%define xinput_major 12
-%define xinput_minor 2
-%define extension_major 5
+%define xinput_major 13
+%define xinput_minor 0
+%define extension_major 6
 %define extension_minor 0
 
 Name: x11-server
@@ -607,10 +607,10 @@ Xserver source code needed to build unofficial servers, like Xvnc
 
 %patch402 -p1
 
-%patch900 -p1
+#%patch900 -p1
 %patch901 -p1
 %patch902 -p1
-%patch904 -p1
+#patch904 -p1
 %patch905 -p1
 %patch906 -p1
 
