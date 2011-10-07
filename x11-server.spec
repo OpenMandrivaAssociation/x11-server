@@ -21,7 +21,7 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.10.3
+%define version 1.10.4
 %define rel 1
 
 
@@ -128,6 +128,7 @@ BuildRequires: x11-xtrans-devel >= 1.0.3
 # Probably only needed if we change .l or .y files, but let's have them anyway:
 BuildRequires: byacc
 BuildRequires: flex
+BuildRequires: bison
 
 # for xkbcomp patch
 BuildRequires: openssl-devel
@@ -158,7 +159,7 @@ BuildRequires: lynx
 BuildRequires: xmlto
 BuildRequires: x11-sgml-doctools
 %endif
-
+BuildRequires:	glib2-devel
 # Instructions to setup your repository clone
 # git://anongit.freedesktop.org/git/xorg/xserver
 # git checkout origin/server-1.7-branch
@@ -636,6 +637,8 @@ test `getminor extension` == %{extension_minor}
 
 
 %build
+%serverbuild
+
 autoreconf -if
 
 # Copy the clean dir to a 'source' directory that will be used to make the
@@ -658,9 +661,12 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--disable-debug \
 		%endif
 		%if %{enable_builddocs}
-		--enable-builddocs \
+		--enable-docs \
+		--enable-devel-docs \
+		--without-fop \
 		%else
-		--disable-builddocs \
+		--disable-docs \
+		--disable-devel-docs \
 		%endif
 		%if %{enable_udev}
 		--enable-config-udev \
