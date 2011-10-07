@@ -121,7 +121,7 @@ BuildRequires: libxrender-devel >= 0.9.4
 BuildRequires: libxres-devel >= 1.0.0
 BuildRequires: libxv-devel
 BuildRequires: x11-font-util >= 1.1
-BuildRequires: x11-proto-devel >= 7.5
+BuildRequires: x11-proto-devel >= 7.6-4
 BuildRequires: x11-util-macros >= 1.10
 BuildRequires: x11-xtrans-devel >= 1.0.3
 
@@ -157,7 +157,7 @@ BuildRequires: doxygen
 #BuildRequires: fop
 BuildRequires: lynx
 BuildRequires: xmlto
-BuildRequires: x11-sgml-doctools
+BuildRequires: x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	glib2-devel
 # Instructions to setup your repository clone
@@ -693,7 +693,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-xcsecurity \
 		--enable-xf86bigfont \
 		--enable-dpms \
-		--disable-xcalibrate \
 		--disable-tslib \
 		--enable-dbe \
 		--enable-xfree86-utils \
@@ -715,8 +714,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-xephyr \
 		--disable-install-setuid \
 		--enable-secure-rpc \
-		--enable-xwrapper \
-		--enable-pam \
 		%if %{enable_dbus}
 		--enable-config-dbus \
 		%else
@@ -729,7 +726,9 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%endif
 		--with-sha1=libcrypto \
 		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
+
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
+
 %make
 
 %install
