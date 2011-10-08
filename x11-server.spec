@@ -182,6 +182,7 @@ BuildRequires:	glib2-devel
 # (eugeni) obsoleted with '-background none' option
 # Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
+Patch403: 0403-config-add-udev-systemd-multi-seat-support.patch
 
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
@@ -191,6 +192,7 @@ Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-LED-behavior-fixes.patch
 Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
+
 
 %description
 X11 servers
@@ -606,8 +608,9 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %endif
 
 %patch402 -p1
+%patch403 -p1
 
-#%patch900 -p1
+%patch900 -p1
 %patch901 -p1
 %patch902 -p1
 #patch904 -p1
@@ -714,6 +717,8 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		--enable-xephyr \
 		--disable-install-setuid \
 		--enable-secure-rpc \
+		--enable-xwrapper \
+		--enable-pam \
 		%if %{enable_dbus}
 		--enable-config-dbus \
 		%else
