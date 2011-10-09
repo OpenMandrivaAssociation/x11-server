@@ -22,7 +22,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.11.1
-%define rel 1
+%define rel 2
 
 
 # ABI versions.  Have to keep these manually in sync with the source
@@ -193,9 +193,21 @@ Patch904: 0904-LED-behavior-fixes.patch
 Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 
+# Other patches
+# (tpg) this patch restores a missing function miTrapezoids
+# this should be fixed in next release of proprietary drivers
+# for now this function should be restored
+# which is used by proprietary drivers, like nvidia ones
+# upstream git commit
+# http://cgit.freedesktop.org/xorg/xserver/commit/?id=788ccb9a8bcf6a4fb4054c507111eec3338fb969
+# Bugreport on nvnews.com
+# http://www.nvnews.net/vbulletin/showthread.php?t=166698
+# Bugreport on Xorg ML
+# http://lists.x.org/archives/xorg-devel/2011-October/026050.html
+Patch1000: 110_nvidia_slowdow_fix.patch
 
 %description
-X11 servers
+X11 servers.
 
 #------------------------------------------------------------------------------
 
@@ -613,10 +625,10 @@ Xserver source code needed to build unofficial servers, like Xvnc
 %patch900 -p1
 %patch901 -p1
 %patch902 -p1
-#patch904 -p1
+%patch904 -p1
 %patch905 -p1
 %patch906 -p1
-
+%patch1000 -p1
 
 # check the ABI in the source against what we expect.
 getmajor() {
