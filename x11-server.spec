@@ -225,7 +225,7 @@ Requires: libxkbfile-devel
 Requires: libxext-devel >= 1.1
 
 %description devel
-Development files for %{name}
+Development files for %{name}.
 
 %pre devel
 if [ -h %{_includedir}/X11 ]; then
@@ -282,7 +282,7 @@ Provides: xserver-abi(xinput-%{xinput_major}) = %{xinput_minor}
 Provides: xserver-abi(extension-%{extension_major}) = %{extension_minor}
 
 %description common
-X server common files
+X server common files.
 
 # old packages had a dir structure on /usr/X11R6/lib/ but starting on
 # filesystem-2.1.8 these dirs where kept there but were not owned by any
@@ -543,7 +543,7 @@ Possible uses include:
 - Toolkit debugging - rendundant toolkit paints can be observered easily via
   the debugging mode.
 - X Server internals development - develop without the need for an extra
-  machine
+  machine.
 
 %files xephyr
 %defattr(-,root,root)
@@ -604,7 +604,7 @@ License: MIT
 #BuildArch: noarch
 
 %description source
-Xserver source code needed to build unofficial servers, like Xvnc
+Xserver source code needed to build unofficial servers, like Xvnc.
 
 %files source
 %defattr(-, root, root, -)
