@@ -22,7 +22,7 @@
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
 %define version 1.11.1
-%define rel 2
+%define rel 3
 
 
 # ABI versions.  Have to keep these manually in sync with the source
@@ -204,6 +204,8 @@ Patch906: 0906-Xorg-add-an-extra-module-path.patch
 # http://www.nvnews.net/vbulletin/showthread.php?t=166698
 # Bugreport on Xorg ML
 # http://lists.x.org/archives/xorg-devel/2011-October/026050.html
+# (tpg) fixed in nvidia-current-290.03
+# keep this patch for a while
 Patch1000: 110_nvidia_slowdow_fix.patch
 
 %description
@@ -628,7 +630,6 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 %patch904 -p1
 %patch905 -p1
 %patch906 -p1
-%patch1000 -p1
 
 # check the ABI in the source against what we expect.
 getmajor() {
