@@ -104,7 +104,7 @@ Obsoletes: %{name}-xfake < %{version}-%{release}
 BuildConflicts: systemtap
 
 BuildRequires: libmesagl-devel >= 7.1
-BuildRequires: libpam-devel
+BuildRequires: pam-devel
 BuildRequires: libpciaccess-devel
 BuildRequires: libpixman-1-devel >= 0.9.5
 BuildRequires: libxau-devel >= 1.0.0
