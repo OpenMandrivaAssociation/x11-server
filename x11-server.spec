@@ -620,16 +620,7 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 %else
 %setup -q -n xorg-server-%{version}
 %endif
-
-%patch402 -p1
-%patch403 -p1
-
-%patch900 -p1
-%patch901 -p1
-%patch902 -p1
-%patch904 -p1
-%patch905 -p1
-%patch906 -p1
+%apply_patches
 
 # check the ABI in the source against what we expect.
 getmajor() {
@@ -689,6 +680,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 		%else
 		--disable-config-udev \
 		%endif
+		--disable-strict-compilation \
 		--disable-install-libxf86config \
 		--enable-composite \
 		--enable-xres \
