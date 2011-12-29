@@ -101,6 +101,9 @@ Obsoletes: %{name}-xfake < %{version}-%{release}
 %if !%{enable_kdrive}
 Obsoletes: %{name}-xephyr < %{version}-%{release}
 %endif
+%if !%{enable_xfbdev}
+Obsoletes: %{name}-xfbdev < %{version}-%{release}
+%endif
 
 # FIXME: build with systemtap installed is broken
 BuildConflicts: systemtap
