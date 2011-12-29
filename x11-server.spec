@@ -708,15 +708,16 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--disable-xwin \
 %if %{enable_kdrive}
 	--enable-kdrive \
+	--enable-xephyr \
 %else
 	--disable-disable \
+	--disable-xephyr \
 %endif
 %if %enable_xfake
 	--enable-xfake \
 %else
 	--disable-xfake \
 %endif
-	--enable-xephyr \
 	--disable-install-setuid \
 	--enable-secure-rpc \
 	--enable-xwrapper \
