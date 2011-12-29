@@ -2,7 +2,8 @@
 
 %define with_debug		0
 %define enable_dmx		1
-%define enable_xfake		1
+%define enable_xfake	1
+%define enable_kdrive	0
 %define enable_hal		0
 %define enable_udev		1
 %define enable_dbus		%{enable_hal}
@@ -21,10 +22,6 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.11.3
-%define rel 1
-
-
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
@@ -36,16 +33,17 @@
 %define extension_major 6
 %define extension_minor 0
 
+%define rel 1
+
 Name: x11-server
-Version: %{version}
+Version: 1.11.3
 %if %{git}
-Release: %mkrel 0.%{git}.%{rel}
+Release: 0.%{git}.%{rel}
 %else
-Release: %mkrel %{rel}
+Release: %{rel}
 %endif
 Summary:  X11 servers
 Group: System/X11
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 URL: http://xorg.freedesktop.org
 %if %{git}
 Source0:	xorg-server-%{git}.tar.bz2
@@ -98,6 +96,9 @@ Obsoletes: %{name}-xvnc < %{version}-%{release}
 
 %if !%{enable_xfake}
 Obsoletes: %{name}-xfake < %{version}-%{release}
+%endif
+%if !%{enable_kdrive}
+Obsoletes: %{name}-xephyr < %{version}-%{release}
 %endif
 
 # FIXME: build with systemtap installed is broken
@@ -235,7 +236,6 @@ if [ -h %{_includedir}/X11 ]; then
 fi
 
 %files devel
-%defattr(-,root,root)
 %dir %{_includedir}/xorg
 %{_bindir}/xserver-sdk-abi-requires
 %{_includedir}/xorg/*.h
@@ -260,7 +260,7 @@ Requires: x11-font-cursor-misc
 Requires: x11-font-alias
 Requires: x11-data-xkbdata
 Requires: xkbcomp
-%if %enable_udev
+%if %{enable_udev}
 Requires: udev
 %endif
 Requires(post): update-alternatives >= 1.9.0
@@ -336,7 +336,6 @@ if [ ! -f %{_sysconfdir}/ld.so.conf.d/GL/standard.conf ]; then
 fi
 
 %files common
-%defattr(-,root,root)
 %dir %{_libdir}/xorg/modules
 %dir %{xorg1_6_extra_modules}
 %dir %{_sysconfdir}/X11
@@ -346,20 +345,20 @@ fi
 %dir %{_sysconfdir}/X11/xorg.conf.d
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
-%if %enable_dbus
+%if %{enable_dbus}
 %{_sysconfdir}/dbus-1/system.d/xorg-server.conf
 %endif
 %{_bindir}/gtf
 %{_bindir}/cvt
-%if %enable_hal
+%if %{enable_hal}
 %{_bindir}/mandriva-setup-keyboard
 %{_datadir}/hal/fdi/policy/10osvendor/*.fdi
 %endif
-%if %enable_udev
+%if %{enable_udev}
 /sbin/mandriva-setup-keyboard
 %{_sysconfdir}/udev/rules.d/61-x11-input.rules
 %endif
-%if %enable_dmx
+%if %{enable_dmx}
 %{_bindir}/vdltodmx
 %endif
 %{_libdir}/xorg/modules/*
@@ -367,7 +366,7 @@ fi
 %{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/gtf.*
 %{_mandir}/man1/cvt.*
-%if %enable_dmx
+%if %{enable_dmx}
 %{_mandir}/man1/vdltodmx.*
 %endif
 %{_mandir}/man4/fbdevhw.*
@@ -407,7 +406,6 @@ Obsoletes: xorg-x11-server
 x11-server-xorg is the new generation of X server from X.Org.
 
 %files xorg
-%defattr(-,root,root)
 %{_bindir}/X
 %{_bindir}/Xorg
 %attr(4755,root,root)%{_bindir}/Xwrapper
@@ -423,7 +421,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 
 #------------------------------------------------------------------------------
 
-%if %enable_dmx
+%if %{enable_dmx}
 %package xdmx
 Summary: Distributed Multi-head X server
 Group: System/X11
@@ -448,7 +446,6 @@ Xdmx communicates to the back-end X servers using the standard X11 protocol,
 and standard and/or commonly available X server extensions.
 
 %files xdmx
-%defattr(-,root,root)
 %{_bindir}/Xdmx
 %{_bindir}/xdmx*
 %{_bindir}/dmx*
@@ -480,7 +477,6 @@ will run as a client of your real X server (perhaps for
 testing purposes).
 
 %files xnest
-%defattr(-,root,root)
 %{_bindir}/Xnest
 %{_mandir}/man1/Xnest.*
 
@@ -515,13 +511,13 @@ If you need to test your X server or your X clients, you may want to
 install Xvfb for that purpose.
 
 %files xvfb
-%defattr(-,root,root)
 %{_bindir}/Xvfb
 %{_bindir}/xvfb-run
 %{_mandir}/man1/Xvfb.*
 
 #------------------------------------------------------------------------------
 
+%if %{enable_kdrive}
 %package xephyr
 Summary: KDrive Xephyr X server
 Group: System/X11
@@ -548,13 +544,13 @@ Possible uses include:
   machine.
 
 %files xephyr
-%defattr(-,root,root)
 %{_bindir}/Xephyr
 %{_mandir}/man1/Xephyr.1*
+%endif
 
 #------------------------------------------------------------------------------
 
-%if %enable_xfake
+%if %{enable_xfake}
 %package xfake
 Summary: KDrive fake X server
 Group: System/X11
@@ -570,7 +566,6 @@ and the video driver corresponding to your video card.
 This KDrive server is targetted for testing purposes.
 
 %files xfake
-%defattr(-,root,root)
 %{_bindir}/Xfake
 %endif
 
@@ -591,7 +586,6 @@ and the video driver corresponding to your video card.
 This KDrive server is targetted for being used on top of linux framebuffer.
 
 %files xfbdev
-%defattr(-,root,root)
 %{_bindir}/Xfbdev
 
 #------------------------------------------------------------------------------
@@ -609,7 +603,6 @@ License: MIT
 Xserver source code needed to build unofficial servers, like Xvnc.
 
 %files source
-%defattr(-, root, root, -)
 %{xserver_source_dir}
 
 #------------------------------------------------------------------------------
@@ -657,86 +650,90 @@ find . -maxdepth 1 ! -name source ! -name '\.' -exec cp -r '{}' source \;
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
-%configure2_5x	--with-log-dir=%{_logdir} \
-		--with-os-vendor="%_vendor" \
-		--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
-		--with-vendor-web="http://qa.mandriva.com" \
-		--with-extra-module-dir=%{extra_module_dir} \
-		%if %{with_debug}
-		--enable-debug \
-		%else
-		--disable-debug \
-		%endif
-		%if %{enable_builddocs}
-		--enable-docs \
-		--enable-devel-docs \
-		--without-fop \
-		%else
-		--disable-docs \
-		--disable-devel-docs \
-		%endif
-		%if %{enable_udev}
-		--enable-config-udev \
-		%else
-		--disable-config-udev \
-		%endif
-		--disable-strict-compilation \
-		--disable-install-libxf86config \
-		--enable-composite \
-		--enable-xres \
-		--enable-record \
-		--enable-xv \
-		--enable-xvmc \
-		--enable-dga \
-		--enable-screensaver \
-		--enable-xdmcp \
-		--enable-xdm-auth-1 \
-		--enable-glx \
-		--enable-aiglx \
-		--enable-glx-tls \
-		--enable-dri \
-		--enable-xinerama \
-		--enable-xf86vidmode \
-		--enable-xace \
-		--enable-xcsecurity \
-		--enable-xf86bigfont \
-		--enable-dpms \
-		--disable-tslib \
-		--enable-dbe \
-		--enable-xfree86-utils \
-		--enable-xorg \
-		%if %enable_dmx
-		--enable-dmx \
-		%else
-		--disable-dmx \
-		%endif
-		--enable-xvfb \
-		--enable-xnest \
-		--disable-xwin \
-		--enable-kdrive \
-		%if %enable_xfake
-		--enable-xfake \
-		%else
-		--disable-xfake \
-		%endif
-		--enable-xephyr \
-		--disable-install-setuid \
-		--enable-secure-rpc \
-		--enable-xwrapper \
-		--enable-pam \
-		%if %{enable_dbus}
-		--enable-config-dbus \
-		%else
-		--disable-config-dbus \
-		%endif
-		%if %{enable_hal}
-		--enable-config-hal \
-		%else
-		--disable-config-hal \
-		%endif
-		--with-sha1=libcrypto \
-		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
-
+%configure2_5x \
+	--with-log-dir=%{_logdir} \
+	--with-os-vendor="%_vendor" \
+	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
+	--with-vendor-web="http://qa.mandriva.com" \
+	--with-extra-module-dir=%{extra_module_dir} \
+%if %{with_debug}
+	--enable-debug \
+%else
+	--disable-debug \
+%endif
+%if %{enable_builddocs}
+	--enable-docs \
+	--enable-devel-docs \
+	--without-fop \
+%else
+	--disable-docs \
+	--disable-devel-docs \
+%endif
+%if %{enable_udev}
+	--enable-config-udev \
+%else
+	--disable-config-udev \
+%endif
+	--disable-install-libxf86config \
+	--enable-composite \
+	--enable-xres \
+	--enable-record \
+	--enable-xv \
+	--enable-xvmc \
+	--enable-dga \
+	--enable-screensaver \
+	--enable-xdmcp \
+	--enable-xdm-auth-1 \
+	--enable-glx \
+	--enable-aiglx \
+	--enable-glx-tls \
+	--enable-dri \
+	--enable-xinerama \
+	--enable-xf86vidmode \
+	--enable-xace \
+	--enable-xcsecurity \
+	--enable-xf86bigfont \
+	--enable-dpms \
+	--disable-tslib \
+	--enable-dbe \
+	--enable-xfree86-utils \
+	--enable-xorg \
+%if %{enable_dmx}
+	--enable-dmx \
+%else
+	--disable-dmx \
+%endif
+	--enable-xvfb \
+	--enable-xnest \
+	--disable-xwin \
+%if %{enable_kdrive}
+	--enable-kdrive \
+%else
+	--disable-disable \
+%endif
+%if %enable_xfake
+	--enable-xfake \
+%else
+	--disable-xfake \
+%endif
+	--enable-xephyr \
+	--disable-install-setuid \
+	--enable-secure-rpc \
+	--enable-xwrapper \
+	--enable-pam \
+%if %{enable_dbus}
+	--enable-config-dbus \
+%else
+	--disable-config-dbus \
+%endif
+%if %{enable_hal}
+	--enable-config-hal \
+%else
+	--disable-config-hal \
+%endif
+	--with-sha1=libcrypto \
+	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
+	
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
 %make
@@ -801,8 +798,4 @@ install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
 # Create xorg.conf.d
 install -d -m 755 %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
