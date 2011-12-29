@@ -2,8 +2,8 @@
 
 %define with_debug		0
 %define enable_dmx		1
-%define enable_xfake	1
 %define enable_kdrive	0
+%define enable_xfake	%{enable_kdrive}
 %define enable_hal		0
 %define enable_udev		1
 %define enable_dbus		%{enable_hal}
@@ -241,7 +241,6 @@ fi
 %{_includedir}/xorg/*.h
 %{_libdir}/pkgconfig/xorg-server.pc
 %{_datadir}/aclocal/xorg-server.m4
-
 
 #------------------------------------------------------------------------------
 
