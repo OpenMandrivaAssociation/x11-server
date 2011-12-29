@@ -4,6 +4,7 @@
 %define enable_dmx		1
 %define enable_kdrive	0
 %define enable_xfake	%{enable_kdrive}
+%define enable_xfbdev	%{enable_kdrive}
 %define enable_hal		0
 %define enable_udev		1
 %define enable_dbus		%{enable_hal}
@@ -570,6 +571,7 @@ This KDrive server is targetted for testing purposes.
 
 #------------------------------------------------------------------------------
 
+%if %{enable_xfbdev}
 %package xfbdev
 Summary: KDrive fbdev X server
 Group: System/X11
@@ -586,6 +588,7 @@ This KDrive server is targetted for being used on top of linux framebuffer.
 
 %files xfbdev
 %{_bindir}/Xfbdev
+%endif
 
 #------------------------------------------------------------------------------
 
@@ -797,5 +800,8 @@ install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
 
 # Create xorg.conf.d
 install -d -m 755 %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
+
+# remove backup files
+find %{buildroot} -type f -name "*~" -exec rm -f {} ';'
 
 %files
