@@ -105,9 +105,6 @@ Obsoletes: %{name}-xephyr < %{version}-%{release}
 Obsoletes: %{name}-xfbdev < %{version}-%{release}
 %endif
 
-# FIXME: build with systemtap installed is broken
-BuildConflicts: systemtap
-
 BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: pam-devel
 BuildRequires: libpciaccess-devel
