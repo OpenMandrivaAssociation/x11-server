@@ -37,7 +37,7 @@
 %define rel 1
 
 Name: x11-server
-Version: 1.11.3
+Version: 1.11.4
 %if %{git}
 Release: 0.%{git}.%{rel}
 %else
@@ -145,7 +145,7 @@ BuildRequires: libhal-devel
 %endif
 
 %if %{enable_udev}
-BuildRequires: libudev-devel
+BuildRequires: pkgconfig(libudev)
 %endif
 
 %if %{enable_dbus}
@@ -806,5 +806,8 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
 
 # remove backup files
 find %{buildroot} -type f -name "*~" -exec rm -f {} ';'
+
+# remove DTrace related files (until DTrace exists on Linux)
+rm -rf %{buildroot}%_docdir/xorg-server/Xserver-DTrace*
 
 %files
