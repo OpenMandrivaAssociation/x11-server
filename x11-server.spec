@@ -750,7 +750,7 @@ ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
 ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
 
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-install -m 0644 %{_sourcedir}/xserver.pamd %{buildroot}%{_sysconfdir}/pam.d/xserver
+install -m 0644 %SOURCE1 %{buildroot}%{_sysconfdir}/pam.d/xserver
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
@@ -776,7 +776,7 @@ cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
 EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
-install -m 0755 %{_sourcedir}/xvfb-run.sh %{buildroot}%{_bindir}/xvfb-run
+install -m 0755 %SOURCE2 %{buildroot}%{_bindir}/xvfb-run
 
 %if %enable_hal
 # autoconfigure keyboard layout based on system settings
