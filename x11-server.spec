@@ -27,9 +27,9 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 11
+%define videodrv_major 12
 %define videodrv_minor 0
-%define xinput_major 13
+%define xinput_major 16
 %define xinput_minor 0
 %define extension_major 6
 %define extension_minor 0
@@ -37,7 +37,7 @@
 %define rel 1
 
 Name: x11-server
-Version: 1.11.4
+Version: 1.12.0
 %if %{git}
 Release: 0.%{git}.%{rel}
 %else
@@ -61,6 +61,7 @@ Source7: 11-x11-mouse-quirks.fdi
 # from RH/FC:
 # for requires generation in drivers
 Source30:  xserver-sdk-abi-requires
+Source100: x11-server.rpmlintrc
 License: GPLv2+ and MIT
 
 Obsoletes: x11-server13 <= 1.2.99.905
@@ -184,7 +185,6 @@ BuildRequires:	glib2-devel
 # (eugeni) obsoleted with '-background none' option
 # Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
 Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
-Patch403: 0403-config-add-udev-systemd-multi-seat-support.patch
 
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
