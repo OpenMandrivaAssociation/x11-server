@@ -34,10 +34,10 @@
 %define extension_major 6
 %define extension_minor 0
 
-%define rel 2
+%define rel 1
 
 Name: x11-server
-Version: 1.12.0
+Version: 1.12.1
 %if %{git}
 Release: 0.%{git}.%{rel}
 %else
