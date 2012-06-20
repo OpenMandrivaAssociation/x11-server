@@ -196,19 +196,6 @@ Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 
 # Other patches
-# (tpg) this patch restores a missing function miTrapezoids
-# this should be fixed in next release of proprietary drivers
-# for now this function should be restored
-# which is used by proprietary drivers, like nvidia ones
-# upstream git commit
-# http://cgit.freedesktop.org/xorg/xserver/commit/?id=788ccb9a8bcf6a4fb4054c507111eec3338fb969
-# Bugreport on nvnews.com
-# http://www.nvnews.net/vbulletin/showthread.php?t=166698
-# Bugreport on Xorg ML
-# http://lists.x.org/archives/xorg-devel/2011-October/026050.html
-# (tpg) fixed in nvidia-current-290.03
-# keep this patch for a while
-Patch1000: 110_nvidia_slowdow_fix.patch
 
 %description
 X11 servers.
@@ -736,7 +723,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 	--with-sha1=libcrypto \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
-	
+
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
 %make
