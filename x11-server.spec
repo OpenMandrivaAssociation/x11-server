@@ -37,7 +37,7 @@
 %define rel 1
 
 Name: x11-server
-Version: 1.12.1
+Version: 1.12.2
 %if %{git}
 Release: 0.%{git}.%{rel}
 %else
