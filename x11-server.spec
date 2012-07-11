@@ -34,7 +34,7 @@
 %define extension_major 6
 %define extension_minor 0
 
-%define rel 1
+%define rel 2
 
 Name: x11-server
 Version: 1.12.3
@@ -343,7 +343,7 @@ fi
 %endif
 %if %{enable_udev}
 /sbin/mandriva-setup-keyboard
-%{_sysconfdir}/udev/rules.d/61-x11-input.rules
+/lib/udev/rules.d/61-x11-input.rules
 %endif
 %if %{enable_dmx}
 %{_bindir}/vdltodmx
@@ -775,9 +775,9 @@ install -m 0755 %{SOURCE4} %{buildroot}%{_bindir}/mandriva-setup-keyboard
 
 %if %enable_udev
 mkdir -p %{buildroot}/sbin
-mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d/
+mkdir -p %{buildroot}/lib/udev/rules.d/
 install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
-install -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/udev/rules.d
+install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
 %endif
 
 # Make the source package
