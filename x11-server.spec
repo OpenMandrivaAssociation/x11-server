@@ -28,7 +28,7 @@
 %define ansic_major 0
 %define ansic_minor 4
 %define videodrv_major 12
-%define videodrv_minor 0
+%define videodrv_minor 1
 %define xinput_major 16
 %define xinput_minor 0
 %define extension_major 6
@@ -37,7 +37,7 @@
 %define rel 2
 
 Name: x11-server
-Version: 1.12.3
+Version: 1.12.4
 %if %{git}
 Release: 0.%{git}.%{rel}
 %else
