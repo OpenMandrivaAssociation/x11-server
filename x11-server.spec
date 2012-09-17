@@ -27,17 +27,17 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 12
-%define videodrv_minor 1
-%define xinput_major 16
+%define videodrv_major 13
+%define videodrv_minor 0
+%define xinput_major 18
 %define xinput_minor 0
-%define extension_major 6
+%define extension_major 7
 %define extension_minor 0
 
-%define rel 2
+%define rel 1
 
 Name: x11-server
-Version: 1.12.4
+Version: 1.13.0
 %if %{git}
 Release: 0.%{git}.%{rel}
 %else
