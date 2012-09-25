@@ -34,7 +34,7 @@
 %define extension_major 7
 %define extension_minor 0
 
-%define rel 1
+%define rel 2
 
 Name: x11-server
 Version: 1.13.0
@@ -109,7 +109,10 @@ Obsoletes: %{name}-xfbdev < %{version}-%{release}
 BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: pam-devel
 BuildRequires: libpciaccess-devel
+%if %mdvver >= 201200
+%else
 BuildRequires: libpixman-1-devel >= 0.9.5
+%endif
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
 BuildRequires: libxdmcp-devel >= 1.0.0
@@ -196,6 +199,9 @@ Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
 
 # Other patches
+%if %mdvver >= 201200
+Patch1000:	use-new-pixman-api.diff
+%endif
 
 %description
 X11 servers.
@@ -699,7 +705,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-kdrive \
 	--enable-xephyr \
 %else
-	--disable-disable \
 	--disable-xephyr \
 %endif
 %if %enable_xfake
