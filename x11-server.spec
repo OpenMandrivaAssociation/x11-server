@@ -221,6 +221,7 @@ Requires: libpixman-1-devel
 Requires: libpciaccess-devel
 Requires: libxkbfile-devel
 Requires: libxext-devel >= 1.1
+Requires: pkgconfig(dri)
 
 %description devel
 Development files for %{name}.
