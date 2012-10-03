@@ -197,6 +197,7 @@ Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
 Patch904: 0904-LED-behavior-fixes.patch
 Patch905: 0905-Add-noAutoDevices-command-line-option.patch
 Patch906: 0906-Xorg-add-an-extra-module-path.patch
+Patch910: xorg-1.13.0-link-tirpc.patch
 
 # Other patches
 %if %mdvver >= 201200
