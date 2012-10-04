@@ -129,7 +129,7 @@ BuildRequires: libxv-devel
 BuildRequires: x11-font-util >= 1.1
 BuildRequires: x11-proto-devel >= 7.6-4
 BuildRequires: x11-util-macros >= 1.15
-BuildRequires: x11-xtrans-devel >= 1.0.3
+BuildRequires: x11-xtrans-devel >= 1.2.7-2
 
 # Probably only needed if we change .l or .y files, but let's have them anyway:
 BuildRequires: byacc
