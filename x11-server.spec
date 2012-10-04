@@ -165,6 +165,7 @@ BuildRequires: lynx
 BuildRequires: xmlto
 BuildRequires: x11-sgml-doctools >= 1.8
 %endif
+BuildRequires: pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	glib2-devel
 # Instructions to setup your repository clone
 # git://anongit.freedesktop.org/git/xorg/xserver
