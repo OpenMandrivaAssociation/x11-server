@@ -200,9 +200,7 @@ Patch906: 0906-Xorg-add-an-extra-module-path.patch
 Patch910: xorg-1.13.0-link-tirpc.patch
 
 # Other patches
-%if %mdvver >= 201200
 Patch1000:	use-new-pixman-api.diff
-%endif
 
 %description
 X11 servers.
@@ -611,6 +609,13 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 %setup -q -n xorg-server-%{version}
 %endif
 %apply_patches
+# HACK patch 1000 needs to be packaged unconditionally, but applied only for
+# mdvver >= 201200.
+# apply_patches, however, applies all patches -- so for < 201200, we apply
+# and revert.
+%if %mdvver < 201200
+%patch1000 -p1 -R -b .revert1000~
+%endif
 
 # check the ABI in the source against what we expect.
 getmajor() {
