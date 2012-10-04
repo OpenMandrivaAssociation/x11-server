@@ -109,10 +109,7 @@ Obsoletes: %{name}-xfbdev < %{version}-%{release}
 BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: pam-devel
 BuildRequires: libpciaccess-devel
-%if %mdvver >= 201200
-%else
-BuildRequires: libpixman-1-devel >= 0.9.5
-%endif
+BuildRequires: pkgconfig(pixman-1) >= 0.9.5
 BuildRequires: libxau-devel >= 1.0.0
 BuildRequires: libxaw-devel >= 1.0.1
 BuildRequires: libxdmcp-devel >= 1.0.0
@@ -216,7 +213,7 @@ License: MIT
 %define oldxorgnamedevel  %mklibname xorg-x11
 Conflicts: %{oldxorgnamedevel}-devel < 7.0
 Obsoletes: x11-server13-devel <= 1.2.99.905
-Requires: libpixman-1-devel
+Requires: pkgconfig(pixman-1) >= 0.9.5
 Requires: libpciaccess-devel
 Requires: libxkbfile-devel
 Requires: libxext-devel >= 1.1
