@@ -1,16 +1,16 @@
 %define git 0
 
-%define with_debug		0
-%define enable_dmx		1
-%define enable_kdrive	0
-%define enable_xfake	%{enable_kdrive}
-%define enable_xfbdev	%{enable_kdrive}
-%define enable_hal		0
-%define enable_udev		1
-%define enable_dbus		%{enable_hal}
-%define enable_builddocs	1
+%define with_debug 0
+%define enable_dmx 1
+%define enable_kdrive 0
+%define enable_xfake %{enable_kdrive}
+%define enable_xfbdev %{enable_kdrive}
+%define enable_hal 0
+%define enable_udev 1
+%define enable_dbus %{enable_hal}
+%define enable_builddocs 1
 # Do magic with .rpmsave named links
-%define pre_post_trans		1
+%define pre_post_trans 1
 
 # Need this for shared objects that reference X Server, or other modules symbols
 %define _disable_ld_no_undefined 1
@@ -20,8 +20,8 @@
 
 # Search for modules in extra_module_dir before the default path.
 # This will allow fglrx to install its modified modules in more cleaner way.
-%define extra_module_dir        %{_libdir}/xorg/extra-modules
-%define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
+%define extra_module_dir %{_libdir}/xorg/extra-modules
+%define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -36,133 +36,133 @@
 
 %define rel 4
 
-Name: x11-server
-Version: 1.13.0
+Name:		x11-server
+Version:	1.13.0
 %if %{git}
-Release: 0.%{git}.%{rel}
+Release:	0.%{git}.%{rel}
 %else
-Release: %{rel}
+Release:	%{rel}
 %endif
-Summary:  X11 servers
-Group: System/X11
-URL: http://xorg.freedesktop.org
+Summary:	X11 servers
+Group:		System/X11
+URL:		http://xorg.freedesktop.org
 %if %{git}
 Source0:	xorg-server-%{git}.tar.bz2
 %else
-Source0: http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
 %endif
-Source1: xserver.pamd
-Source2: xvfb-run.sh
-Source3: 10-x11-keymap.fdi
-Source4: mandriva-setup-keyboard-hal
-Source5: mandriva-setup-keyboard-udev
-Source6: 61-x11-input.rules
-Source7: 11-x11-mouse-quirks.fdi
+Source1:	xserver.pamd
+Source2:	xvfb-run.sh
+Source3:	10-x11-keymap.fdi
+Source4:	mandriva-setup-keyboard-hal
+Source5:	mandriva-setup-keyboard-udev
+Source6:	61-x11-input.rules
+Source7:	11-x11-mouse-quirks.fdi
 # from RH/FC:
 # for requires generation in drivers
-Source30:  xserver-sdk-abi-requires
-Source100: x11-server.rpmlintrc
-License: GPLv2+ and MIT
+Source30:	xserver-sdk-abi-requires
+Source100:	x11-server.rpmlintrc
+License:	GPLv2+ and MIT
 
-Obsoletes: x11-server13 <= 1.2.99.905
+Obsoletes:	x11-server13 <= 1.2.99.905
 
 # vesa based kdrive X servers are not built anymore.
 # Obsoleted for clean upgraded
-Obsoletes: x11-server-xati	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xchips	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xepson	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xi810	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xmach64	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xmga	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xnvidia	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xpm2	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xr128	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xsmi	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xvesa	<= 1.4.2-4mdv2009.0
-Obsoletes: x11-server-xvia	<= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xati <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xchips <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xepson <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xi810 <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xmach64 <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xmga <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xnvidia <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xpm2 <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xr128 <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xsmi <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xvesa <= 1.4.2-4mdv2009.0
+Obsoletes:	x11-server-xvia <= 1.4.2-4mdv2009.0
 
 # die, Xgl, die - AdamW 2008/11
-Obsoletes: x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
+Obsoletes:	x11-server-xgl <= 0.0.1-0.20080722.3mdv2009.0
 
-Requires: %{name}-xorg
+Requires:	%{name}-xorg
 %if %{enable_dmx}
-Requires: %{name}-xdmx
+Requires:	%{name}-xdmx
 %else
-Obsoletes: %{name}-xdmx < %{version}-%{release}
+Obsoletes:	%{name}-xdmx < %{version}-%{release}
 %endif
-Requires: %{name}-xnest
-Requires: %{name}-xvfb
+Requires:	%{name}-xnest
+Requires:	%{name}-xvfb
 
 # This should be removed when any of the vnc packages provide x11-server-xvnc:
-Obsoletes: %{name}-xvnc < %{version}-%{release}
+Obsoletes:	%{name}-xvnc < %{version}-%{release}
 
 %if !%{enable_xfake}
-Obsoletes: %{name}-xfake < %{version}-%{release}
+Obsoletes:	%{name}-xfake < %{version}-%{release}
 %endif
 %if !%{enable_kdrive}
-Obsoletes: %{name}-xephyr < %{version}-%{release}
+Obsoletes:	%{name}-xephyr < %{version}-%{release}
 %endif
 %if !%{enable_xfbdev}
-Obsoletes: %{name}-xfbdev < %{version}-%{release}
+Obsoletes:	%{name}-xfbdev < %{version}-%{release}
 %endif
 
-BuildRequires: libmesagl-devel >= 7.1
-BuildRequires: pam-devel
-BuildRequires: libpciaccess-devel
-BuildRequires: pkgconfig(pixman-1) >= 0.9.5
-BuildRequires: libxau-devel >= 1.0.0
-BuildRequires: libxaw-devel >= 1.0.1
-BuildRequires: libxdmcp-devel >= 1.0.0
-BuildRequires: libxext-devel >= 1.1
-BuildRequires: libxfixes-devel
-BuildRequires: libxfont-devel >= 1.2.8-2mdv
-BuildRequires: libxi-devel >= 1.1.3
-BuildRequires: libxkbfile-devel >= 1.0.4
-BuildRequires: libxmu-devel >= 1.0.0
-BuildRequires: libxpm-devel >= 3.5.4.2
-BuildRequires: libxrender-devel >= 0.9.4
-BuildRequires: libxres-devel >= 1.0.0
-BuildRequires: libxv-devel
-BuildRequires: x11-font-util >= 1.1
-BuildRequires: x11-proto-devel >= 7.6-4
-BuildRequires: x11-util-macros >= 1.15
-BuildRequires: x11-xtrans-devel >= 1.2.7-2
+BuildRequires:	libmesagl-devel >= 7.1
+BuildRequires:	pam-devel
+BuildRequires:	libpciaccess-devel
+BuildRequires:	pkgconfig(pixman-1) >= 0.9.5
+BuildRequires:	libxau-devel >= 1.0.0
+BuildRequires:	libxaw-devel >= 1.0.1
+BuildRequires:	libxdmcp-devel >= 1.0.0
+BuildRequires:	libxext-devel >= 1.1
+BuildRequires:	libxfixes-devel
+BuildRequires:	libxfont-devel >= 1.2.8-2mdv
+BuildRequires:	libxi-devel >= 1.1.3
+BuildRequires:	libxkbfile-devel >= 1.0.4
+BuildRequires:	libxmu-devel >= 1.0.0
+BuildRequires:	libxpm-devel >= 3.5.4.2
+BuildRequires:	libxrender-devel >= 0.9.4
+BuildRequires:	libxres-devel >= 1.0.0
+BuildRequires:	libxv-devel
+BuildRequires:	x11-font-util >= 1.1
+BuildRequires:	x11-proto-devel >= 7.6-4
+BuildRequires:	x11-util-macros >= 1.15
+BuildRequires:	x11-xtrans-devel >= 1.2.7-2
 
 # Probably only needed if we change .l or .y files, but let's have them anyway:
-BuildRequires: byacc
-BuildRequires: flex
-BuildRequires: bison
+BuildRequires:	byacc
+BuildRequires:	flex
+BuildRequires:	bison
 
 # for xkbcomp patch
-BuildRequires: openssl-devel
+BuildRequires:	openssl-devel
 
 %if %{enable_hal}
 # For the moment only really required if compiling with --config-dbus
 # But if available at build time, will include headers, but do nothing
-BuildRequires: libhal-devel
+BuildRequires:	libhal-devel
 %endif
 
 %if %{enable_udev}
-BuildRequires: pkgconfig(libudev) >= 186
+BuildRequires:	pkgconfig(libudev) >= 186
 %endif
 
 %if %{enable_dbus}
-BuildRequires: libdbus-devel
+BuildRequires:	libdbus-devel
 %endif
 
 %if %{enable_dmx}
-BuildRequires: libdmx-devel
-BuildRequires: libxtst-devel >= 1.1
+BuildRequires:	libdmx-devel
+BuildRequires:	libxtst-devel >= 1.1
 %endif
 
 %if %{enable_builddocs}
-BuildRequires: doxygen
-#BuildRequires: fop
-BuildRequires: lynx
-BuildRequires: xmlto
-BuildRequires: x11-sgml-doctools >= 1.8
+BuildRequires:	doxygen
+#BuildRequires:	fop
+BuildRequires:	lynx
+BuildRequires:	xmlto
+BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
-BuildRequires: pkgconfig(libtirpc) >= 0.2.0
+BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	glib2-devel
 # Instructions to setup your repository clone
 # git://anongit.freedesktop.org/git/xorg/xserver
@@ -185,17 +185,17 @@ BuildRequires:	glib2-devel
 # git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
 # (eugeni) obsoleted with '-background none' option
 # Patch401: 0401-RH-xserver-1.9.0-bg-none-root-v1.5.patch
-Patch402: 0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
+Patch402:	0402-RH-xserver-1.5.99.3-ddx-rules-v1.1.patch
 
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
-Patch900: 0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch901: 0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
-Patch902: 0902-Take-width-into-account-when-choosing-default-mode.patch
-Patch904: 0904-LED-behavior-fixes.patch
-Patch905: 0905-Add-noAutoDevices-command-line-option.patch
-Patch906: 0906-Xorg-add-an-extra-module-path.patch
-Patch910: xorg-1.13.0-link-tirpc.patch
+Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
+Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
+Patch904:	0904-LED-behavior-fixes.patch
+Patch905:	0905-Add-noAutoDevices-command-line-option.patch
+Patch906:	0906-Xorg-add-an-extra-module-path.patch
+Patch910:	xorg-1.13.0-link-tirpc.patch
 
 # Other patches
 Patch1000:	use-new-pixman-api.diff
@@ -205,19 +205,20 @@ X11 servers.
 
 #------------------------------------------------------------------------------
 
-%package devel
-Summary: Development files for %{name}
-Group: Development/X11
-License: MIT
+%package	devel
+Summary:	Development files for %{name}
+Group:		Development/X11
+License:	MIT
 
 %define oldxorgnamedevel  %mklibname xorg-x11
-Conflicts: %{oldxorgnamedevel}-devel < 7.0
-Obsoletes: x11-server13-devel <= 1.2.99.905
-Requires: pkgconfig(pixman-1) >= 0.9.5
-Requires: libpciaccess-devel
-Requires: libxkbfile-devel
-Requires: libxext-devel >= 1.1
-Requires: pkgconfig(dri)
+
+Conflicts:	%{oldxorgnamedevel}-devel < 7.0
+Obsoletes:	x11-server13-devel <= 1.2.99.905
+Requires:	pkgconfig(pixman-1) >= 0.9.5
+Requires:	libpciaccess-devel
+Requires:	libxkbfile-devel
+Requires:	libxext-devel >= 1.1
+Requires:	pkgconfig(dri)
 
 %description devel
 Development files for %{name}.
@@ -237,42 +238,40 @@ fi
 #------------------------------------------------------------------------------
 
 %package common
-Summary: X server common files
-Group: System/X11
-License: MIT
-Provides: XFree86 = 7.0.0
-Conflicts: xorg-x11 <= 6.9.0-12mdk
-Obsoletes: x11-server13-common <= 1.2.99.905
-Obsoletes: x11-server-xprt <= 1.3.0.0-2mdv2008.0
-Requires: rgb
+Summary:	X server common files
+Group:		System/X11
+License:	MIT
+Provides:	XFree86 = 7.0.0
+Conflicts:	xorg-x11 <= 6.9.0-12mdk
+Obsoletes:	x11-server13-common <= 1.2.99.905
+Obsoletes:	x11-server-xprt <= 1.3.0.0-2mdv2008.0
+Requires:	rgb
 # for 'fixed' and 'cursor' fonts
-Requires: x11-font-misc-misc
-Requires: x11-font-cursor-misc
-Requires: x11-font-alias
-Requires: x11-data-xkbdata
-Requires: xkbcomp
+Requires:	x11-font-misc-misc
+Requires:	x11-font-cursor-misc
+Requires:	x11-font-alias
+Requires:	x11-data-xkbdata
+Requires:	xkbcomp
 %if %{enable_udev}
-Requires: udev
+Requires:	udev
 %endif
-Requires(post): update-alternatives >= 1.9.0
-Requires(postun): update-alternatives
+Requires(post):	update-alternatives >= 1.9.0
+Requires(postun):	update-alternatives
 # see comment about /usr/X11R6/lib below
-Conflicts: filesystem < 2.1.8
+Conflicts:	filesystem < 2.1.8
 # nvidia-71xx does not support X.org server >= 1.5
-Conflicts: x11-driver-video-nvidia71xx < 71.86.09-2
+Conflicts:	x11-driver-video-nvidia71xx < 71.86.09-2
 # old fglrx does not support X.org server >= 1.7
-Conflicts: x11-driver-video-fglrx < 8.720
+Conflicts:	x11-driver-video-fglrx < 8.720
 # Fix: missing conflicts to allow upgrade from 2008.0 to cooker
 # http://qa.mandriva.com/show_bug.cgi?id=36651
-Conflicts: x11-driver-video-nvidia-current <= 100.14.19
+Conflicts:	x11-driver-video-nvidia-current <= 100.14.19
+Conflicts:	x11-xorg1_5-server < 1.5.3-4
 
-Conflicts: x11-xorg1_5-server < 1.5.3-4
-
-
-Provides: xserver-abi(ansic-%{ansic_major}) = %{ansic_minor}
-Provides: xserver-abi(videodrv-%{videodrv_major}) = %{videodrv_minor}
-Provides: xserver-abi(xinput-%{xinput_major}) = %{xinput_minor}
-Provides: xserver-abi(extension-%{extension_major}) = %{extension_minor}
+Provides:	xserver-abi(ansic-%{ansic_major}) = %{ansic_minor}
+Provides:	xserver-abi(videodrv-%{videodrv_major}) = %{videodrv_minor}
+Provides:	xserver-abi(xinput-%{xinput_major}) = %{xinput_minor}
+Provides:	xserver-abi(extension-%{extension_major}) = %{extension_minor}
 
 %description common
 X server common files.
@@ -370,28 +369,28 @@ fi
 #------------------------------------------------------------------------------
 
 %package xorg
-Summary: X.org X11 server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
-Requires: x11-data-xkbdata > 1.3-5
-Requires: x11-font-alias
-Requires: libx11-common
+Summary:	X.org X11 server
+Group:		System/X11
+License:	MIT
+Requires:	x11-server-common = %{version}-%{release}
+Requires:	x11-data-xkbdata > 1.3-5
+Requires:	x11-font-alias
+Requires:	libx11-common
 %if %{enable_udev} || %{enable_hal}
-Requires: x11-driver-input-evdev
-Conflicts: drakx-kbd-mouse-x11 < 0.66
+Requires:	x11-driver-input-evdev
+Conflicts:	drakx-kbd-mouse-x11 < 0.66
 %else
-Requires: x11-driver-input-mouse
-Requires: x11-driver-input-keyboard
+Requires:	x11-driver-input-mouse
+Requires:	x11-driver-input-keyboard
 %endif
-Conflicts: compiz < 0.5.0-1mdv2007.1
-Obsoletes: x11-server13-xorg <= 1.2.99.905
+Conflicts:	compiz < 0.5.0-1mdv2007.1
+Obsoletes:	x11-server13-xorg <= 1.2.99.905
 
 # minimum libxfont needed for xserver-1.9:
-Requires: libxfont >= 1.4.2
+Requires:	libxfont >= 1.4.2
 
 # This package was used in the transition to modular:
-Obsoletes: xorg-x11-server
+Obsoletes:	xorg-x11-server
 
 %description xorg
 x11-server-xorg is the new generation of X server from X.Org.
@@ -413,14 +412,14 @@ x11-server-xorg is the new generation of X server from X.Org.
 #------------------------------------------------------------------------------
 
 %if %{enable_dmx}
-%package xdmx
-Summary: Distributed Multi-head X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
+%package	xdmx
+Summary:	Distributed Multi-head X server
+Group:		System/X11
+License:	MIT
+Requires:	x11-server-common = %{version}-%{release}
 
 # This package was used in the transition to modular:
-Obsoletes: xorg-x11-Xdmx
+Obsoletes:	xorg-x11-Xdmx
 
 %description xdmx
 Xdmx is a proxy X server that uses one or more other X servers
@@ -448,13 +447,13 @@ and standard and/or commonly available X server extensions.
 #------------------------------------------------------------------------------
 
 %package xnest
-Summary: A nested X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
+Summary:	A nested X server
+Group:		System/X11
+License:	MIT
+Requires:	x11-server-common = %{version}-%{release}
 
 # This package was used in the transition to modular:
-Obsoletes: xorg-x11-Xnest
+Obsoletes:	xorg-x11-Xnest
 
 %description xnest
 Xnest is an X Window System server which runs in an X window.
@@ -474,15 +473,15 @@ testing purposes).
 #------------------------------------------------------------------------------
 
 %package xvfb
-Summary: X virtual framebuffer server
-Group: System/X11
+Summary:	X virtual framebuffer server
+Group:		System/X11
 # xvfb-run is GPLv2, rest is MIT
-License: MIT and GPLv2
-Requires: x11-server-common = %{version}-%{release}
-Requires: xauth
+License:	MIT and GPLv2
+Requires:	x11-server-common = %{version}-%{release}
+Requires:	xauth
 
 # This package was used in the transition to modular:
-Obsoletes: xorg-x11-Xvfb
+Obsoletes:	xorg-x11-Xvfb
 
 %description xvfb
 Xvfb (X Virtual Frame Buffer) is an X Windows System server
@@ -509,11 +508,11 @@ install Xvfb for that purpose.
 #------------------------------------------------------------------------------
 
 %if %{enable_kdrive}
-%package xephyr
-Summary: KDrive Xephyr X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
+%package	xephyr
+Summary:	KDrive Xephyr X server
+Group:		System/X11
+License:	MIT
+Requires:	x11-server-common = %{version}-%{release}
 
 %description xephyr
 KDrive (formerly known as TinyX) is a light-weight X server targetting specific
@@ -542,11 +541,11 @@ Possible uses include:
 #------------------------------------------------------------------------------
 
 %if %{enable_xfake}
-%package xfake
-Summary: KDrive fake X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
+%package	xfake
+Summary:	KDrive fake X server
+Group:		System/X11
+License:	MIT
+Requires:	x11-server-common = %{version}-%{release}
 
 %description xfake
 KDrive (formerly known as TinyX) is a light-weight X server targetting specific
@@ -563,11 +562,11 @@ This KDrive server is targetted for testing purposes.
 #------------------------------------------------------------------------------
 
 %if %{enable_xfbdev}
-%package xfbdev
-Summary: KDrive fbdev X server
-Group: System/X11
-License: MIT
-Requires: x11-server-common = %{version}-%{release}
+%package	xfbdev
+Summary:	KDrive fbdev X server
+Group:		System/X11
+License:	MIT
+Requires:	x11-server-common = %{version}-%{release}
 
 %description xfbdev
 KDrive (formerly known as TinyX) is a light-weight X server targetting specific
@@ -586,11 +585,11 @@ This KDrive server is targetted for being used on top of linux framebuffer.
 %define xserver_source_dir %{_datadir}/%{name}-source
 
 %package source
-Summary: Xserver source code required to build unofficial servers
-Group: Development/X11
-License: MIT
+Summary:	Xserver source code required to build unofficial servers
+Group:		Development/X11
+License:	MIT
 # (pz) our build system doesn't like mixing arch with noarch yet
-#BuildArch: noarch
+BuildArch: noarch
 
 %description source
 Xserver source code needed to build unofficial servers, like Xvnc.
@@ -652,7 +651,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 %configure2_5x \
 	--with-log-dir=%{_logdir} \
-	--with-os-vendor="%_vendor" \
+	--with-os-vendor="%{_vendor}" \
 	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 	--with-vendor-web="http://qa.mandriva.com" \
 	--with-extra-module-dir=%{extra_module_dir} \
@@ -739,7 +738,6 @@ pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
@@ -747,7 +745,7 @@ ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
 ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
 
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-install -m 0644 %SOURCE1 %{buildroot}%{_sysconfdir}/pam.d/xserver
+install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pam.d/xserver
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
@@ -773,7 +771,7 @@ cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
 EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
-install -m 0755 %SOURCE2 %{buildroot}%{_bindir}/xvfb-run
+install -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/xvfb-run
 
 %if %enable_hal
 # autoconfigure keyboard layout based on system settings
@@ -802,6 +800,6 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
 find %{buildroot} -type f -name "*~" -exec rm -f {} ';'
 
 # remove DTrace related files (until DTrace exists on Linux)
-rm -rf %{buildroot}%_docdir/xorg-server/Xserver-DTrace*
+rm -rf %{buildroot}%{_docdir}/xorg-server/Xserver-DTrace*
 
 %files
