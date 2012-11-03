@@ -34,7 +34,7 @@
 %define extension_major 7
 %define extension_minor 0
 
-%define rel 3
+%define rel 4
 
 Name: x11-server
 Version: 1.13.0
