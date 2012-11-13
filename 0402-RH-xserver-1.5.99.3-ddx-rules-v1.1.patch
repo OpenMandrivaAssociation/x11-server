@@ -1,0 +1,29 @@
+From 587df9f9958e148a9063a75ea58bb7ad63f055e8 Mon Sep 17 00:00:00 2001
+From: Colin Guthrie <cguthrie@mandriva.org>
+Date: Thu, 1 Jan 2009 17:36:22 +0000
+Subject: [PATCH 402/403] RH: xserver-1.5.99.3-ddx-rules v1.1
+
+---
+ hw/xfree86/common/xf86Config.c |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/hw/xfree86/common/xf86Config.c b/hw/xfree86/common/xf86Config.c
+index 40f65bd..88f3dc3 100644
+--- a/hw/xfree86/common/xf86Config.c
++++ b/hw/xfree86/common/xf86Config.c
+@@ -985,6 +985,12 @@ configServerFlags(XF86ConfFlagsPtr flagsconf, XF86OptionPtr layoutopts)
+ #endif
+     XkbSetRulesDflts(&set);
+ 
++    /* AEI on? Then we're not using kbd, so use the evdev rules set. */
++#ifdef XKB
++    XkbSetRulesDflts(((xf86Info.allowEmptyInput) ? "evdev" : "base"),
++                     "pc105", "us", NULL, NULL);
++#endif
++
+     xf86Info.useDefaultFontPath = TRUE;
+     xf86Info.useDefaultFontPathFrom = X_DEFAULT;
+     if (xf86GetOptValBool(FlagOptions, FLAG_USE_DEFAULT_FONT_PATH, &value)) {
+-- 
+1.6.4.4
+

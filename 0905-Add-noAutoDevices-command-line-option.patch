@@ -1,0 +1,65 @@
+diff --git a/hw/xfree86/common/xf86.h b/hw/xfree86/common/xf86.h
+index bb2903d..f3e39b4 100644
+--- a/hw/xfree86/common/xf86.h
++++ b/hw/xfree86/common/xf86.h
+@@ -80,6 +80,7 @@ extern _X_EXPORT confDRIRec xf86ConfigDRI;
+ extern _X_EXPORT Bool xf86DRI2Enabled(void);
+ 
+ extern _X_EXPORT Bool VTSwitchEnabled;  /* kbd driver */
++extern _X_EXPORT Bool xf86AutoAddDevices;
+ 
+ #define XF86SCRNINFO(p) xf86ScreenToScrn(p)
+ 
+diff --git a/hw/xfree86/common/xf86Config.c b/hw/xfree86/common/xf86Config.c
+index ce76e39..9c8b236 100644
+--- a/hw/xfree86/common/xf86Config.c
++++ b/hw/xfree86/common/xf86Config.c
+@@ -830,7 +830,11 @@ configServerFlags(XF86ConfFlagsPtr flagsconf, XF86OptionPtr layoutopts)
+         xf86Info.useSIGIO = FALSE;
+     }
+ 
+-    if (xf86IsOptionSet(FlagOptions, FLAG_AUTO_ADD_DEVICES)) {
++    if (xf86AutoAddDevices == FALSE) {
++	xf86Info.autoAddDevices = FALSE;
++	from = X_CMDLINE;
++    }
++    else if (xf86IsOptionSet(FlagOptions, FLAG_AUTO_ADD_DEVICES)) {
+         xf86GetOptValBool(FlagOptions, FLAG_AUTO_ADD_DEVICES,
+                           &xf86Info.autoAddDevices);
+         from = X_CONFIG;
+diff --git a/hw/xfree86/common/xf86Globals.c b/hw/xfree86/common/xf86Globals.c
+index 7df7a80..8d2e969 100644
+--- a/hw/xfree86/common/xf86Globals.c
++++ b/hw/xfree86/common/xf86Globals.c
+@@ -160,6 +160,7 @@ InputDriverPtr *xf86InputDriverList = NULL;
+ int xf86NumInputDrivers = 0;
+ int xf86NumScreens = 0;
+ int xf86NumGPUScreens = 0;
++Bool xf86AutoAddDevices = TRUE;
+ 
+ const char *xf86VisualNames[] = {
+     "StaticGray",
+diff --git a/hw/xfree86/common/xf86Init.c b/hw/xfree86/common/xf86Init.c
+index e4a6b86..6026cce 100644
+--- a/hw/xfree86/common/xf86Init.c
++++ b/hw/xfree86/common/xf86Init.c
+@@ -1452,6 +1452,11 @@ ddxProcessArgument(int argc, char **argv, int i)
+         return 1;
+     }
+ 
++    if (!strcmp(argv[i], "-noAutoAddDevices")) {
++	xf86AutoAddDevices = FALSE;
++	return 1;
++    }
++
+     /* OS-specific processing */
+     return xf86ProcessArgument(argc, argv, i);
+ }
+@@ -1524,6 +1529,7 @@ ddxUseMsg(void)
+     ErrorF
+         ("-novtswitch            don't automatically switch VT at reset & exit\n");
+     ErrorF("-sharevts              share VTs with another X server\n");
++    ErrorF("-noAutoAddDevices      do not add devices through HAL events\n");
+     /* OS-specific usage */
+     xf86UseMsg();
+     ErrorF("\n");

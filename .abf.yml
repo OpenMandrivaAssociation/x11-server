@@ -1,0 +1,11 @@
+sources:
+  "10-x11-keymap.fdi:"	a7eff1664fc3303b70d6f18c73bca7c7bdeba6bc
+  "11-x11-mouse-quirks.fdi:"	a9591c33d8721ce5f72cc908ff0535b044052b4b
+  "61-x11-input.rules:"	6fac65557f97eefbbf9bbf0396b3454069e8c509
+  "mandriva-setup-keyboard-hal:"	5337e7e1ac758cc1d371607d0c6bd08d8546eee5
+  "mandriva-setup-keyboard-udev:"	72dbfca19cbd3ab5112e8d4105275bb7652dfc57
+  "x11-server.rpmlintrc:"	22d648d5f0a967a13092dbe61885af878269783e
+  "xorg-server-1.13.0.tar.bz2:"	b29aef6ab4924e2b034ccb26b289e929d61a2555
+  "xserver.pamd:"	4d673b29e06d2a94fc551bb1bb5faf8472d4bcaa
+  "xserver-sdk-abi-requires:"	60bc870bcadeff0073d716754b77aea257e34c75
+  "xvfb-run.sh:"	ee89077235584fa698dc9f020ab7eae86c6eba91
