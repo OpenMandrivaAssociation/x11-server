@@ -1,0 +1,3 @@
+# We fully expect to own /etc/X11 and legacy
+# links /usr/X11R6 and /usr/X11R6/lib...
+addFilter('E: standard-dir-owned-by-package')
