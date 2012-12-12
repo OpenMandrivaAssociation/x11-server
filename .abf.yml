@@ -1,3 +1,4 @@
----
-sources:
+removed_sources:
   xorg-server-1.13.0.901.tar.bz2: e863eed21cd75dfb3b6cfab5cdede72ac2057e13
+sources:
+  xorg-server-1.13.0.902.tar.bz2: c85722aec3e7acdf639716bf8604355f56d3eaac
