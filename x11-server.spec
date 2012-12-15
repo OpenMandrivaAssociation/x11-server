@@ -21,7 +21,6 @@
 %define extra_module_dir        %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules	%{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define version 1.13.0.902
 %define rel 1
 
 # ABI versions.  Have to keep these manually in sync with the source
@@ -36,7 +35,7 @@
 %define extension_minor 0
 
 Name: x11-server
-Version: %{version}
+Version: 1.13.1
 %if %{git}
 Release: 0.%{git}.%{rel}
 %else
@@ -79,6 +78,7 @@ Obsoletes: %{name}-xfake < %{version}-%{release}
 # FIXME: build with systemtap installed is broken
 BuildConflicts: systemtap
 
+BuildRequires: pkgconfig(libtirpc)
 BuildRequires: libmesagl-devel >= 7.1
 BuildRequires: pam-devel
 BuildRequires: libpciaccess-devel
