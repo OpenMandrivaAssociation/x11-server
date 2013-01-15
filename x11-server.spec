@@ -325,6 +325,7 @@ Requires: x11-font-alias
 Requires: libx11-common
 %if %{enable_udev}
 Requires: x11-driver-input-evdev
+Requires:	udev
 Conflicts: drakx-kbd-mouse-x11 < 0.66
 %else
 Requires: x11-driver-input-mouse
