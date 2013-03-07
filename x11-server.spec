@@ -29,7 +29,7 @@
 %define ansic_minor 4
 %define videodrv_major 14
 %define videodrv_minor 1
-%define xinput_major 18
+%define xinput_major 19
 %define xinput_minor 0
 %define extension_major 7
 %define extension_minor 0
