@@ -30,7 +30,7 @@
 %define videodrv_major 14
 %define videodrv_minor 1
 %define xinput_major 19
-%define xinput_minor 0
+%define xinput_minor 1
 %define extension_major 7
 %define extension_minor 0
 
