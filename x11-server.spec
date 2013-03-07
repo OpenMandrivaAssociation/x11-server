@@ -27,7 +27,7 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 13
+%define videodrv_major 14
 %define videodrv_minor 1
 %define xinput_major 18
 %define xinput_minor 0
