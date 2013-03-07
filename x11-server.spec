@@ -168,7 +168,6 @@ Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch3000:	exa-glyphs-fallback.diff
 
 # Other patches
-Patch1000:	use-new-pixman-api.diff
 
 # Do not crash if Xv is not initialized (patch from xorg-devel ML)
 # The crash happened when v4l was loaded and xv was not registered,
