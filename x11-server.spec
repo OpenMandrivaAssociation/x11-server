@@ -173,6 +173,7 @@ Patch3000:	exa-glyphs-fallback.diff
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
 Patch1001: 1001-do-not-crash-if-xv-not-initialized.patch
+Patch1002:	xserver_xorg-server-aarch64-support.patch
 
 %description
 X11 servers.
