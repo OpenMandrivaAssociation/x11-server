@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   xorg-server-1.14.0.tar.bz2: 62b35456ece3e2bb9944b0c1f8b880ec02aab91e
+sources:
+  xorg-server-1.14.1.tar.bz2: f67a3a250216ab40f0e31648151ee1a457b70a3a
