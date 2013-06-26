@@ -35,7 +35,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.14.1
+Version:	1.14.2
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
@@ -79,23 +79,23 @@ Obsoletes:	%{name}-xfake < %{version}-%{release}
 BuildConflicts: systemtap
 
 BuildRequires:	pkgconfig(libtirpc)
-BuildRequires:	libmesagl-devel >= 7.1
+BuildRequires:	pkgconfig(gl)
 BuildRequires:	pam-devel
-BuildRequires:	libpciaccess-devel
+BuildRequires:	pkgconfig(pciaccess)
 BuildRequires:	pkgconfig(pixman-1) >= 0.9.5
-BuildRequires:	libxau-devel >= 1.0.0
-BuildRequires:	libxaw-devel >= 1.0.1
-BuildRequires:	libxdmcp-devel >= 1.0.0
-BuildRequires:	libxext-devel >= 1.1
-BuildRequires:	libxfixes-devel
-BuildRequires:	libxfont-devel >= 1.2.8-2mdv
-BuildRequires:	libxi-devel >= 1.1.3
-BuildRequires:	libxkbfile-devel >= 1.0.4
-BuildRequires:	libxmu-devel >= 1.0.0
-BuildRequires:	libxpm-devel >= 3.5.4.2
-BuildRequires:	libxrender-devel >= 0.9.4
-BuildRequires:	libxres-devel >= 1.0.0
-BuildRequires:	libxv-devel
+BuildRequires:	pkgconfig(xau) >= 1.0.0
+BuildRequires:	pkgconfig(xaw7) >= 1.0.1
+BuildRequires:	pkgconfig(xdmcp) >= 1.0.0
+BuildRequires:	pkgconfig(xext) >= 1.1
+BuildRequires:	pkgconfig(xfixes)
+BuildRequires:	pkgconfig(xfont) >= 1.2.8-2mdv
+BuildRequires:	pkgconfig(xi) >= 1.1.3
+BuildRequires:	pkgconfig(xkbfile) >= 1.0.4
+BuildRequires:	pkgconfig(xmu) >= 1.0.0
+BuildRequires:	pkgconfig(xpm) >= 3.5.4.2
+BuildRequires:	pkgconfig(xrender) >= 0.9.4
+BuildRequires:	pkgconfig(xres) >= 1.0.0
+BuildRequires:	pkgconfig(xv)
 BuildRequires:	x11-font-util >= 1.1
 BuildRequires:	x11-proto-devel >= 7.6-4
 BuildRequires:	x11-util-macros >= 1.15
