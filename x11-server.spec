@@ -130,7 +130,7 @@ BuildRequires:	xmlto
 BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
-BuildRequires:	glib2-devel
+BuildRequires:	pkgconfig(glib-2.0)
 # Instructions to setup your repository clone
 # git://anongit.freedesktop.org/git/xorg/xserver
 # git checkout origin/server-1.7-branch
