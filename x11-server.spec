@@ -174,6 +174,7 @@ Patch3000:	exa-glyphs-fallback.diff
 # for example on RV610 with radeon driver
 Patch1001: 1001-do-not-crash-if-xv-not-initialized.patch
 Patch1002:	xserver_xorg-server-aarch64-support.patch
+Patch1003:	arm32_line_removed.patch
 
 %description
 X11 servers.

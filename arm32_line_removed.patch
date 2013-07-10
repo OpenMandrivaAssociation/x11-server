@@ -1,0 +1,20 @@
+diff --git a/include/servermd.h b/include/servermd.h
+index 023aa24..6f61895 100644
+--- a/include/servermd.h
++++ b/include/servermd.h
+@@ -83,13 +83,13 @@ SOFTWARE.
+ 
+ #endif                          /* __avr32__ */
+ 
+-#ifdef __arm32__
++#ifdef __arm__
+ 
+ #define IMAGE_BYTE_ORDER        LSBFirst
+ #define BITMAP_BIT_ORDER        LSBFirst
+ #define GLYPHPADBYTES           4
+ 
+-#endif                          /* __arm32__ */
++#endif                          /* __arm__ */
+ 
+ #if defined(__nds32__)
+
