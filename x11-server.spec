@@ -21,7 +21,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 1
+%define rel 2
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -588,7 +588,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--with-log-dir=%{_logdir} \
 	--with-os-vendor="%_vendor" \
 	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
-	--with-vendor-web="http://qa.mandriva.com" \
+	--with-vendor-web="http://issues.openmandriva.org" \
 	--with-extra-module-dir=%{extra_module_dir} \
 		%if %{with_debug}
 		--enable-debug \
