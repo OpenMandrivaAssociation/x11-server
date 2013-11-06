@@ -21,7 +21,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 3
+%define rel 4
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -76,7 +76,7 @@ Obsoletes:	%{name}-xfake < %{version}-%{release}
 %endif
 
 # FIXME: build with systemtap installed is broken
-BuildConflicts: systemtap
+BuildConflicts:	systemtap
 
 BuildRequires:	pkgconfig(libtirpc)
 BuildRequires:	pkgconfig(gl)
@@ -292,7 +292,7 @@ fi
 %{_bindir}/cvt
 %if %{enable_udev}
 /sbin/mandriva-setup-keyboard
-/lib/udev/rules.d/61-x11-input.rules
+#/lib/udev/rules.d/61-x11-input.rules
 %endif
 %if %{enable_dmx}
 %{_bindir}/vdltodmx
@@ -663,7 +663,6 @@ pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
@@ -671,7 +670,7 @@ ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
 ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
 
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-install -m 0644 %SOURCE1 %{buildroot}%{_sysconfdir}/pam.d/xserver
+install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pam.d/xserver
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
@@ -697,13 +696,16 @@ cat > %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL/standard.conf << EOF
 EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
-install -m 0755 %SOURCE2 %{buildroot}%{_bindir}/xvfb-run
+install -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/xvfb-run
 
 %if %enable_udev
 mkdir -p %{buildroot}/sbin
 mkdir -p %{buildroot}/lib/udev/rules.d/
 install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
-install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
+# (tpg) do not install this as running mandriva-setup-keyboard 
+# with systemd configuration before X start produces keyboard layout issues
+# https://issues.openmandriva.org/show_bug.cgi?id=274
+#install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
 %endif
 
 # Make the source package
