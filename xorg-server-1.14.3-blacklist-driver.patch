@@ -1,0 +1,52 @@
+--- xorg-server-1.14.3/hw/xfree86/common/xf86Configure.c.omv~	2013-11-18 20:39:26.180731622 +0100
++++ xorg-server-1.14.3/hw/xfree86/common/xf86Configure.c	2013-11-18 20:55:28.955695278 +0100
+@@ -528,6 +528,28 @@ DoConfigure(void)
+     XF86ConfigPtr xf86config = NULL;
+     char **vlist, **vl;
+     int *dev2screen;
++    int cmdlineFd;
++    char *blacklist = NULL;
++
++    cmdlineFd = open("/proc/cmdline", O_RDONLY);
++    if(cmdlineFd >= 0) {
++	    int size = 0;
++	    blacklist = (char*)malloc(1024);
++	    while(read(cmdlineFd, blacklist+size, 1024) == 1024) {
++		    blacklist = (char *)realloc(blacklist, (++size)*1024+1024);
++	    }
++	    close(cmdlineFd);
++	    if(!strstr(blacklist, "xorg.blacklist=")) {
++		    free(blacklist);
++		    blacklist = NULL;
++	    } else {
++		    memmove(blacklist, strstr(blacklist, "xorg.blacklist=")+15, strlen(blacklist)-15);
++		    if(strchr(blacklist, ' '))
++			    *strchr(blacklist, ' ')=0;
++		    if(strchr(blacklist, '\n'))
++			    *strchr(blacklist, '\n')=0;
++	    }
++    }
+ 
+     vlist = xf86DriverlistFromCompile();
+ 
+@@ -555,12 +577,20 @@ DoConfigure(void)
+         Bool found_screen;
+         DriverRec *const drv = xf86DriverList[CurrentDriver];
+ 
++        if (blacklist && drv->driverName) {
++            if(strstr(blacklist, drv->driverName))
++                continue;
++        }
++
+         found_screen = xf86CallDriverProbe(drv, TRUE);
+         if (found_screen && drv->Identify) {
+             (*drv->Identify) (0);
+         }
+     }
+ 
++    if (blacklist)
++        free(blacklist);
++
+     if (nDevToConfig <= 0) {
+         ErrorF("No devices to configure.  Configuration failed.\n");
+         goto bail;

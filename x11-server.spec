@@ -21,7 +21,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 4
+%define rel 5
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -163,6 +163,7 @@ Patch906:	0906-Xorg-add-an-extra-module-path.patch
 Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
 Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
+Patch911:	xorg-server-1.14.3-blacklist-driver.patch
 
 # (tv) fix issues with new cairo (fdo#47266):
 Patch3000:	exa-glyphs-fallback.diff
