@@ -97,6 +97,16 @@ BuildRequires:	pkgconfig(xrender) >= 0.9.4
 BuildRequires:	pkgconfig(xres) >= 1.0.0
 BuildRequires:	pkgconfig(xshmfence) >= 1.1
 BuildRequires:	pkgconfig(xv)
+BuildRequires:	pkgconfig(xcb)
+BuildRequires:	pkgconfig(xcb-aux)
+BuildRequires:	pkgconfig(xcb-icccm)
+BuildRequires:	pkgconfig(xcb-image)
+BuildRequires:	pkgconfig(xcb-shape)
+BuildRequires:	pkgconfig(xcb-keysyms)
+BuildRequires:	pkgconfig(xcb-xv)
+BuildRequires:	pkgconfig(libdrm)
+BuildRequires:	pkgconfig(xcb-glx)
+BuildRequires:	pkgconfig(xcb-xf86dri) > 1.6
 BuildRequires:	x11-font-util >= 1.1
 BuildRequires:	x11-proto-devel >= 7.6-4
 BuildRequires:	x11-util-macros >= 1.15
