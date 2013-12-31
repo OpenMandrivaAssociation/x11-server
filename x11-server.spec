@@ -21,21 +21,21 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 5
+%define rel 1
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 14
-%define videodrv_minor 1
-%define xinput_major 19
-%define xinput_minor 1
-%define extension_major 7
+%define videodrv_major 15
+%define videodrv_minor 0
+%define xinput_major 20
+%define xinput_minor 0
+%define extension_major 8
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.14.3
+Version:	1.15.0
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
@@ -95,7 +95,18 @@ BuildRequires:	pkgconfig(xmu) >= 1.0.0
 BuildRequires:	pkgconfig(xpm) >= 3.5.4.2
 BuildRequires:	pkgconfig(xrender) >= 0.9.4
 BuildRequires:	pkgconfig(xres) >= 1.0.0
+BuildRequires:	pkgconfig(xshmfence) >= 1.1
 BuildRequires:	pkgconfig(xv)
+BuildRequires:	pkgconfig(xcb)
+BuildRequires:	pkgconfig(xcb-aux)
+BuildRequires:	pkgconfig(xcb-icccm)
+BuildRequires:	pkgconfig(xcb-image)
+BuildRequires:	pkgconfig(xcb-shape)
+BuildRequires:	pkgconfig(xcb-keysyms)
+BuildRequires:	pkgconfig(xcb-xv)
+BuildRequires:	pkgconfig(libdrm)
+BuildRequires:	pkgconfig(xcb-glx)
+BuildRequires:	pkgconfig(xcb-xf86dri) > 1.6
 BuildRequires:	x11-font-util >= 1.1
 BuildRequires:	x11-proto-devel >= 7.6-4
 BuildRequires:	x11-util-macros >= 1.15
@@ -174,7 +185,6 @@ Patch3000:	exa-glyphs-fallback.diff
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
 Patch1001: 1001-do-not-crash-if-xv-not-initialized.patch
-Patch1002:	xserver_xorg-server-aarch64-support.patch
 Patch1003:	arm32_line_removed.patch
 
 %description
@@ -356,6 +366,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %if %{enable_udev}
 %{_datadir}/X11/xorg.conf.d/10-evdev.conf
 %endif
+%{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
 #------------------------------------------------------------------------------
 
@@ -591,73 +602,75 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 	--with-vendor-web="%{bugurl}" \
 	--with-extra-module-dir=%{extra_module_dir} \
-		%if %{with_debug}
-		--enable-debug \
-		%else
-		--disable-debug \
-		%endif
-		%if %{enable_builddocs}
-		--enable-builddocs \
-		%else
-		--disable-builddocs \
-		%endif
-		%if %{enable_udev}
-		--enable-config-udev \
-		%else
-		--disable-config-udev \
-		%endif
-		--disable-strict-compilation \
-		--disable-install-libxf86config \
-		--enable-composite \
-		--enable-xres \
-		--enable-record \
-		--enable-xv \
-		--enable-xvmc \
-		--enable-dga \
-		--enable-screensaver \
-		--enable-xdmcp \
-		--enable-xdm-auth-1 \
-		--enable-glx \
-		--enable-aiglx \
-		--enable-glx-tls \
-		--enable-dri \
-		--enable-xinerama \
-		--enable-xf86vidmode \
-		--enable-xace \
-		--enable-xcsecurity \
-		--enable-xf86bigfont \
-		--enable-dpms \
-		--disable-tslib \
-		--enable-dbe \
-		--enable-xfree86-utils \
-		--enable-xorg \
-		%if %enable_dmx
-		--enable-dmx \
-		%else
-		--disable-dmx \
-		%endif
-		--enable-xvfb \
-		--enable-xnest \
-		--disable-xwin \
-		--enable-kdrive \
-		%if %enable_xfake
-		--enable-xfake \
-		%else
-		--disable-xfake \
-		%endif
-		--enable-xephyr \
-		--disable-install-setuid \
-		--enable-secure-rpc \
-		--enable-xwrapper \
-		--enable-pam \
-		%if %{enable_dbus}
-		--enable-config-dbus \
-		%else
-		--disable-config-dbus \
-		%endif
-		--disable-config-hal \
-		--with-sha1=libcrypto \
-		--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
+	%if %{with_debug}
+	--enable-debug \
+	%else
+	--disable-debug \
+	%endif
+	%if %{enable_builddocs}
+	--enable-builddocs \
+	%else
+	--disable-builddocs \
+	%endif
+	%if %{enable_udev}
+	--enable-config-udev \
+	%else
+	--disable-config-udev \
+	%endif
+	--disable-strict-compilation \
+	--disable-install-libxf86config \
+	--enable-composite \
+	--enable-xres \
+	--enable-record \
+	--enable-xv \
+	--enable-xvmc \
+	--enable-dga \
+	--enable-screensaver \
+	--enable-xdmcp \
+	--enable-xdm-auth-1 \
+	--enable-glx \
+	--enable-aiglx \
+	--enable-glx-tls \
+	--enable-dri \
+	--enable-dri2 \
+	--enable-dri3 \
+	--enable-xinerama \
+	--enable-xf86vidmode \
+	--enable-xace \
+	--enable-xcsecurity \
+	--enable-xf86bigfont \
+	--enable-dpms \
+	--disable-tslib \
+	--enable-dbe \
+	--enable-xfree86-utils \
+	--enable-xorg \
+	%if %enable_dmx
+	--enable-dmx \
+	%else
+	--disable-dmx \
+	%endif
+	--enable-xvfb \
+	--enable-xnest \
+	--disable-xwin \
+	--enable-kdrive \
+	%if %enable_xfake
+	--enable-xfake \
+	%else
+	--disable-xfake \
+	%endif
+	--enable-xephyr \
+	--disable-install-setuid \
+	--enable-secure-rpc \
+	--enable-xwrapper \
+	--enable-pam \
+	%if %{enable_dbus}
+	--enable-config-dbus \
+	%else
+	--disable-config-dbus \
+	%endif
+	--disable-config-hal \
+	--with-sha1=libcrypto \
+	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
