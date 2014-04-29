@@ -21,7 +21,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 2
+%define rel 3
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -54,6 +54,7 @@ Source2:	xvfb-run.sh
 Source5:	mandriva-setup-keyboard-udev
 Source6:	61-x11-input.rules
 Source7:	90-zap.conf
+Source8:	50-synaptics.conf
 # from RH/FC:
 # for requires generation in drivers
 Source30:	xserver-sdk-abi-requires
@@ -296,6 +297,7 @@ fi
 %dir %{_sysconfdir}/ld.so.conf.d/GL
 %dir %{_sysconfdir}/X11/xorg.conf.d
 %config(noreplace) %{_sysconfdir}/X11/xorg.conf.d/90-zap.conf
+%config(noreplace) %{_sysconfdir}/X11/xorg.conf.d/50-synaptics.conf
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 %if %{enable_dbus}
@@ -734,5 +736,8 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
 
 # And enable Ctrl+Alt+Backspace by default
 install -c -m 644 %{SOURCE7} %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/
+
+# Add synaptics configuration
+install -c -m 644 %{SOURCE8} %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/
 
 %files
