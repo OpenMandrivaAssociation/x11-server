@@ -600,9 +600,9 @@ find . -maxdepth 1 ! -name source ! -name '\.' -exec cp -r '{}' source \;
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
-%configure2_5x \
+%configure \
 	--with-log-dir=%{_logdir} \
-	--with-os-vendor="%_vendor" \
+	--with-os-vendor="%{_vendor}" \
 	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 	--with-vendor-web="%{bugurl}" \
 	--with-extra-module-dir=%{extra_module_dir} \
@@ -674,6 +674,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	%endif
 	--disable-config-hal \
 	--with-sha1=libcrypto \
+	--enable-xwayland \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
