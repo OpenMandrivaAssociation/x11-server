@@ -99,7 +99,7 @@ BuildRequires:	pkgconfig(xpm) >= 3.5.4.2
 BuildRequires:	pkgconfig(xrender) >= 0.9.4
 BuildRequires:	pkgconfig(xres) >= 1.0.0
 BuildRequires:	pkgconfig(xshmfence) >= 1.1
-#BuildRequires:	pkgconfig(epoxy)
+BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xcb)
