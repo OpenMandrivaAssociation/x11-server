@@ -174,7 +174,7 @@ Patch904:	0904-LED-behavior-fixes.patch
 Patch905:	0905-Add-noAutoDevices-command-line-option.patch
 Patch906:	0906-Xorg-add-an-extra-module-path.patch
 Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
-Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
+#Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.14.3-blacklist-driver.patch
 
@@ -186,7 +186,7 @@ Patch3000:	exa-glyphs-fallback.diff
 # Do not crash if Xv is not initialized (patch from xorg-devel ML)
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
-Patch1001: 1001-do-not-crash-if-xv-not-initialized.patch
+Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 Patch1003:	arm32_line_removed.patch
 
 %description
