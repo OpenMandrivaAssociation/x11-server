@@ -172,7 +172,7 @@ Patch906:	0906-Xorg-add-an-extra-module-path.patch
 Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
 #Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
-Patch911:	xorg-server-1.14.3-blacklist-driver.patch
+Patch911:	xorg-server-1.16.0-blacklist-driver.patch
 
 # (tv) fix issues with new cairo (fdo#47266):
 Patch3000:	exa-glyphs-fallback.diff

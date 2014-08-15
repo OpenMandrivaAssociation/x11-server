@@ -1,0 +1,53 @@
+diff -Naur xorg-server-1.16.0/hw/xfree86/common/xf86Configure.c xorg-server-1.16.0.tpg/hw/xfree86/common/xf86Configure.c
+--- xorg-server-1.16.0/hw/xfree86/common/xf86Configure.c	2014-04-16 20:24:00.000000000 +0000
++++ xorg-server-1.16.0.tpg/hw/xfree86/common/xf86Configure.c	2014-08-15 14:53:19.352473795 +0000
+@@ -545,6 +545,28 @@
+     XF86ConfigPtr xf86config = NULL;
+     const char **vlist, **vl;
+     int *dev2screen;
++    int cmdlineFd;
++    char *blacklist = NULL;
++
++    cmdlineFd = open("/proc/cmdline", O_RDONLY);
++    if(cmdlineFd >= 0) {
++           int size = 0;
++           blacklist = (char*)malloc(1024);
++           while(read(cmdlineFd, blacklist+size, 1024) == 1024) {
++                   blacklist = (char *)realloc(blacklist, (++size)*1024+1024);
++           }
++           close(cmdlineFd);
++           if(!strstr(blacklist, "xorg.blacklist=")) {
++                   free(blacklist);
++                   blacklist = NULL;
++           } else {
++                   memmove(blacklist, strstr(blacklist, "xorg.blacklist=")+15, strlen(blacklist)-15);
++                   if(strchr(blacklist, ' '))
++                           *strchr(blacklist, ' ')=0;
++                   if(strchr(blacklist, '\n'))
++                           *strchr(blacklist, '\n')=0;
++           }
++    }
+ 
+     vlist = xf86DriverlistFromCompile();
+ 
+@@ -572,12 +594,20 @@
+         Bool found_screen;
+         DriverRec *const drv = xf86DriverList[CurrentDriver];
+ 
++        if (blacklist && drv->driverName) {
++            if(strstr(blacklist, drv->driverName))
++                continue;
++        }
++
+         found_screen = xf86CallDriverProbe(drv, TRUE);
+         if (found_screen && drv->Identify) {
+             (*drv->Identify) (0);
+         }
+     }
+ 
++    if (blacklist)
++        free(blacklist);
++
+     if (nDevToConfig <= 0) {
+         ErrorF("No devices to configure.  Configuration failed.\n");
+         goto bail;

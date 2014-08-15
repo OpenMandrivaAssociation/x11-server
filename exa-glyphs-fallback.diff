@@ -2,7 +2,7 @@ diff --git a/exa/exa_glyphs.c b/exa/exa_glyphs.c
 index 5c46ec9..1a41c5a 100644
 --- a/exa/exa_glyphs.c
 +++ b/exa/exa_glyphs.c
-@@ -686,6 +686,7 @@ exaGlyphs(CARD8 op,
+@@ -686,6 +686,7 @@
      PixmapPtr pMaskPixmap = 0;
      PicturePtr pMask = NULL;
      ScreenPtr pScreen = pDst->pDrawable->pScreen;
@@ -10,7 +10,7 @@ index 5c46ec9..1a41c5a 100644
      int width = 0, height = 0;
      int x, y;
      int first_xOff = list->xOff, first_yOff = list->yOff;
-@@ -697,7 +698,6 @@ exaGlyphs(CARD8 op,
+@@ -697,7 +698,6 @@
      ExaGlyphBuffer buffer;
  
      if (maskFormat) {
@@ -18,7 +18,7 @@ index 5c46ec9..1a41c5a 100644
          GCPtr pGC;
          xRectangle rect;
  
-@@ -719,22 +719,20 @@ exaGlyphs(CARD8 op,
+@@ -719,22 +719,20 @@
                                                  maskFormat->depth,
                                                  CREATE_PIXMAP_USAGE_SCRATCH);
          if (!pMaskPixmap)
@@ -47,8 +47,8 @@ index 5c46ec9..1a41c5a 100644
 -
              /* The driver can't seem to composite to a8, let's try argb (but
               * without component-alpha) */
-             FreePicture((pointer) pMask, (XID) 0);
-@@ -748,15 +746,25 @@ exaGlyphs(CARD8 op,
+             FreePicture((void *) pMask, (XID) 0);
+@@ -748,15 +746,25 @@
                                                      maskFormat->depth,
                                                      CREATE_PIXMAP_USAGE_SCRATCH);
              if (!pMaskPixmap)
@@ -72,14 +72,14 @@ index 5c46ec9..1a41c5a 100644
 +	      (op != PictOpOver ||
 +	       !(*pExaScr->info->CheckComposite) (PictOpOutReverse, pSrc, pMask, pDst) ||
 +	       !(*pExaScr->info->CheckComposite) (PictOpOver, pSrc, pMask, pDst))))) {
-+	    FreePicture ((pointer) pMask, (XID) 0);
++	    FreePicture ((void *) pMask, (XID) 0);
 +	    goto fallback;
 +	}
 +
          pGC = GetScratchGC(pMaskPixmap->drawable.depth, pScreen);
          ValidateGC(&pMaskPixmap->drawable, pGC);
          rect.x = 0;
-@@ -769,6 +777,12 @@ exaGlyphs(CARD8 op,
+@@ -769,6 +777,12 @@
          y = -extents.y1;
      }
      else {
@@ -92,10 +92,10 @@ index 5c46ec9..1a41c5a 100644
          x = 0;
          y = 0;
      }
-@@ -834,6 +848,10 @@ exaGlyphs(CARD8 op,
+@@ -834,6 +848,10 @@
                           xSrc + x - first_xOff,
                           ySrc + y - first_yOff, 0, 0, x, y, width, height);
-         FreePicture((pointer) pMask, (XID) 0);
+         FreePicture((void *) pMask, (XID) 0);
 -        (*pScreen->DestroyPixmap) (pMaskPixmap);
      }
 +
