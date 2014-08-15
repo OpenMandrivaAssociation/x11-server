@@ -660,7 +660,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xwrapper \
 	--enable-pam \
 	--disable-config-hal \
-	--with-sha1=libc \
+	--with-sha1=libcrypto \
 	--enable-xwayland \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
