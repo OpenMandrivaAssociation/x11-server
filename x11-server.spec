@@ -4,8 +4,6 @@
 %define enable_dmx 1
 %define enable_kdrive 0
 %define enable_xfake 1
-%define enable_udev 1
-%define enable_dbus 0
 %define enable_builddocs 0
 # Do magic with .rpmsave named links
 %define pre_post_trans 1
@@ -27,9 +25,9 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 15
+%define videodrv_major 18
 %define videodrv_minor 0
-%define xinput_major 20
+%define xinput_major 21
 %define xinput_minor 0
 %define extension_major 8
 %define extension_minor 0
@@ -83,6 +81,9 @@ BuildConflicts:	systemtap
 BuildRequires:	pkgconfig(libtirpc)
 BuildRequires:	pkgconfig(gl)
 BuildRequires:	pam-devel
+BuildRequires:	pkgconfig(egl)
+BuildRequires:	pkgconfig(gbm)
+BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(pciaccess)
 BuildRequires:	pkgconfig(pixman-1) >= 0.9.5
 BuildRequires:	pkgconfig(xau) >= 1.0.0
@@ -98,6 +99,8 @@ BuildRequires:	pkgconfig(xpm) >= 3.5.4.2
 BuildRequires:	pkgconfig(xrender) >= 0.9.4
 BuildRequires:	pkgconfig(xres) >= 1.0.0
 BuildRequires:	pkgconfig(xshmfence) >= 1.1
+#BuildRequires:	pkgconfig(epoxy)
+BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-aux)
@@ -121,14 +124,7 @@ BuildRequires:	bison
 
 # for xkbcomp patch
 BuildRequires:	openssl-devel
-
-%if %{enable_udev}
 BuildRequires:	pkgconfig(libudev) >= 186
-%endif
-
-%if %{enable_dbus}
-BuildRequires:	libdbus-devel
-%endif
 
 %if %{enable_dmx}
 BuildRequires:	libdmx-devel
@@ -240,9 +236,7 @@ Requires:	x11-font-cursor-misc
 Requires:	x11-font-alias
 Requires:	x11-data-xkbdata
 Requires:	xkbcomp
-%if %{enable_udev}
 Requires:	udev
-%endif
 Requires(post):	update-alternatives >= 1.9.0
 Requires(postun):	update-alternatives
 # see comment about /usr/X11R6/lib below
@@ -300,15 +294,9 @@ fi
 %config(noreplace) %{_sysconfdir}/X11/xorg.conf.d/50-synaptics.conf
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
-%if %{enable_dbus}
-%{_sysconfdir}/dbus-1/system.d/xorg-server.conf
-%endif
 %{_bindir}/gtf
 %{_bindir}/cvt
-%if %{enable_udev}
 /sbin/mandriva-setup-keyboard
-#/lib/udev/rules.d/61-x11-input.rules
-%endif
 %if %{enable_dmx}
 %{_bindir}/vdltodmx
 %endif
@@ -337,14 +325,9 @@ Requires:	x11-server-common = %{version}-%{release}
 Requires:	x11-data-xkbdata > 1.3-5
 Requires:	x11-font-alias
 Requires:	libx11-common
-%if %{enable_udev}
 Requires:	x11-driver-input-evdev
 Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
-%else
-Requires:	x11-driver-input-mouse
-Requires:	x11-driver-input-keyboard
-%endif
 Conflicts:	compiz < 0.5.0-1mdv2007.1
 Obsoletes:	x11-server13-xorg <= 1.2.99.905
 
@@ -367,9 +350,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_mandir}/man1/Xorg.*
 %{_mandir}/man1/Xserver.*
 %{_mandir}/man5/xorg.conf.*
-%if %{enable_udev}
 %{_datadir}/X11/xorg.conf.d/10-evdev.conf
-%endif
 %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
 #------------------------------------------------------------------------------
@@ -406,6 +387,26 @@ and standard and/or commonly available X server extensions.
 %{_mandir}/man1/xdmxconfig.*
 %{_mandir}/man1/dmxtodmx.*
 %endif
+
+#------------------------------------------------------------------------------
+
+%package xwayland
+Summary:	A X server for Wayland
+Group:		System/X11
+License:	MIT
+Requires:	x11-server-common = %{version}-%{release}
+
+%description xwayland
+Wayland is a complete window system in itself, but even so, if we're migrating
+away from X, it makes sense to have a good backwards compatibility story. With
+a few changes, the Xorg server can be modified to use wayland input devices for
+input and forward either the root window or individual top-level windows as
+wayland surfaces. The server still runs the same 2D driver with the same
+acceleration code as it does when it runs natively. The main difference is that
+wayland handles presentation of the windows instead of KMS. 
+
+%files xwayland
+%{_bindir}/Xwayland
 
 #------------------------------------------------------------------------------
 
@@ -611,16 +612,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	%else
 	--disable-debug \
 	%endif
-	%if %{enable_builddocs}
-	--enable-builddocs \
-	%else
-	--disable-builddocs \
-	%endif
-	%if %{enable_udev}
 	--enable-config-udev \
-	%else
-	--disable-config-udev \
-	%endif
 	--disable-strict-compilation \
 	--disable-install-libxf86config \
 	--enable-composite \
@@ -667,13 +659,8 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-secure-rpc \
 	--enable-xwrapper \
 	--enable-pam \
-	%if %{enable_dbus}
-	--enable-config-dbus \
-	%else
-	--disable-config-dbus \
-	%endif
 	--disable-config-hal \
-	--with-sha1=libcrypto \
+	--with-sha1=libc \
 	--enable-xwayland \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
@@ -717,7 +704,6 @@ touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
 install -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/xvfb-run
 
-%if %enable_udev
 mkdir -p %{buildroot}/sbin
 mkdir -p %{buildroot}/lib/udev/rules.d/
 install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
@@ -725,7 +711,6 @@ install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
 # with systemd configuration before X start produces keyboard layout issues
 # https://issues.openmandriva.org/show_bug.cgi?id=274
 #install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
-%endif
 
 # Make the source package
 cp -r source %{buildroot}/%{xserver_source_dir}
