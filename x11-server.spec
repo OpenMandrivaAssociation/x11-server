@@ -21,7 +21,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 3
+%define rel 3.1
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -240,6 +240,7 @@ Requires:	x11-font-cursor-misc
 Requires:	x11-font-alias
 Requires:	x11-data-xkbdata
 Requires:	xkbcomp
+Requires:	mkcomposecache
 %if %{enable_udev}
 Requires:	udev
 %endif
