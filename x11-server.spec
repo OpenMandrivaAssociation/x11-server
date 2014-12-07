@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 1
+%define rel 2
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -205,6 +205,7 @@ Requires:	libpciaccess-devel
 Requires:	libxkbfile-devel
 Requires:	libxext-devel >= 1.1
 Requires:	pkgconfig(dri)
+%rename		libglamor-devel < 0.6.0-10
 
 %description devel
 Development files for %{name}.
@@ -252,6 +253,7 @@ Conflicts:	x11-driver-video-fglrx < 8.720
 # http://qa.mandriva.com/show_bug.cgi?id=36651
 Conflicts:	x11-driver-video-nvidia-current <= 100.14.19
 Conflicts:	x11-xorg1_5-server < 1.5.3-4
+%rename		%{_lib}glamor0 <= 0.6.0-10
 
 Provides:	xserver-abi(ansic-%{ansic_major}) = %{ansic_minor}
 Provides:	xserver-abi(videodrv-%{videodrv_major}) = %{videodrv_minor}
@@ -397,7 +399,7 @@ and standard and/or commonly available X server extensions.
 Summary:	A X server for Wayland
 Group:		System/X11
 License:	MIT
-Requires:	x11-server-common = %{version}-%{release}
+Requires:	x11-server-common = %{EVRD}
 
 %description xwayland
 Wayland is a complete window system in itself, but even so, if we're migrating
@@ -633,6 +635,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-dri \
 	--enable-dri2 \
 	--enable-dri3 \
+    --enable-glamor \
 	--enable-xinerama \
 	--enable-xf86vidmode \
 	--enable-xace \
