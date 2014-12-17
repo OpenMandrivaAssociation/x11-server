@@ -1,0 +1,31 @@
+From 995ecfb51d4ab8197e4591d5c0957e08a0bd6a59 Mon Sep 17 00:00:00 2001
+From: Peter Hutterer <peter.hutterer@who-t.net>
+Date: Thu, 30 Oct 2014 09:00:21 +1000
+Subject: include: change RegionSize() to take a size_t
+
+/usr/include/xorg/regionstr.h:130:36: warning: implicit conversion changes
+signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+    return (sizeof(RegDataRec) + ((n) * sizeof(BoxRec)));
+                                   ^  ~
+
+Really only just pushes the problem to the caller, but maybe that motivates
+someone to fix it.
+
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+
+diff --git a/include/regionstr.h b/include/regionstr.h
+index 4a0725d..515e93f 100644
+--- a/include/regionstr.h
++++ b/include/regionstr.h
+@@ -125,7 +125,7 @@ RegionEnd(RegionPtr reg)
+ }
+ 
+ static inline size_t
+-RegionSizeof(int n)
++RegionSizeof(size_t n)
+ {
+     return (sizeof(RegDataRec) + ((n) * sizeof(BoxRec)));
+ }
+-- 
+cgit v0.10.2
+

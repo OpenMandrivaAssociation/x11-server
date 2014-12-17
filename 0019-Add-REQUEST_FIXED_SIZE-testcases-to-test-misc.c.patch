@@ -1,0 +1,74 @@
+From d4934a8fb4fab54d39c42ca445687985fe4410cd Mon Sep 17 00:00:00 2001
+From: Alan Coopersmith <alan.coopersmith@oracle.com>
+Date: Sun, 9 Feb 2014 22:42:47 -0800
+Subject: [PATCH 19/33] Add REQUEST_FIXED_SIZE testcases to test/misc.c
+
+Signed-off-by: Alan Coopersmith <alan.coopersmith@oracle.com>
+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+---
+ test/misc.c |   37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/test/misc.c b/test/misc.c
+index dd792e6..66330a1 100644
+--- a/test/misc.c
++++ b/test/misc.c
+@@ -28,6 +28,8 @@
+ #include <stdint.h>
+ #include "misc.h"
+ #include "scrnintstr.h"
++#include "dix.h"
++#include "dixstruct.h"
+ 
+ ScreenInfo screenInfo;
+ 
+@@ -155,11 +157,46 @@ dix_update_desktop_dimensions(void)
+     assert_dimensions(-w2, -h2, w2, h2);
+ }
+ 
++static int
++dix_request_fixed_size_overflow(ClientRec *client)
++{
++    xReq req = { 0 };
++
++    client->req_len = req.length = 1;
++    REQUEST_FIXED_SIZE(req, SIZE_MAX);
++    return Success;
++}
++
++static int
++dix_request_fixed_size_match(ClientRec *client)
++{
++    xReq req = { 0 };
++
++    client->req_len = req.length = 9;
++    REQUEST_FIXED_SIZE(req, 30);
++    return Success;
++}
++
++static void
++dix_request_size_checks(void)
++{
++    ClientRec client = { 0 };
++    int rc;
++
++    rc = dix_request_fixed_size_overflow(&client);
++    assert(rc == BadLength);
++
++    rc = dix_request_fixed_size_match(&client);
++    assert(rc == Success);
++}
++
++
+ int
+ main(int argc, char **argv)
+ {
+     dix_version_compare();
+     dix_update_desktop_dimensions();
++    dix_request_size_checks();
+ 
+     return 0;
+ }
+-- 
+1.7.9.2
+

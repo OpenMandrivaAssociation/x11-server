@@ -21,7 +21,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 3.1
+%define rel 3.2
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -188,6 +188,47 @@ Patch3000:	exa-glyphs-fallback.diff
 # for example on RV610 with radeon driver
 Patch1001: 1001-do-not-crash-if-xv-not-initialized.patch
 Patch1003:	arm32_line_removed.patch
+
+# CVE-2014 fixes
+Patch501:        0000-glx-check-return.patch
+Patch502:        0000-regionsize-size_t.patch
+Patch503:        0001-unchecked-malloc-may-allow-unauthed-client-to-crash-.patch
+Patch504:        0002-dix-integer-overflow-in-ProcPutImage-CVE-2014-8092-1.patch
+Patch505:        0003-dix-integer-overflow-in-GetHosts-CVE-2014-8092-2-4.patch
+Patch506:        0004-dix-integer-overflow-in-RegionSizeof-CVE-2014-8092-3.patch
+Patch507:        0005-dix-integer-overflow-in-REQUEST_FIXED_SIZE-CVE-2014-.patch
+Patch508:        0006-dri2-integer-overflow-in-ProcDRI2GetBuffers-CVE-2014.patch
+Patch509:        0007-dbe-unvalidated-lengths-in-DbeSwapBuffers-calls-CVE-.patch
+Patch510:        0008-Xi-unvalidated-lengths-in-Xinput-extension-CVE-2014-.patch
+Patch511:        0009-xcmisc-unvalidated-length-in-SProcXCMiscGetXIDList-C.patch
+Patch512:        0010-Xv-unvalidated-lengths-in-XVideo-extension-swapped-p.patch
+Patch513:        0011-dri3-unvalidated-lengths-in-DRI3-extension-swapped-p.patch
+Patch514:        0012-present-unvalidated-lengths-in-Present-extension-pro.patch
+Patch515:        0013-randr-unvalidated-lengths-in-RandR-extension-swapped.patch
+Patch516:        0014-render-check-request-size-before-reading-it-CVE-2014.patch
+Patch517:        0015-render-unvalidated-lengths-in-Render-extn.-swapped-p.patch
+Patch518:        0016-xfixes-unvalidated-length-in-SProcXFixesSelectSelect.patch
+Patch519:        0017-Add-request-length-checking-test-cases-for-some-Xinp.patch
+Patch520:        0018-Add-request-length-checking-test-cases-for-some-Xinp.patch
+Patch521:        0019-Add-REQUEST_FIXED_SIZE-testcases-to-test-misc.c.patch
+Patch522:        0020-glx-Be-more-paranoid-about-variable-length-requests-.patch
+Patch523:        0021-glx-Be-more-strict-about-rejecting-invalid-image-siz.patch
+Patch524:        0022-glx-Additional-paranoia-in-__glXGetAnswerBuffer-__GL.patch
+Patch525:        0023-glx-Fix-image-size-computation-for-EXT_texture_integ.patch
+Patch526:        0024-glx-Add-safe_-add-mul-pad-v3-CVE-2014-8093-4-6.patch
+Patch527:        0025-glx-Length-checking-for-GLXRender-requests-v2-CVE-20.patch
+Patch528:        0026-glx-Integer-overflow-protection-for-non-generated-re.patch
+Patch529:        0027-glx-Length-checking-for-RenderLarge-requests-v2-CVE-.patch
+Patch530:        0028-glx-Top-level-length-checking-for-swapped-VendorPriv.patch
+Patch531:        0029-glx-Request-length-checks-for-SetClientInfoARB-CVE-2.patch
+Patch532:        0030-glx-Length-checking-for-non-generated-vendor-private.patch
+Patch533:        0031-glx-Length-checking-for-non-generated-single-request.patch
+Patch534:        0032-glx-Pass-remaining-request-length-into-varsize-v2-CV.patch
+Patch535:        0033-glx-Fix-mask-truncation-in-__glXGetAnswerBuffer-CVE-.patch
+Patch536:        0034-CVE-2014-8097-additional.patch
+Patch537:        0035-CVE-2014-8098-additional.patch
+Patch538:        0036-CVE-2014-8092-additional.patch
+Patch539:        0037-CVE-2014-8092-additional-2.patch
 
 %description
 X11 servers.
