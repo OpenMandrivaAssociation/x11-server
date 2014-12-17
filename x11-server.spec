@@ -33,7 +33,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.16.2
+Version:	1.16.2.901
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
@@ -176,9 +176,6 @@ Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.16.0-blacklist-driver.patch
 # (tpg) taken and adapted from http://markmail.org/thread/jjnhecq3glwalpna#query:+page:1+mid:le7yadjmofu47iey+state:results
 Patch912:	xorg-server-1.16.0-make-use-__GNUC__.patch
-
-# (tv) fix issues with new cairo (fdo#47266):
-Patch3000:	exa-glyphs-fallback.diff
 
 # Other patches
 
