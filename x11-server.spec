@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 1
+%define rel 2
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -337,6 +337,7 @@ Requires:	libxfont >= 1.4.2
 
 # This package was used in the transition to modular:
 Obsoletes:	xorg-x11-server
+%rename		x11-driver-video-modesetting
 
 %description xorg
 x11-server-xorg is the new generation of X server from X.Org.
