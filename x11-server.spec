@@ -33,7 +33,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.16.3
+Version:	1.17.0
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
@@ -606,7 +606,9 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 %configure \
 	--with-log-dir=%{_logdir} \
-	--with-os-vendor="%{_vendor}" \
+	--with-builder-addr="www.openmandriva.org" \
+	--with-vendor-name="%{vendor}" \
+	--with-os-vendor="%{vendor}" \
 	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 	--with-vendor-web="%{bugurl}" \
 	--with-extra-module-dir=%{extra_module_dir} \
@@ -666,6 +668,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--disable-config-hal \
 	--with-sha1=libcrypto \
 	--enable-xwayland \
+	--with-systemd-daemon \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
