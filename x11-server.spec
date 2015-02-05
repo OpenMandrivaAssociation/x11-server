@@ -124,7 +124,7 @@ BuildRequires:	flex
 BuildRequires:	bison
 
 # for xkbcomp patch
-BuildRequires:	openssl-devel
+#BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig(libudev) >= 186
 
 %if %{enable_dmx}
@@ -174,8 +174,6 @@ Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
 #Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.16.0-blacklist-driver.patch
-# (tpg) taken and adapted from http://markmail.org/thread/jjnhecq3glwalpna#query:+page:1+mid:le7yadjmofu47iey+state:results
-Patch912:	xorg-server-1.16.0-make-use-__GNUC__.patch
 
 # Other patches
 
