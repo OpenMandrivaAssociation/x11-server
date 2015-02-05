@@ -77,7 +77,7 @@ Obsoletes:	%{name}-xfake < %{version}-%{release}
 
 # FIXME: build with systemtap installed is broken
 BuildConflicts:	systemtap
-
+BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(libtirpc)
 BuildRequires:	pkgconfig(libunwind)
 BuildRequires:	pkgconfig(gl)
@@ -124,8 +124,7 @@ BuildRequires:	byacc
 BuildRequires:	flex
 BuildRequires:	bison
 
-# for xkbcomp patch
-#BuildRequires:	openssl-devel
+BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig(libudev) >= 186
 
 %if %{enable_dmx}
@@ -311,6 +310,7 @@ fi
 %endif
 %{_mandir}/man4/fbdevhw.*
 %{_mandir}/man4/exa.*
+%{_mandir}/man4/modesetting.4.*
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %dir %{_prefix}/X11R6/lib/X11
