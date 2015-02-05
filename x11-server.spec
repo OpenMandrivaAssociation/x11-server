@@ -181,7 +181,6 @@ Patch911:	xorg-server-1.16.0-blacklist-driver.patch
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
 Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
-Patch1003:	arm32_line_removed.patch
 
 %description
 X11 servers.
