@@ -110,6 +110,7 @@ BuildRequires:	pkgconfig(xcb-image)
 BuildRequires:	pkgconfig(xcb-shape)
 BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xcb-xv)
+BuildRequires:	pkgconfig(xcb-renderutil)
 BuildRequires:	pkgconfig(libdrm)
 BuildRequires:	pkgconfig(xcb-glx)
 BuildRequires:	pkgconfig(xcb-xf86dri) > 1.6
