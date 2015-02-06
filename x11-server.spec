@@ -174,6 +174,7 @@ Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
 #Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.16.0-blacklist-driver.patch
+Patch912:	xorg-server-1.17-fix-i386-asm-for-clang.patch
 
 # Other patches
 
