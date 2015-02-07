@@ -338,6 +338,7 @@ Requires:	libxfont >= 1.4.2
 
 # This package was used in the transition to modular:
 Obsoletes:	xorg-x11-server
+Conflicts:	x11-driver-video-modesetting <= 0.9.0-4
 %rename		x11-driver-video-modesetting
 
 %description xorg
