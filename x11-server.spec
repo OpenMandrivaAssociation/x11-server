@@ -9,7 +9,7 @@
 %define pre_post_trans 1
 
 # Need this for shared objects that reference X Server, or other modules symbols
-#define _disable_ld_no_undefined 1
+%define _disable_ld_no_undefined 1
 
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
