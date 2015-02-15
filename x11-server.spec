@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 4
+%define rel 5
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -183,6 +183,7 @@ Patch912:	xorg-server-1.17-fix-i386-asm-for-clang.patch
 # for example on RV610 with radeon driver
 Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 Patch1002:	xorg-server-1.17.0-add-missing-glamor-links.patch
+Patch1003:	xorg-server-1.17.1-modesetting-linkage.patch
 
 %description
 X11 servers.
@@ -606,7 +607,7 @@ find . -maxdepth 1 ! -name source ! -name '\.' -exec cp -r '{}' source \;
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
-%configure \
+CC=gcc CXX=g++ %configure \
 	--with-log-dir=%{_logdir} \
 	--with-builder-addr="www.openmandriva.org" \
 	--with-vendor-name="%{vendor}" \
