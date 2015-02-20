@@ -56,7 +56,7 @@ diff -Naur xorg-server-1.17.1/hw/xfree86/glamor_egl/Makefile.am xorg-server-1.17
  
  libglamoregl_la_LIBADD = \
  	$(top_builddir)/glamor/libglamor.la \
-+	$(XORG_LIBS) \
++	$(XSERVER_LIBS) \
 +	$(PIXMAN_LIBS) \
  	$()
  
