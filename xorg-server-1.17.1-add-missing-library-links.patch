@@ -69,7 +69,7 @@ diff -Naur xorg-server-1.17.1/hw/xfree86/int10/Makefile.am xorg-server-1.17.1.tp
  
  libint10_la_LDFLAGS = -avoid-version
 -libint10_la_LIBADD = $(PCIACCESS_LIBS)
-+libint10_la_LIBADD = $(PCIACCESS_LIBS) $(OS_LIB) $(top_builddir)/hw/xfree86/common/libcommon.la
++libint10_la_LIBADD = $(PCIACCESS_LIBS) $(OS_LIB) $()
  
  COMMON_SOURCES = \
  	helper_exec.c \
