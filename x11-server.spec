@@ -599,7 +599,7 @@ test `getminor extension` == %{extension_minor}
 
 # Copy the clean dir to a 'source' directory that will be used to make the
 # x11-server-source subpackage
-mkdir source
+mkdir -p source
 find . -maxdepth 1 ! -name source ! -name '\.' -exec cp -r '{}' source \;
 
 
