@@ -81,7 +81,7 @@ diff -Naur xorg-server-1.17.1/hw/xfree86/shadowfb/Makefile.am xorg-server-1.17.1
  libshadowfb_la_LDFLAGS = -module -avoid-version $(LD_NO_UNDEFINED_FLAG)
  libshadowfb_la_SOURCES = sfbmodule.c shadow.c
 -libshadowfb_la_LIBADD = $(PIXMAN_LIBS)
-+libshadowfb_la_LIBADD = $(PIXMAN_LIBS) $(XORG_LIBS)
++libshadowfb_la_LIBADD = $(PIXMAN_LIBS) $(DIX_LIB)
  
  sdk_HEADERS = shadowfb.h
  
