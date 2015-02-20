@@ -18,7 +18,7 @@ diff -Naur xorg-server-1.17.1/glx/Makefile.am xorg-server-1.17.1.tpg/glx/Makefil
  endif
  
 -libglxdri_la_LIBADD = $(DLOPEN_LIBS)
-+libglxdri_la_LIBADD = $(DLOPEN_LIBS) $(XORG_LIBS)
++libglxdri_la_LIBADD = $(DLOPEN_LIBS) $()
  
  libglx_la_SOURCES = \
  	$(indirect_sources) \
