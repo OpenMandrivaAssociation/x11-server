@@ -93,7 +93,7 @@ diff -Naur xorg-server-1.17.1/hw/xfree86/vbe/Makefile.am xorg-server-1.17.1.tpg/
  libvbe_la_SOURCES = vbe.c vbeModes.c vbe_module.c
  if NO_UNDEFINED
 -libvbe_la_LIBADD = ../int10/libint10.la
-+libvbe_la_LIBADD = ../int10/libint10.la $(XORG_LIBS)
++libvbe_la_LIBADD = ../int10/libint10.la $(XORG_LIBS) $(OS_LIB)
  endif
  
  sdk_HEADERS = vbe.h vbeModes.h
