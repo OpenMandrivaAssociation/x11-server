@@ -1,6 +1,6 @@
 diff -Naur xorg-server-1.17.1/glamor/Makefile.am xorg-server-1.17.1.tpg/glamor/Makefile.am
 --- xorg-server-1.17.1/glamor/Makefile.am	2014-11-21 03:02:48.000000000 +0000
-+++ xorg-server-1.17.1.tpg/glamor/Makefile.am	2015-02-20 00:17:29.642942226 +0000
++++ xorg-server-1.17.1.tpg/glamor/Makefile.am	2015-02-14 08:24:16.146447617 +0000
 @@ -1,6 +1,6 @@
  noinst_LTLIBRARIES = libglamor.la libglamor_egl_stubs.la
 -
@@ -10,27 +10,22 @@ diff -Naur xorg-server-1.17.1/glamor/Makefile.am xorg-server-1.17.1.tpg/glamor/M
  
  AM_CFLAGS = $(CWARNFLAGS) $(DIX_CFLAGS) $(GLAMOR_CFLAGS)
  
-diff -Naur xorg-server-1.17.1/glx/Makefile.am xorg-server-1.17.1.tpg/glx/Makefile.am
---- xorg-server-1.17.1/glx/Makefile.am	2014-02-08 00:14:19.000000000 +0000
-+++ xorg-server-1.17.1.tpg/glx/Makefile.am	2015-02-20 00:58:22.541834379 +0000
-@@ -44,7 +44,7 @@
- libglxdri_la_SOURCES += glxdri2.c
- endif
- 
--libglxdri_la_LIBADD = $(DLOPEN_LIBS)
-+libglxdri_la_LIBADD = $(DLOPEN_LIBS) $(OS_LIB)
- 
- libglx_la_SOURCES = \
- 	$(indirect_sources) \
-@@ -86,4 +86,4 @@
-         unpack.h \
-         xfont.c
- 
--libglx_la_LIBADD = $(DLOPEN_LIBS)
-+libglx_la_LIBADD = $(DLOPEN_LIBS) $(OS_LIB)
+diff -Naur xorg-server-1.17.1/glamor/Makefile.in xorg-server-1.17.1.tpg/glamor/Makefile.in
+--- xorg-server-1.17.1/glamor/Makefile.in	2015-02-10 22:50:00.000000000 +0000
++++ xorg-server-1.17.1.tpg/glamor/Makefile.in	2015-02-14 08:25:59.516196191 +0000
+@@ -557,7 +557,8 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ noinst_LTLIBRARIES = libglamor.la libglamor_egl_stubs.la
+-libglamor_la_LIBADD = $(GLAMOR_LIBS)
++libglamor_la_LDFLAGS = -module -avoid-version $(LD_NO_UNDEFINED_FLAG)
++libglamor_la_LIBADD = $(GLAMOR_LIBS) $(DLOPEN_LIBS)
+ AM_CFLAGS = $(CWARNFLAGS) $(DIX_CFLAGS) $(GLAMOR_CFLAGS)
+ libglamor_la_SOURCES = \
+    glamor.c \
 diff -Naur xorg-server-1.17.1/hw/xfree86/drivers/modesetting/Makefile.am xorg-server-1.17.1.tpg/hw/xfree86/drivers/modesetting/Makefile.am
 --- xorg-server-1.17.1/hw/xfree86/drivers/modesetting/Makefile.am	2015-01-17 23:42:52.000000000 +0000
-+++ xorg-server-1.17.1.tpg/hw/xfree86/drivers/modesetting/Makefile.am	2015-02-20 00:51:46.023082615 +0000
++++ xorg-server-1.17.1.tpg/hw/xfree86/drivers/modesetting/Makefile.am	2015-02-14 08:13:12.346391588 +0000
 @@ -24,7 +24,7 @@
  # _ladir passes a dummy rpath to libtool so the thing will actually link
  # TODO: -nostdlib/-Bstatic/-lgcc platform magic, not installing the .a, etc.
@@ -39,72 +34,34 @@ diff -Naur xorg-server-1.17.1/hw/xfree86/drivers/modesetting/Makefile.am xorg-se
 +AM_CFLAGS = $(DIX_CFLAGS) $(XORG_CFLAGS) $(LIBDRM_CFLAGS) $(UDEV_CFLAGS) $(CWARNFLAGS) $(GLAMOR_CFLAGS)
  
  AM_CPPFLAGS = \
- 	$(XORG_INCS) \
+    $(XORG_INCS) \
 @@ -39,7 +39,7 @@
  
  modesetting_drv_la_LTLIBRARIES = modesetting_drv.la
  modesetting_drv_la_LDFLAGS = -module -avoid-version
 -modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS)
-+modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(GLAMOR_LIBS) $(XORG_LIBS) $(XSERVER_LIBS) $(MI_EXT_LIB) $(MIEXT_SHADOW_LIB) $(PIXMAN_LIBS) $(top_builddir)/glamor/libglamor.la $(top_builddir)/glamor/libglamor_egl_stubs.la
++modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(GLAMOR_LIBS) $(OS_LIB) $(MIEXT_SHADOW_LIB) $(top_builddir)/glamor/libglamor.la $(top_builddir)/glamor/libglamor_egl_stubs.la
  modesetting_drv_ladir = @moduledir@/drivers
  
  modesetting_drv_la_SOURCES = \
-diff -Naur xorg-server-1.17.1/hw/xfree86/glamor_egl/Makefile.am xorg-server-1.17.1.tpg/hw/xfree86/glamor_egl/Makefile.am
---- xorg-server-1.17.1/hw/xfree86/glamor_egl/Makefile.am	2014-07-18 03:06:21.000000000 +0000
-+++ xorg-server-1.17.1.tpg/hw/xfree86/glamor_egl/Makefile.am	2015-02-20 00:55:39.459415576 +0000
-@@ -34,6 +34,8 @@
+diff -Naur xorg-server-1.17.1/hw/xfree86/drivers/modesetting/Makefile.in xorg-server-1.17.1.tpg/hw/xfree86/drivers/modesetting/Makefile.in
+--- xorg-server-1.17.1/hw/xfree86/drivers/modesetting/Makefile.in	2015-02-10 22:50:02.000000000 +0000
++++ xorg-server-1.17.1.tpg/hw/xfree86/drivers/modesetting/Makefile.in	2015-02-14 08:13:12.348391642 +0000
+@@ -574,7 +574,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-AM_CFLAGS = $(DIX_CFLAGS) $(XORG_CFLAGS) $(LIBDRM_CFLAGS) $(UDEV_CFLAGS) $(CWARNFLAGS)
++AM_CFLAGS = $(DIX_CFLAGS) $(XORG_CFLAGS) $(LIBDRM_CFLAGS) $(UDEV_CFLAGS) $(CWARNFLAGS) $(GLAMOR_CFLAGS)
+ AM_CPPFLAGS = \
+    $(XORG_INCS) \
+    -I$(top_srcdir)/glamor \
+@@ -588,7 +588,7 @@
  
- libglamoregl_la_LIBADD = \
- 	$(top_builddir)/glamor/libglamor.la \
-+	$(DIX_LIB) $(MIEXT_SHADOW_LIB) $(OS_LIB) \
-+	$(PIXMAN_LIBS) \
- 	$()
- 
- AM_CPPFLAGS = $(XORG_INCS) \
-diff -Naur xorg-server-1.17.1/hw/xfree86/int10/Makefile.am xorg-server-1.17.1.tpg/hw/xfree86/int10/Makefile.am
---- xorg-server-1.17.1/hw/xfree86/int10/Makefile.am	2013-08-06 05:12:12.000000000 +0000
-+++ xorg-server-1.17.1.tpg/hw/xfree86/int10/Makefile.am	2015-02-20 00:47:41.681455641 +0000
-@@ -5,7 +5,7 @@
- EXTRA_CFLAGS =
- 
- libint10_la_LDFLAGS = -avoid-version
--libint10_la_LIBADD = $(PCIACCESS_LIBS)
-+libint10_la_LIBADD = $(PCIACCESS_LIBS) $(OS_LIB) $()
- 
- COMMON_SOURCES = \
- 	helper_exec.c \
-diff -Naur xorg-server-1.17.1/hw/xfree86/shadowfb/Makefile.am xorg-server-1.17.1.tpg/hw/xfree86/shadowfb/Makefile.am
---- xorg-server-1.17.1/hw/xfree86/shadowfb/Makefile.am	2013-08-06 05:12:12.000000000 +0000
-+++ xorg-server-1.17.1.tpg/hw/xfree86/shadowfb/Makefile.am	2015-02-20 00:51:49.510177205 +0000
-@@ -1,7 +1,7 @@
- module_LTLIBRARIES = libshadowfb.la
- libshadowfb_la_LDFLAGS = -module -avoid-version $(LD_NO_UNDEFINED_FLAG)
- libshadowfb_la_SOURCES = sfbmodule.c shadow.c
--libshadowfb_la_LIBADD = $(PIXMAN_LIBS)
-+libshadowfb_la_LIBADD = $(PIXMAN_LIBS) $(DIX_LIB)
- 
- sdk_HEADERS = shadowfb.h
- 
-diff -Naur xorg-server-1.17.1/hw/xfree86/vbe/Makefile.am xorg-server-1.17.1.tpg/hw/xfree86/vbe/Makefile.am
---- xorg-server-1.17.1/hw/xfree86/vbe/Makefile.am	2013-08-06 05:12:12.000000000 +0000
-+++ xorg-server-1.17.1.tpg/hw/xfree86/vbe/Makefile.am	2015-02-20 00:51:55.495339559 +0000
-@@ -2,7 +2,7 @@
- libvbe_la_LDFLAGS = -module -avoid-version $(LD_NO_UNDEFINED_FLAG)
- libvbe_la_SOURCES = vbe.c vbeModes.c vbe_module.c
- if NO_UNDEFINED
--libvbe_la_LIBADD = ../int10/libint10.la
-+libvbe_la_LIBADD = ../int10/libint10.la $(XORG_LIBS) $(OS_LIB)
- endif
- 
- sdk_HEADERS = vbe.h vbeModes.h
-diff -Naur xorg-server-1.17.1/hw/xfree86/vgahw/Makefile.am xorg-server-1.17.1.tpg/hw/xfree86/vgahw/Makefile.am
---- xorg-server-1.17.1/hw/xfree86/vgahw/Makefile.am	2014-08-01 17:50:31.000000000 +0000
-+++ xorg-server-1.17.1.tpg/hw/xfree86/vgahw/Makefile.am	2015-02-20 00:52:35.320419880 +0000
-@@ -1,6 +1,6 @@
- module_LTLIBRARIES = libvgahw.la
- libvgahw_la_LDFLAGS = -avoid-version
--libvgahw_la_LIBADD = $(PCIACCESS_LIBS)
-+libvgahw_la_LIBADD = $(PCIACCESS_LIBS) $(OS_LIB) $()
- libvgahw_la_SOURCES = vgaHW.c vgaHWmodule.c
- AM_CPPFLAGS = $(XORG_INCS) -I$(srcdir)/../ddc -I$(srcdir)/../i2c
- AM_CFLAGS = $(DIX_CFLAGS) $(XORG_CFLAGS)
+ modesetting_drv_la_LTLIBRARIES = modesetting_drv.la
+ modesetting_drv_la_LDFLAGS = -module -avoid-version
+-modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS)
++modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(GLAMOR_LIBS) $(OS_LIB) $(MIEXT_SHADOW_LIB) $(top_builddir)/glamor/libglamor.la $(top_builddir)/glamor/libglamor_egl_stubs.la
+ modesetting_drv_ladir = @moduledir@/drivers
+ modesetting_drv_la_SOURCES = \
+     dri2.c \
