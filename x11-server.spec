@@ -570,6 +570,7 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 %setup -q -n xorg-server-%{version}
 %endif
 %apply_patches
+autoreconf -if
 
 # check the ABI in the source against what we expect.
 getmajor() {
@@ -595,7 +596,6 @@ test `getminor extension` == %{extension_minor}
 %build
 %serverbuild_hardened
 
-autoreconf -if
 
 # Copy the clean dir to a 'source' directory that will be used to make the
 # x11-server-source subpackage
