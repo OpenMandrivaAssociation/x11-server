@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 5
+%define rel 6
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -182,8 +182,7 @@ Patch912:	xorg-server-1.17-fix-i386-asm-for-clang.patch
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
 Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
-Patch1002:	xorg-server-1.17.0-add-missing-glamor-links.patch
-Patch1003:	xorg-server-1.17.1-modesetting-linkage.patch
+Patch1002:	xorg-server-1.17.1-add-missing-library-links.patch
 
 %description
 X11 servers.
