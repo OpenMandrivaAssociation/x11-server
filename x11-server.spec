@@ -250,6 +250,8 @@ Conflicts:	x11-driver-video-fglrx < 8.720
 Conflicts:	x11-driver-video-nvidia-current <= 100.14.19
 Conflicts:	x11-xorg1_5-server < 1.5.3-4
 Obsoletes:	%{_lib}glamor0 <= 0.6.0-10
+%rename		x11-driver-video-modesetting 2:0.9.0-4
+
 
 Provides:	xserver-abi(ansic-%{ansic_major}) = %{ansic_minor}
 Provides:	xserver-abi(videodrv-%{videodrv_major}) = %{videodrv_minor}
@@ -338,8 +340,6 @@ Requires:	libxfont >= 1.4.2
 
 # This package was used in the transition to modular:
 Obsoletes:	xorg-x11-server
-Conflicts:	x11-driver-video-modesetting <= 0.9.0-4
-%rename		x11-driver-video-modesetting
 
 %description xorg
 x11-server-xorg is the new generation of X server from X.Org.
