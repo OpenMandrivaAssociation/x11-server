@@ -27,7 +27,7 @@ diff -Naur xorg-server-1.17.1/hw/xfree86/drivers/modesetting/Makefile.am xorg-se
  modesetting_drv_la_LTLIBRARIES = modesetting_drv.la
  modesetting_drv_la_LDFLAGS = -module -avoid-version
 -modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS)
-+modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(FB_LIB) $(FIXES_LIB) $(MI_LIB) $(XEXT_LIB) $(DAMAGE_LIB) $(PRESENT_LIB) $(MIEXT_SYNC_LIB) $(MIEXT_DAMAGE_LIB) $(MIEXT_SHADOW_LIB) $(XI_LIB) $(XKB_LIB) $(XKB_STUB_LIB) $(COMPOSITE_LIB) $(DIX_LIB) $(OS_LIB) $(GLAMOR_LIBS) $(DIX_LIB) $(top_builddir)/glamor/libglamor.la $(top_builddir)/glamor/libglamor_egl_stubs.la $(DLOPEN_LIBS)
++modesetting_drv_la_LIBADD = $(UDEV_LIBS) $(DRM_LIBS) $(FB_LIB) $(FIXES_LIB) $(MI_LIB) $(XEXT_LIB) $(DAMAGE_LIB) $(PRESENT_LIB) $(MIEXT_SYNC_LIB) $(MIEXT_DAMAGE_LIB) $(MIEXT_SHADOW_LIB) $(XI_LIB) $(XKB_LIB) $(XKB_STUB_LIB) $(COMPOSITE_LIB) $(DIX_LIB) $(OS_LIB) $(GLAMOR_LIBS) $(top_builddir)/glamor/libglamor.la $(top_builddir)/glamor/libglamor_egl_stubs.la $(DLOPEN_LIBS)
  modesetting_drv_ladir = @moduledir@/drivers
  
  modesetting_drv_la_SOURCES = \
