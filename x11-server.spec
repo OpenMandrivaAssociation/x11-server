@@ -593,12 +593,9 @@ test `getminor extension` == %{extension_minor}
 
 
 %build
-# Copy the clean dir to a 'source' directory that will be used to make the
-# x11-server-source subpackage
-mkdir -p source
-find . -maxdepth 1 ! -name source ! -name '\.' -exec cp -r '{}' source \;
-
-
+CONFIGURE_TOP="$PWD"
+mkdir -p .build
+pushd .build
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
@@ -674,7 +671,7 @@ pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 %make
 
 %install
-%makeinstall_std
+%makeinstall_std -C .build
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
 ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
@@ -718,7 +715,8 @@ install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
 #install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
 
 # Make the source package
-cp -r source %{buildroot}/%{xserver_source_dir}
+install -d %{buildroot}/%{xserver_source_dir}
+cp -r * %{buildroot}/%{xserver_source_dir}
 
 install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
 
