@@ -182,7 +182,6 @@ Patch912:	xorg-server-1.17-fix-i386-asm-for-clang.patch
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
 Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
-Patch1002:	xorg-server-1.17.1-add-missing-library-links.patch
 
 %description
 X11 servers.
