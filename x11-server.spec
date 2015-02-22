@@ -594,9 +594,6 @@ test `getminor extension` == %{extension_minor}
 
 
 %build
-%serverbuild_hardened
-
-
 # Copy the clean dir to a 'source' directory that will be used to make the
 # x11-server-source subpackage
 mkdir -p source
