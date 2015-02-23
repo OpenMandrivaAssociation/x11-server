@@ -189,7 +189,7 @@ Patch1503:	N_driver-autoconfig.diff
 Patch1504:	u_fbdevhw.diff
 Patch1505:	ux_xserver_xvfb-randr.patch
 Patch1506:	u_xorg-server-xdmcp.patch
-Patch1507:	N_Force-swcursor-for-KMS-without-hw-cursor-sup.patch
+Patch1507:	N_Force-swcursor-for-KMS-drivers-without-hw-cursor-sup.patch
 Patch1508:	u_ad-hoc-fix-for-mmap-s-truncated-offset-parameter-on-.patch
 
 
