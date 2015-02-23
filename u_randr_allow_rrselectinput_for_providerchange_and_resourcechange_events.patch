@@ -1,0 +1,24 @@
+From 6d0da2a4d5c31d055674f482d3d1afe308ed8eeb Mon Sep 17 00:00:00 2001
+From: Michal Srb <msrb@suse.com>
+Date: Mon, 7 Oct 2013 17:55:30 +0300
+Subject: [PATCH] randr: Allow RRSelectInput for ProviderChange and
+ ResourceChange events.
+
+Reviewed-by: Dave Airlie <airlied@redhat.com>
+Signed-off-by: Michal Srb <msrb@suse.com>
+
+diff --git a/randr/rrdispatch.c b/randr/rrdispatch.c
+index 7fbc9f0..f050d38 100644
+--- a/randr/rrdispatch.c
++++ b/randr/rrdispatch.c
+@@ -92,7 +92,9 @@ ProcRRSelectInput(ClientPtr client)
+                          RRCrtcChangeNotifyMask |
+                          RROutputChangeNotifyMask |
+                          RROutputPropertyNotifyMask |
+-                         RRProviderPropertyNotifyMask)) {
++                         RRProviderChangeNotifyMask |
++                         RRProviderPropertyNotifyMask |
++                         RRResourceChangeNotifyMask)) {
+         ScreenPtr pScreen = pWin->drawable.pScreen;
+ 
+         rrScrPriv(pScreen);

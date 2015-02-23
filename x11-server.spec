@@ -176,12 +176,23 @@ Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.16.0-blacklist-driver.patch
 Patch912:	xorg-server-1.17-fix-i386-asm-for-clang.patch
 
-# Other patches
-
 # Do not crash if Xv is not initialized (patch from xorg-devel ML)
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
 Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
+
+# Other patches
+##Suse patches
+Patch1501:	u_randr_allow_rrselectinp~sourcechange_events.patch
+Patch1502:	u_exa-only-draw-valid-trapezoids.patch
+Patch1503:	N_driver-autoconfig.diff
+Patch1504:	u_fbdevhw.diff
+Patch1505:	ux_xserver_xvfb-randr.patch
+Patch1506:	u_xorg-server-xdmcp.patch
+Patch1507:	N_Force-swcursor-for-KMS-without-hw-cursor-sup.patch
+Patch1508:	u_ad-hoc-fix-for-mmap-s-truncated-offset-parameter-on-.patch
+
+
 
 %description
 X11 servers.
