@@ -183,7 +183,7 @@ Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 
 # Other patches
 ##Suse patches
-Patch1501:	u_randr_allow_rrselectinp~sourcechange_events.patch
+Patch1501:	u_randr_allow_rrselectinput_for_providerchange_and_resourcechange_events.patch
 Patch1502:	u_exa-only-draw-valid-trapezoids.patch
 Patch1503:	N_driver-autoconfig.diff
 Patch1504:	u_fbdevhw.diff
