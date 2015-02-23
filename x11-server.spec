@@ -185,11 +185,10 @@ Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 ##Suse patches
 Patch1501:	u_randr_allow_rrselectinput_for_providerchange_and_resourcechange_events.patch
 Patch1502:	u_exa-only-draw-valid-trapezoids.patch
-Patch1503:	u_fbdevhw.diff
-Patch1504:	ux_xserver_xvfb-randr.patch
-Patch1505:	u_xorg-server-xdmcp.patch
-Patch1506:	N_Force-swcursor-for-KMS-drivers-without-hw-cursor-sup.patch
-Patch1507:	u_ad-hoc-fix-for-mmap-s-truncated-offset-parameter-on-.patch
+Patch1503:	ux_xserver_xvfb-randr.patch
+Patch1504:	u_xorg-server-xdmcp.patch
+Patch1505:	N_Force-swcursor-for-KMS-drivers-without-hw-cursor-sup.patch
+Patch1506:	u_ad-hoc-fix-for-mmap-s-truncated-offset-parameter-on-.patch
 
 
 
