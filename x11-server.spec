@@ -629,6 +629,8 @@ test `getminor extension` == %{extension_minor}
 
 
 %build
+%servebuild
+
 autoreconf -if
 
 # Copy the clean dir to a 'source' directory that will be used to make the
