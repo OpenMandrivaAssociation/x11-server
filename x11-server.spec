@@ -629,7 +629,7 @@ test `getminor extension` == %{extension_minor}
 
 
 %build
-%servebuild
+%serverbuild
 
 autoreconf -if
 
