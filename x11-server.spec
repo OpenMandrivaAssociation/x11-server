@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 9
+%define rel 10
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -339,6 +339,7 @@ Requires:	x11-data-xkbdata > 1.3-5
 Requires:	x11-font-alias
 Requires:	libx11-common
 Requires:	x11-driver-input-evdev
+Requires:	x11-driver-input-libinput
 Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
 Conflicts:	compiz < 0.5.0-1mdv2007.1
