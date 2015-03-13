@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 10
+%define rel 11
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -189,6 +189,7 @@ Patch1503:	ux_xserver_xvfb-randr.patch
 Patch1504:	u_xorg-server-xdmcp.patch
 Patch1505:	N_Force-swcursor-for-KMS-drivers-without-hw-cursor-sup.patch
 Patch1506:	u_ad-hoc-fix-for-mmap-s-truncated-offset-parameter-on-.patch
+Patch1507:	0001-os-access-fix-regression-in-server-interpreted-auth.patch
 
 
 
