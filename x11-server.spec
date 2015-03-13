@@ -190,6 +190,7 @@ Patch1504:	u_xorg-server-xdmcp.patch
 Patch1505:	N_Force-swcursor-for-KMS-drivers-without-hw-cursor-sup.patch
 Patch1506:	u_ad-hoc-fix-for-mmap-s-truncated-offset-parameter-on-.patch
 Patch1507:	0001-os-access-fix-regression-in-server-interpreted-auth.patch
+Patch1508:	pci_device_map_legacy_zero.patch
 
 
 
