@@ -27,7 +27,7 @@
  {
      unsigned char ret;
 -    __asm__ __volatile__("in%B0 (%1)":"=a"(ret):"d"(port));
-+    __asm__ __volatile__("in %0,(%1)":"=a"(ret):"d"(port));
++    __asm__ __volatile__("in (%%dx),%%al":"=a"(ret):"d"(port));
  
      return ret;
  }
@@ -36,7 +36,7 @@
  {
      unsigned short ret;
 -    __asm__ __volatile__("in%W0 (%1)":"=a"(ret):"d"(port));
-+    __asm__ __volatile__("in %0,(%1)":"=a"(ret):"d"(port));
++    __asm__ __volatile__("in (%%dx),%%ax":"=a"(ret):"d"(port));
  
      return ret;
  }
@@ -45,7 +45,7 @@
  {
      unsigned int ret;
 -    __asm__ __volatile__("in%L0 (%1)":"=a"(ret):"d"(port));
-+    __asm__ __volatile__("in %0,(%1)":"=a"(ret):"d"(port));
++    __asm__ __volatile__("in (%%dx),%%eax":"=a"(ret):"d"(port));
  
      return ret;
  }
