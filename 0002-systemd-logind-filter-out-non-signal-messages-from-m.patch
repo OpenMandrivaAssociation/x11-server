@@ -1,0 +1,40 @@
+From 792e9251670ce94210df5c6d354059bbb97f4478 Mon Sep 17 00:00:00 2001
+From: Ray Strode <rstrode@redhat.com>
+Date: Thu, 16 Apr 2015 11:28:15 -0400
+Subject: [PATCH] systemd-logind: filter out non-signal messages from message
+ filter
+
+It's possible to receive a message reply in the message filter if a
+previous message call timed out locally before the reply arrived.
+
+The message_filter function only handles signals, at the moment, and
+does not properly handle message replies.
+
+This commit changes the message_filter function to filter out all
+non-signal messages, including spurious message replies.
+
+Downstream-bug: https://bugzilla.redhat.com/show_bug.cgi?id=1209347
+Signed-off-by: Ray Strode <rstrode@redhat.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Keith Packard <keithp@keithp.com>
+---
+ hw/xfree86/os-support/linux/systemd-logind.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/hw/xfree86/os-support/linux/systemd-logind.c b/hw/xfree86/os-support/linux/systemd-logind.c
+index 49758f4..57c87c0 100644
+--- a/hw/xfree86/os-support/linux/systemd-logind.c
++++ b/hw/xfree86/os-support/linux/systemd-logind.c
+@@ -313,6 +313,9 @@ message_filter(DBusConnection * connection, DBusMessage * message, void *data)
+     dbus_int32_t major, minor;
+     char *pause_str;
+ 
++    if (dbus_message_get_type (message) != DBUS_MESSAGE_TYPE_SIGNAL)
++        return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
++
+     dbus_error_init(&error);
+ 
+     if (dbus_message_is_signal(message,
+-- 
+1.9.0
+

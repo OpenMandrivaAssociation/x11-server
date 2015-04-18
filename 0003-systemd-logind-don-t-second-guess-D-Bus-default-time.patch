@@ -1,0 +1,99 @@
+From b1029716e41e252f149b82124a149da180607c96 Mon Sep 17 00:00:00 2001
+From: Ray Strode <rstrode@redhat.com>
+Date: Thu, 16 Apr 2015 11:28:16 -0400
+Subject: [PATCH] systemd-logind: don't second guess D-Bus default timeout
+
+At the moment, the X server uses a non-default timeout for D-Bus
+messages to systemd-logind. The only timeouts normally used with
+D-Bus are:
+
+1) Infinite
+2) Default
+
+Anything else is just as arbitrary as Default, and so rarely makes
+sense to use instead of Default.
+
+Put another way, there's little reason to be fault tolerant against
+a local root running daemon (logind), that in some configurations, the
+X server already depends on for proper functionality.
+
+This commit changes systemd-logind to just use the default timeouts.
+
+Downstream-bug: https://bugzilla.redhat.com/show_bug.cgi?id=1209347
+Signed-off-by: Ray Strode <rstrode@redhat.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Keith Packard <keithp@keithp.com>
+---
+ hw/xfree86/os-support/linux/systemd-logind.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/hw/xfree86/os-support/linux/systemd-logind.c b/hw/xfree86/os-support/linux/systemd-logind.c
+index 57c87c0..4ad41a3 100644
+--- a/hw/xfree86/os-support/linux/systemd-logind.c
++++ b/hw/xfree86/os-support/linux/systemd-logind.c
+@@ -40,8 +40,6 @@
+ 
+ #include "systemd-logind.h"
+ 
+-#define DBUS_TIMEOUT 500 /* Wait max 0.5 seconds */
+-
+ struct systemd_logind_info {
+     DBusConnection *conn;
+     char *session;
+@@ -130,7 +128,7 @@ systemd_logind_take_fd(int _major, int _minor, const char *path,
+     }
+ 
+     reply = dbus_connection_send_with_reply_and_block(info->conn, msg,
+-                                                      DBUS_TIMEOUT, &error);
++                                                      DBUS_TIMEOUT_USE_DEFAULT, &error);
+     if (!reply) {
+         LogMessage(X_ERROR, "systemd-logind: failed to take device %s: %s\n",
+                    path, error.message);
+@@ -207,7 +205,7 @@ systemd_logind_release_fd(int _major, int _minor, int fd)
+     }
+ 
+     reply = dbus_connection_send_with_reply_and_block(info->conn, msg,
+-                                                      DBUS_TIMEOUT, &error);
++                                                      DBUS_TIMEOUT_USE_DEFAULT, &error);
+     if (!reply)
+         LogMessage(X_ERROR, "systemd-logind: failed to release device: %s\n",
+                    error.message);
+@@ -289,7 +287,7 @@ systemd_logind_ack_pause(struct systemd_logind_info *info,
+     }
+ 
+     reply = dbus_connection_send_with_reply_and_block(info->conn, msg,
+-                                                      DBUS_TIMEOUT, &error);
++                                                      DBUS_TIMEOUT_USE_DEFAULT, &error);
+     if (!reply)
+         LogMessage(X_ERROR, "systemd-logind: failed to ack pause: %s\n",
+                    error.message);
+@@ -457,7 +455,7 @@ connect_hook(DBusConnection *connection, void *data)
+     }
+ 
+     reply = dbus_connection_send_with_reply_and_block(connection, msg,
+-                                                      DBUS_TIMEOUT, &error);
++                                                      DBUS_TIMEOUT_USE_DEFAULT, &error);
+     if (!reply) {
+         LogMessage(X_ERROR, "systemd-logind: failed to get session: %s\n",
+                    error.message);
+@@ -492,7 +490,7 @@ connect_hook(DBusConnection *connection, void *data)
+     }
+ 
+     reply = dbus_connection_send_with_reply_and_block(connection, msg,
+-                                                      DBUS_TIMEOUT, &error);
++                                                      DBUS_TIMEOUT_USE_DEFAULT, &error);
+     if (!reply) {
+         LogMessage(X_ERROR, "systemd-logind: TakeControl failed: %s\n",
+                    error.message);
+@@ -564,7 +562,7 @@ systemd_logind_release_control(struct systemd_logind_info *info)
+     }
+ 
+     reply = dbus_connection_send_with_reply_and_block(info->conn, msg,
+-                                                      DBUS_TIMEOUT, &error);
++                                                      DBUS_TIMEOUT_USE_DEFAULT, &error);
+     if (!reply) {
+         LogMessage(X_ERROR, "systemd-logind: ReleaseControl failed: %s\n",
+                    error.message);
+-- 
+1.9.0
+

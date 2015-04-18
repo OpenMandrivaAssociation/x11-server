@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 14
+%define rel 15
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -156,6 +156,8 @@ BuildRequires:	pkgconfig(glib-2.0)
 
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
+Patch0:		0002-systemd-logind-filter-out-non-signal-messages-from-m.patch
+Patch1:		0003-systemd-logind-don-t-second-guess-D-Bus-default-time.patch
 
 # Patches "liberated" from Fedora:
 # http://pkgs.fedoraproject.org/gitweb/?p=xorg-x11-server.git
