@@ -78,7 +78,6 @@ Obsoletes:	%{name}-xfake < %{version}-%{release}
 # FIXME: build with systemtap installed is broken
 BuildConflicts:	systemtap
 BuildRequires:	pkgconfig(dbus-1)
-BuildRequires:	pkgconfig(libtirpc)
 # causes to segfaults in X binary
 #BuildRequires:	pkgconfig(libunwind)
 BuildRequires:	pkgconfig(gl)
@@ -624,6 +623,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--disable-debug \
 	%endif
 	--enable-config-udev \
+	--enable-config-udev-kms \
 	--disable-strict-compilation \
 	--disable-install-libxf86config \
 	--enable-composite \
@@ -669,12 +669,11 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xephyr \
 	--disable-install-setuid \
 	--enable-secure-rpc \
-	--enable-xwrapper \
-	--enable-pam \
 	--disable-config-hal \
 	--with-sha1=libcrypto \
-	--enable-xwayland \
-    --enable-systemd-logind \
+	--with-systemd-daemon \
+	--enable-systemd-logind \
+	--enable-xwrapper \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
