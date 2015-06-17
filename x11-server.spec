@@ -157,8 +157,6 @@ BuildRequires:	pkgconfig(glib-2.0)
 
 # Upstream cherry picks from master branch
 # git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
-Patch0:		0002-systemd-logind-filter-out-non-signal-messages-from-m.patch
-Patch1:		0003-systemd-logind-don-t-second-guess-D-Bus-default-time.patch
 
 # Patches "liberated" from Fedora:
 # http://pkgs.fedoraproject.org/gitweb/?p=xorg-x11-server.git
@@ -615,9 +613,10 @@ pushd .build
 %if %{with_debug}
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
-CC=gcc CXX=g++ %configure \
+
+%configure \
 	--with-log-dir=%{_logdir} \
-	--with-builder-addr="www.openmandriva.org" \
+	--with-builder-addr="%{disturl}" \
 	--with-vendor-name="%{vendor}" \
 	--with-os-vendor="%{vendor}" \
 	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
