@@ -189,7 +189,6 @@ Patch1502:	u_exa-only-draw-valid-trapezoids.patch
 Patch1503:	ux_xserver_xvfb-randr.patch
 Patch1504:	u_xorg-server-xdmcp.patch
 Patch1505:	N_Force-swcursor-for-KMS-drivers-without-hw-cursor-sup.patch
-Patch1507:	0001-os-access-fix-regression-in-server-interpreted-auth.patch
 Patch1508:	pci_device_map_legacy_zero.patch
 
 
