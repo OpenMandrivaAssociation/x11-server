@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 16
+%define rel 1
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -33,7 +33,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.17.1
+Version:	1.17.2
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
