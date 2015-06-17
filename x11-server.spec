@@ -86,6 +86,7 @@ BuildRequires:	pam-devel
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gbm)
 BuildRequires:	pkgconfig(systemd)
+BuildRequires:	pkgconfig(libsystemd-daemon)
 BuildRequires:	pkgconfig(pciaccess)
 BuildRequires:	pkgconfig(pixman-1) >= 0.9.5
 BuildRequires:	pkgconfig(xau) >= 1.0.0
@@ -673,7 +674,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--disable-config-hal \
 	--with-sha1=libcrypto \
 	--enable-xwayland \
-	--with-systemd-daemon \
+    --enable-systemd-logind \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
