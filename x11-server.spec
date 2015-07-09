@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 2
+%define rel 3
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -609,6 +609,13 @@ pushd .build
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 
+%if ! %{cross_compiling}
+# Currently, X.org compiled with clang (as of 1.17.2-2, clang 3.7.0-0.240532.1)
+# crashes on startup.
+# Before removing forcing gcc, test that a system with your new
+# X packages boots to UI after a reboot.
+CC=gcc CXX=g++ \
+%endif
 %configure \
 	--with-log-dir=%{_logdir} \
 	--with-builder-addr="%{disturl}" \
