@@ -33,7 +33,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.17.2
+Version:	1.17.3
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
@@ -184,7 +184,6 @@ Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 
 # Other patches
 ##Suse patches
-Patch1501:	u_randr_allow_rrselectinput_for_providerchange_and_resourcechange_events.patch
 Patch1502:	u_exa-only-draw-valid-trapezoids.patch
 Patch1503:	ux_xserver_xvfb-randr.patch
 Patch1504:	u_xorg-server-xdmcp.patch
