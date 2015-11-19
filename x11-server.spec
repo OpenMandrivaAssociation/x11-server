@@ -25,15 +25,15 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 19
+%define videodrv_major 20
 %define videodrv_minor 0
-%define xinput_major 21
-%define xinput_minor 0
+%define xinput_major 22
+%define xinput_minor 1
 %define extension_major 9
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.17.4
+Version:	1.18.0
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
@@ -175,7 +175,6 @@ Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
 #Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.16.0-blacklist-driver.patch
-Patch912:	xorg-server-1.17-fix-i386-asm-for-clang.patch
 
 # Do not crash if Xv is not initialized (patch from xorg-devel ML)
 # The crash happened when v4l was loaded and xv was not registered,
@@ -187,7 +186,6 @@ Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 Patch1502:	u_exa-only-draw-valid-trapezoids.patch
 Patch1503:	ux_xserver_xvfb-randr.patch
 Patch1504:	u_xorg-server-xdmcp.patch
-Patch1505:	N_Force-swcursor-for-KMS-drivers-without-hw-cursor-sup.patch
 
 %description
 X11 servers.
@@ -362,7 +360,6 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_mandir}/man1/Xorg.*
 %{_mandir}/man1/Xserver.*
 %{_mandir}/man5/xorg.conf.*
-%{_datadir}/X11/xorg.conf.d/10-evdev.conf
 %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
 #------------------------------------------------------------------------------
