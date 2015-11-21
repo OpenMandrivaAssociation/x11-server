@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 1
+%define rel 2
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -254,8 +254,8 @@ Conflicts:	x11-driver-video-fglrx < 8.720
 Conflicts:	x11-driver-video-nvidia-current <= 100.14.19
 Conflicts:	x11-xorg1_5-server < 1.5.3-4
 Obsoletes:	%{_lib}glamor0 <= 0.6.0-10
-%rename		x11-driver-video-modesetting 2:0.9.0-4
-
+Obsoletes:	x11-driver-video-modesetting < 2:0.9.1
+Provides:	x11-driver-video-modesetting = 2:0.9.1
 
 Provides:	xserver-abi(ansic-%{ansic_major}) = %{ansic_minor}
 Provides:	xserver-abi(videodrv-%{videodrv_major}) = %{videodrv_minor}
