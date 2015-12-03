@@ -610,6 +610,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 # crashes on startup.
 # Before removing forcing gcc, test that a system with your new
 # X packages boots to UI after a reboot.
+%define _disable_lto 1
 CC=gcc CXX=g++ \
 %endif
 %configure \
