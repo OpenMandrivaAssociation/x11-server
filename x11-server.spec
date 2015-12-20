@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 3
+%define rel 4
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -116,7 +116,7 @@ BuildRequires:	pkgconfig(libdrm)
 BuildRequires:	pkgconfig(xcb-glx)
 BuildRequires:	pkgconfig(xcb-xf86dri) > 1.6
 BuildRequires:	x11-font-util >= 1.1
-BuildRequires:	x11-proto-devel >= 7.6-4
+BuildRequires:	x11-proto-devel >= 7.7-21
 BuildRequires:	x11-util-macros >= 1.15
 BuildRequires:	x11-xtrans-devel >= 1.2.7-2
 
@@ -186,6 +186,13 @@ Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 Patch1502:	u_exa-only-draw-valid-trapezoids.patch
 Patch1503:	ux_xserver_xvfb-randr.patch
 Patch1504:	u_xorg-server-xdmcp.patch
+
+# Fedora patches:
+# submitted: http://lists.freedesktop.org/archives/xorg-devel/2015-November/047811.html
+Patch1505:	0001-Xorg.wrap-activate-libdrm-based-detection-for-KMS-dr.patch
+
+# because the display-managers are not ready yet, do not upstream
+Patch1506:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
 
 %description
 X11 servers.
@@ -334,8 +341,7 @@ Requires:	x11-data-xkbdata > 1.3-5
 Requires:	x11-font-alias
 Requires:	libx11-common
 Requires:	x11-driver-input-evdev
-# (tpg) for now disable it as x11 segfaults
-#Requires:	x11-driver-input-libinput
+Requires:	x11-driver-input-libinput
 Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
 Conflicts:	compiz < 0.5.0-1mdv2007.1
@@ -353,6 +359,8 @@ x11-server-xorg is the new generation of X server from X.Org.
 %files xorg
 %{_bindir}/X
 %{_bindir}/Xorg
+%{_libexecdir}/Xorg
+%attr(4755,root,root)%{_libexecdir}/Xorg.wrap
 %attr(4755,root,root)%{_bindir}/Xwrapper
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
@@ -360,6 +368,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_mandir}/man1/Xorg.*
 %{_mandir}/man1/Xserver.*
 %{_mandir}/man5/xorg.conf.*
+%{_mandir}/man5/Xwrapper.config.*
 %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 
 #------------------------------------------------------------------------------
@@ -677,7 +686,7 @@ CC=gcc CXX=g++ \
 	--with-sha1=libcrypto \
 	--with-systemd-daemon \
 	--enable-systemd-logind \
-	--enable-xwrapper \
+	--enable-suid-wrapper \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
@@ -689,7 +698,7 @@ pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
 ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
-ln -sf %{_bindir}/Xwrapper %{buildroot}%{_bindir}/X
+ln -sf %{_libexecdir}/Xorg.wrap %{buildroot}%{_bindir}/X
 
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
 install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pam.d/xserver
