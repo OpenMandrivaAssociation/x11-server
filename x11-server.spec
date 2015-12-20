@@ -19,7 +19,7 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 4
+%define rel 5
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -619,8 +619,9 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 # crashes on startup.
 # Before removing forcing gcc, test that a system with your new
 # X packages boots to UI after a reboot.
-%define _disable_lto 1
-CC=gcc CXX=g++ \
+# (tpg) try with LTO and clang enabled
+#define _disable_lto 1
+#CC=gcc CXX=g++ \
 %endif
 %configure \
 	--with-log-dir=%{_logdir} \
