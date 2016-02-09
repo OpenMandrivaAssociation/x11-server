@@ -33,7 +33,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.18.0
+Version:	1.18.1
 %if %{git}
 Release:	0.%{git}.%{rel}
 %else
@@ -184,12 +184,7 @@ Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
 # Other patches
 ##Suse patches
 Patch1502:	u_exa-only-draw-valid-trapezoids.patch
-Patch1503:	ux_xserver_xvfb-randr.patch
 Patch1504:	u_xorg-server-xdmcp.patch
-
-# Fedora patches:
-# submitted: http://lists.freedesktop.org/archives/xorg-devel/2015-November/047811.html
-Patch1505:	0001-Xorg.wrap-activate-libdrm-based-detection-for-KMS-dr.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch1506:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
