@@ -19,8 +19,6 @@
 %define extra_module_dir %{_libdir}/xorg/extra-modules
 %define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
 
-%define rel 6
-
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
@@ -35,9 +33,9 @@
 Name:		x11-server
 Version:	1.18.1
 %if %{git}
-Release:	0.%{git}.%{rel}
+Release:	0.%{git}.1
 %else
-Release:	%{rel}
+Release:	7
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -188,6 +186,12 @@ Patch1504:	u_xorg-server-xdmcp.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch1506:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+
+# xwayland patches
+# https://patchwork.freedesktop.org/patch/72945/
+Patch1507:	Add-hybrid-full-size-empty-clip-mode-to-SetRootClip.patch
+# https://patchwork.freedesktop.org/patch/72951/
+Patch1508:	xwayland-fix-a-crash-on-output-removal.patch
 
 %description
 X11 servers.
@@ -580,6 +584,7 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 %setup -q -n xorg-server-%{version}
 %endif
 %apply_patches
+
 autoreconf -if
 
 # check the ABI in the source against what we expect.
