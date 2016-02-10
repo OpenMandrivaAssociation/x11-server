@@ -163,7 +163,9 @@ BuildRequires:	pkgconfig(glib-2.0)
 
 # Mandriva patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
-Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+
+# (tpg) use upstream suid xwrapper
+#Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
 Patch904:	0904-LED-behavior-fixes.patch
@@ -340,7 +342,6 @@ Requires:	x11-data-xkbdata > 1.3-5
 Requires:	x11-font-alias
 Requires:	libx11-common
 Requires:	x11-driver-input-evdev
-#Requires:	x11-driver-input-libinput
 # (tpg) segfaults
 Conflicts:	x11-driver-input-libinput <= 0.16.0
 Requires:	udev
@@ -362,7 +363,6 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_bindir}/Xorg
 %{_libexecdir}/Xorg
 %attr(4755,root,root)%{_libexecdir}/Xorg.wrap
-%attr(4755,root,root)%{_bindir}/Xwrapper
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
