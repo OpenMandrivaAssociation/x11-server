@@ -31,11 +31,11 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.18.1
+Version:	1.18.2
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	7
+Release:	1
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -188,12 +188,6 @@ Patch1504:	u_xorg-server-xdmcp.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch1506:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
-
-# xwayland patches
-# https://patchwork.freedesktop.org/patch/72945/
-Patch1507:	Add-hybrid-full-size-empty-clip-mode-to-SetRootClip.patch
-# https://patchwork.freedesktop.org/patch/72951/
-Patch1508:	xwayland-fix-a-crash-on-output-removal.patch
 
 %description
 X11 servers.
