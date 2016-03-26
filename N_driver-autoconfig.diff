@@ -26,7 +26,7 @@ Index: hw/xfree86/common/xf86pciBus.c
 +	driverList[1] = "nouveau";
 +	/* GeForce 6150SE support broken (bnc #465190/544674) */
 +	if (dev->device_id != 0x03D0) {
-+		driverList[2] = "nv";
++		driverList[2] = "modesetting";
 +	}
 +	break;
      case 0x12d2:
