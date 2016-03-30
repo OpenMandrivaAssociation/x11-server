@@ -35,7 +35,7 @@ Version:	1.18.2
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	3
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -336,8 +336,8 @@ Requires:	x11-data-xkbdata > 1.3-5
 Requires:	x11-font-alias
 Requires:	libx11-common
 Requires:	x11-driver-input-evdev
-# (tpg) segfaults
-Conflicts:	x11-driver-input-libinput <= 0.16.0
+# (tpg) 0.16.0 and older segfaults
+Requires:	x11-driver-input-libinput >= 0.17.0
 Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
 Conflicts:	compiz < 0.5.0-1mdv2007.1
