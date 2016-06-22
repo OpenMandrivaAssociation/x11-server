@@ -83,7 +83,7 @@ BuildRequires:	pam-devel
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gbm)
 BuildRequires:	pkgconfig(systemd)
-BuildRequires:	pkgconfig(libsystemd-daemon)
+BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(pciaccess)
 BuildRequires:	pkgconfig(pixman-1) >= 0.9.5
 BuildRequires:	pkgconfig(xau) >= 1.0.0
