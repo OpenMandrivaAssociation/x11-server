@@ -14,11 +14,6 @@
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
 
-# Search for modules in extra_module_dir before the default path.
-# This will allow fglrx to install its modified modules in more cleaner way.
-%define extra_module_dir %{_libdir}/xorg/extra-modules
-%define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
-
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
@@ -35,7 +30,7 @@ Version:	1.18.3
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	3
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -47,6 +42,8 @@ Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{v
 %endif
 Source1:	xserver.pamd
 Source2:	xvfb-run.sh
+# for finding & loading nvidia and flgrx drivers:
+Source3:	00-modules.conf
 Source5:	mandriva-setup-keyboard-udev
 Source6:	61-x11-input.rules
 Source7:	90-zap.conf
@@ -170,7 +167,6 @@ Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
 Patch904:	0904-LED-behavior-fixes.patch
 Patch905:	0905-Add-noAutoDevices-command-line-option.patch
-Patch906:	0906-Xorg-add-an-extra-module-path.patch
 Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
 #Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
@@ -269,8 +265,7 @@ X server common files.
 
 %post common
 %{_sbindir}/update-alternatives \
-	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
-	--slave %{extra_module_dir} xorg_extra_modules %{xorg1_6_extra_modules}
+	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority}
 
 # (anssi)
 %triggerun common -- %{name}-common < 1.3.0.0-17
@@ -293,7 +288,6 @@ fi
 
 %files common
 %dir %{_libdir}/xorg/modules
-%dir %{xorg1_6_extra_modules}
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
 %dir %{_sysconfdir}/X11/fontpath.d
@@ -370,7 +364,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_mandir}/man5/xorg.conf.*
 %{_mandir}/man5/Xwrapper.config.*
 %{_datadir}/X11/xorg.conf.d/10-quirks.conf
-
+%{_datadir}/X11/xorg.conf.d/00-modules.conf
 #------------------------------------------------------------------------------
 
 %if %{enable_dmx}
@@ -631,7 +625,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--with-os-vendor="%{vendor}" \
 	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
 	--with-vendor-web="%{bugurl}" \
-	--with-extra-module-dir=%{extra_module_dir} \
 	%if %{with_debug}
 	--enable-debug \
 	%else
@@ -719,7 +712,6 @@ ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 # create more module directories to be owned by x11-server-common
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
-install -d -m755 %{buildroot}%{xorg1_6_extra_modules}
 
 # (anssi) manage proprietary drivers
 install -d -m755 %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL
@@ -730,6 +722,7 @@ EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
 install -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/xvfb-run
+install -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/X11/xorg.conf.d/
 
 mkdir -p %{buildroot}/sbin
 mkdir -p %{buildroot}/lib/udev/rules.d/
