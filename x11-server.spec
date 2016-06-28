@@ -14,10 +14,7 @@
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
 
-# Search for modules in extra_module_dir before the default path.
-# This will allow fglrx to install its modified modules in more cleaner way.
-%define extra_module_dir %{_libdir}/xorg/extra-modules
-%define xorg1_6_extra_modules %{_libdir}/xorg/xorg-1.6-extra-modules
+%define moduledir %{_libdir}/xorg/modules
 
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
@@ -35,7 +32,7 @@ Version:	1.18.3
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	3
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -47,6 +44,9 @@ Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{v
 %endif
 Source1:	xserver.pamd
 Source2:	xvfb-run.sh
+# for finding & loading nvidia and flgrx drivers:
+Source3:	00-modules.conf
+Source4:	10-quirks.conf
 Source5:	mandriva-setup-keyboard-udev
 Source6:	61-x11-input.rules
 Source7:	90-zap.conf
@@ -85,7 +85,7 @@ BuildRequires:	pkgconfig(gbm)
 BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(pciaccess)
-BuildRequires:	pkgconfig(pixman-1) >= 0.9.5
+BuildRequires:	pkgconfig(pixman-1)
 BuildRequires:	pkgconfig(xau) >= 1.0.0
 BuildRequires:	pkgconfig(xaw7) >= 1.0.1
 BuildRequires:	pkgconfig(xdmcp) >= 1.0.0
@@ -140,54 +140,61 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
-# Instructions to setup your repository clone
-# git://anongit.freedesktop.org/git/xorg/xserver
-# git checkout origin/server-1.7-branch
-# git checkout -b mdv-1.7-cherry-picks
-# git am ../03??-*.patch
-# git checkout -b mdv-1.7-redhat
-# git am ../04??-*.patch
-# git checkout -b mdv-1.7-patches
-# git am ../09??-*.patch
 
-# Sync with server-1.6-branch
-# git format-patch --start-number 100 xorg-server-1.6.4..server-1.6-branch
+# Fedora Patches
+Patch6000:	0001-randr-provider-only-allow-slave-gpu-to-be-offload-so.patch
+Patch6001:	0002-modesetting-set-driverPrivate-to-NULL-after-closing-.patch
+Patch6002:	0003-xf86Crtc-don-t-set-the-root-window-property-on-slave.patch
+Patch6004:	0004-modesetting-set-capabilities-up-after-glamor-and-ena.patch
+Patch6005:	0005-modesetting-Properly-cleanup-fb-for-reverse-prime-of.patch
+Patch6006:	0006-modesetting-Clear-drmmode-fb_id-before-unflipping.patch
+Patch6007:	0007-modesetting-Fix-swapping-of-provider-sink-source-cap.patch
+Patch6008:	0008-modesetting-Load-on-GPU-s-with-0-outputs.patch
+Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
 
-# Upstream cherry picks from master branch
-# git format-patch --start-number 300 origin/server-1.6-branch..mdv-1.6.4-cherry-picks
+# do not upstream - do not even use here yet
+Patch7027:	xserver-autobind-hotplug.patch
 
-# Patches "liberated" from Fedora:
-# http://pkgs.fedoraproject.org/gitweb/?p=xorg-x11-server.git
-# git format-patch --start-number 400 mdv-1.6.4-cherry-picks..mdv-1.6.4-redhat
-# (eugeni) obsoleted with '-background none' option
+# https://bugzilla.redhat.com/show_bug.cgi?id=1282252
+Patch9200:	0001-Xi-don-t-deliver-emulated-motion-events-for-non-emul.patch
 
-# Mandriva patches
+# because the display-managers are not ready yet, do not upstream
+Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+
+Patch10002:	0001-present-Improve-scaling-of-vblank-handler.patch
+Patch10003:	0002-present-Fix-presentation-of-flips-out-of-order.patch
+
+# Bug 1047151 - Numlock LED incorrect after keyboard map switch
+Patch10004:	0001-xkb-after-changing-the-keymap-force-an-indicator-upd.patch
+Patch10005:	0001-xkb-add-a-cause-to-the-xkb-indicator-update-after-a-.patch
+
+# OpenMandriva/Mageia patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
-
-# (tpg) use upstream suid xwrapper
-#Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
 Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
-Patch904:	0904-LED-behavior-fixes.patch
-Patch905:	0905-Add-noAutoDevices-command-line-option.patch
-Patch906:	0906-Xorg-add-an-extra-module-path.patch
+Patch903:	0903-LED-behavior-fixes.patch
+Patch906:	0906-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
 Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
-#Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.16.0-blacklist-driver.patch
+
+# Candidates for dropping:
+# 902: by pixel, so that X11 choose the best resolution with a better algorithm
+# 903: Input subsystem has changed *a lot* since this patch was written... I
+#      fear it might break things now
+# 906: All this patch does is force users to hit ctrl+alt+bksp twice (with
+#      an annoying sound) IF the hotkey is enabled. If the user chooses to
+#      enable ctrk+alt+bksp, why force him to hit twice? OTOH, the sound is
+#      annoying, and it should teach users to not use ctrl+alt+bksp =D
 
 # Do not crash if Xv is not initialized (patch from xorg-devel ML)
 # The crash happened when v4l was loaded and xv was not registered,
 # for example on RV610 with radeon driver
-Patch1001:	1001-do-not-crash-if-xv-not-initialized.patch
+Patch4001:	1001-do-not-crash-if-xv-not-initialized.patch
 
-# Other patches
-##Suse patches
-Patch1502:	u_exa-only-draw-valid-trapezoids.patch
-Patch1504:	u_xorg-server-xdmcp.patch
-
-# because the display-managers are not ready yet, do not upstream
-Patch1506:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+# (cg) Point the user at the journal rather than a logfile at /dev/null
+Patch5001:	point-user-at-journal-rather-than-dev-null.patch
 
 %description
 X11 servers.
@@ -202,7 +209,7 @@ License:	MIT
 %define oldxorgnamedevel  %mklibname xorg-x11
 Conflicts:	%{oldxorgnamedevel}-devel < 7.0
 Obsoletes:	x11-server13-devel <= 1.2.99.905
-Requires:	pkgconfig(pixman-1) >= 0.9.5
+Requires:	pkgconfig(pixman-1)
 Requires:	libpciaccess-devel
 Requires:	libxkbfile-devel
 Requires:	libxext-devel >= 1.1
@@ -214,7 +221,7 @@ Development files for %{name}.
 
 %pre devel
 if [ -h %{_includedir}/X11 ]; then
-	rm -f %{_includedir}/X11
+    rm -f %{_includedir}/X11
 fi
 
 %files devel
@@ -269,31 +276,29 @@ X server common files.
 
 %post common
 %{_sbindir}/update-alternatives \
-	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority} \
-	--slave %{extra_module_dir} xorg_extra_modules %{xorg1_6_extra_modules}
+	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority}
 
 # (anssi)
 %triggerun common -- %{name}-common < 1.3.0.0-17
 [ $1 -eq 2 ] || exit 0 # do not run if downgrading
 current_glconf="$(readlink -e %{_sysconfdir}/ld.so.conf.d/GL.conf)"
 if [ "${current_glconf#*mesa}" == "gl1.conf" ]; then
-	# This an upgrade of a system with no proprietary drivers enabled, update
-	# the link to point to the new standard.conf instead of libmesagl1.conf (2008.0 change).
-	%{_sbindir}/update-alternatives --set gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
+# This an upgrade of a system with no proprietary drivers enabled, update
+# the link to point to the new standard.conf instead of libmesagl1.conf (2008.0 change).
+    %{_sbindir}/update-alternatives --set gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 else
-	# XFdrake did not set symlink to manual mode before 2008.0, so we ensure it here.
-	%{_sbindir}/update-alternatives --set gl_conf "${current_glconf}"
+# XFdrake did not set symlink to manual mode before 2008.0, so we ensure it here.
+    %{_sbindir}/update-alternatives --set gl_conf "${current_glconf}"
 fi
 true
 
 %postun common
 if [ ! -f %{_sysconfdir}/ld.so.conf.d/GL/standard.conf ]; then
-	/usr/sbin/update-alternatives --remove gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
+    /usr/sbin/update-alternatives --remove gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 fi
 
 %files common
 %dir %{_libdir}/xorg/modules
-%dir %{xorg1_6_extra_modules}
 %dir %{_sysconfdir}/X11
 %dir %{_sysconfdir}/X11/app-defaults
 %dir %{_sysconfdir}/X11/fontpath.d
@@ -323,7 +328,6 @@ fi
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %dir %{_prefix}/X11R6/lib/X11
-
 
 #------------------------------------------------------------------------------
 
@@ -362,6 +366,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_bindir}/Xorg
 %{_libexecdir}/Xorg
 %attr(4755,root,root)%{_libexecdir}/Xorg.wrap
+%attr(4755,root,root)%{_bindir}/Xwrapper
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
@@ -370,7 +375,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_mandir}/man5/xorg.conf.*
 %{_mandir}/man5/Xwrapper.config.*
 %{_datadir}/X11/xorg.conf.d/10-quirks.conf
-
+%{_datadir}/X11/xorg.conf.d/00-modules.conf
 #------------------------------------------------------------------------------
 
 %if %{enable_dmx}
@@ -626,21 +631,30 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 %configure \
 	--with-log-dir=%{_logdir} \
+	--with-module-dir=%{moduledir} \
+	--enable-dependency-tracking \
+%ifnarch %{ix86} x86_64
+	--disable-vbe \
+	--disable-int10-module \
+%else
+	--with-int10=x86emu \
+%endif
 	--with-builder-addr="%{disturl}" \
 	--with-vendor-name="%{vendor}" \
 	--with-os-vendor="%{vendor}" \
-	--with-os-name="`echo \`uname -s -r\` | sed -e s'/ /_/g'`" \
+	--with-builderstring="Build ID: %{name} %{version}-%{release}" \
+	--with-os-name="$(hostname -s) $(uname -r)" \
 	--with-vendor-web="%{bugurl}" \
-	--with-extra-module-dir=%{extra_module_dir} \
 	%if %{with_debug}
 	--enable-debug \
 	%else
 	--disable-debug \
 	%endif
+	--without-dtrace \
+	--enable-present \
 	--enable-config-udev \
 	--enable-config-udev-kms \
 	--disable-strict-compilation \
-	--disable-install-libxf86config \
 	--enable-composite \
 	--enable-xres \
 	--enable-record \
@@ -652,7 +666,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xdm-auth-1 \
 	--enable-glx \
 	--enable-aiglx \
-	--enable-glx-tls \
 	--enable-dri \
 	--enable-dri2 \
 	--enable-dri3 \
@@ -684,12 +697,13 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xephyr \
 	--disable-install-setuid \
 	--enable-secure-rpc \
+	--enable-pam \
 	--disable-config-hal \
 	--with-sha1=libcrypto \
 	--with-systemd-daemon \
 	--enable-systemd-logind \
 	--enable-suid-wrapper \
-	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d"
+	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
@@ -707,6 +721,11 @@ install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pam.d/xserver
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
 touch %{buildroot}%{_sysconfdir}/security/console.apps/xserver
 
+mkdir -p %{buildroot}%{_datadir}/X11/xorg.conf.d
+install -m 644 %{SOURCE4} %{buildroot}%{_datadir}/X11/xorg.conf.d
+# Create xorg.conf.d
+mkdir -p %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
+
 mkdir -p %{buildroot}%{_sysconfdir}/X11/app-defaults
 mkdir -p %{buildroot}%{_sysconfdir}/X11/fontpath.d
 
@@ -719,7 +738,6 @@ ln -s ../../%{_lib}/X11 %{buildroot}%{_prefix}/X11R6/lib/X11
 
 # create more module directories to be owned by x11-server-common
 install -d -m755 %{buildroot}%{_libdir}/xorg/modules/{input,drivers}
-install -d -m755 %{buildroot}%{xorg1_6_extra_modules}
 
 # (anssi) manage proprietary drivers
 install -d -m755 %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL
@@ -730,6 +748,7 @@ EOF
 touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
 install -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/xvfb-run
+install -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/X11/xorg.conf.d/
 
 mkdir -p %{buildroot}/sbin
 mkdir -p %{buildroot}/lib/udev/rules.d/
@@ -744,9 +763,6 @@ install -d %{buildroot}/%{xserver_source_dir}
 cp -r * %{buildroot}/%{xserver_source_dir}
 
 install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
-
-# Create xorg.conf.d
-install -d -m 755 %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
 
 # And enable Ctrl+Alt+Backspace by default
 install -c -m 644 %{SOURCE7} %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/

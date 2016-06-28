@@ -1,6 +1,22 @@
---- xorg-server-1.14.99.905/Makefile.am.0900~	2013-12-16 18:27:54.000000000 +0100
-+++ xorg-server-1.14.99.905/Makefile.am	2013-12-22 15:20:40.930214188 +0100
-@@ -53,6 +53,13 @@ SUBDIRS = \
+From fa324e307ac746bf76e0d8330484a4506f807688 Mon Sep 17 00:00:00 2001
+From: Paulo Cesar Pereira de Andrade <pcpa@mandriva.com.br>
+Date: Wed, 5 Dec 2007 13:14:20 -0200
+Subject: [PATCH 900/908] Use a X wrapper that uses pam and consolehelper to
+ give X root privileges
+
+---
+ Makefile.am    |    7 ++
+ configure.ac   |   14 +++
+ os/Makefile.am |    8 ++-
+ os/wrapper.c   |  312 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 340 insertions(+), 1 deletions(-)
+ create mode 100644 os/wrapper.c
+
+diff --git a/Makefile.am b/Makefile.am
+index cea140b..1092147 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -42,6 +42,13 @@ SUBDIRS = \
  	hw \
  	test
  
@@ -14,9 +30,11 @@
  if XORG
  aclocaldir = $(datadir)/aclocal
  aclocal_DATA = xorg-server.m4
---- xorg-server-1.14.99.905/configure.ac.0900~	2013-12-19 23:20:49.000000000 +0100
-+++ xorg-server-1.14.99.905/configure.ac	2013-12-22 15:20:40.930214188 +0100
-@@ -677,6 +677,20 @@ fi
+diff --git a/configure.ac b/configure.ac
+index 2ac1f2e..43d521d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -672,6 +672,20 @@ fi
  AC_MSG_RESULT([$SETUID])
  AM_CONDITIONAL(INSTALL_SETUID, [test "x$SETUID" = "xyes"])
  
@@ -37,8 +55,10 @@
  dnl Issue an error if xtrans.m4 was not found and XTRANS_CONNECTION_FLAGS macro
  dnl was not expanded, since xorg-server with no transport types is rather useless.
  dnl
---- xorg-server-1.14.99.905/os/Makefile.am.0900~	2013-11-12 00:15:00.000000000 +0100
-+++ xorg-server-1.14.99.905/os/Makefile.am	2013-12-22 15:22:22.410215518 +0100
+diff --git a/os/Makefile.am b/os/Makefile.am
+index ef9ecdd..102fecc 100644
+--- a/os/Makefile.am
++++ b/os/Makefile.am
 @@ -1,6 +1,8 @@
  noinst_LTLIBRARIES = libos.la
  
@@ -49,7 +69,7 @@
  
  SECURERPC_SRCS = rpcauth.c
  XDMCP_SRCS = xdmcp.c
-@@ -44,6 +46,10 @@ if BUSFAULT
+@@ -44,6 +46,10 @@
  libos_la_SOURCES += $(BUSFAULT_SRCS)
  endif
  
@@ -60,8 +80,11 @@
  EXTRA_DIST = $(SECURERPC_SRCS) $(XDMCP_SRCS)
  
  if SPECIAL_DTRACE_OBJECTS
---- xorg-server-1.14.99.905/os/wrapper.c.0900~	2013-12-22 15:20:40.930214188 +0100
-+++ xorg-server-1.14.99.905/os/wrapper.c	2013-12-22 15:20:40.930214188 +0100
+diff --git a/os/wrapper.c b/os/wrapper.c
+new file mode 100644
+index 0000000..7b04390
+--- /dev/null
++++ b/os/wrapper.c
 @@ -0,0 +1,312 @@
 +/*
 + * X server wrapper.
@@ -375,3 +398,6 @@
 +    }
 +    exit(1);
 +}
+-- 
+1.7.6
+
