@@ -166,7 +166,6 @@ BuildRequires:	pkgconfig(glib-2.0)
 Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
 Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
 Patch904:	0904-LED-behavior-fixes.patch
-Patch905:	0905-Add-noAutoDevices-command-line-option.patch
 Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
 #Patch908:	0908-XKB-cache-xkbcomp-output-for-fast-start-up-v.1-for-1.patch
 Patch910:	xorg-1.13.0-link-tirpc.patch
