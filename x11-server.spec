@@ -85,7 +85,7 @@ BuildRequires:	pkgconfig(gbm)
 BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(pciaccess)
-BuildRequires:	pkgconfig(pixman-1) >= 0.9.5
+BuildRequires:	pkgconfig(pixman-1)
 BuildRequires:	pkgconfig(xau) >= 1.0.0
 BuildRequires:	pkgconfig(xaw7) >= 1.0.1
 BuildRequires:	pkgconfig(xdmcp) >= 1.0.0
@@ -209,7 +209,7 @@ License:	MIT
 %define oldxorgnamedevel  %mklibname xorg-x11
 Conflicts:	%{oldxorgnamedevel}-devel < 7.0
 Obsoletes:	x11-server13-devel <= 1.2.99.905
-Requires:	pkgconfig(pixman-1) >= 0.9.5
+Requires:	pkgconfig(pixman-1)
 Requires:	libpciaccess-devel
 Requires:	libxkbfile-devel
 Requires:	libxext-devel >= 1.1
@@ -366,6 +366,7 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_bindir}/Xorg
 %{_libexecdir}/Xorg
 %attr(4755,root,root)%{_libexecdir}/Xorg.wrap
+%attr(4755,root,root)%{_bindir}/Xwrapper
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
