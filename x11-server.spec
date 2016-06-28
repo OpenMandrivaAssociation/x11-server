@@ -629,10 +629,11 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	%else
 	--disable-debug \
 	%endif
+	--without-dtrace \
+	--enable-present \
 	--enable-config-udev \
 	--enable-config-udev-kms \
 	--disable-strict-compilation \
-	--disable-install-libxf86config \
 	--enable-composite \
 	--enable-xres \
 	--enable-record \
@@ -644,7 +645,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xdm-auth-1 \
 	--enable-glx \
 	--enable-aiglx \
-	--enable-glx-tls \
 	--enable-dri \
 	--enable-dri2 \
 	--enable-dri3 \
