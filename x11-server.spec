@@ -32,7 +32,7 @@ Version:	1.18.3
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	3
+Release:	4
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -167,6 +167,8 @@ Patch10003:	0002-present-Fix-presentation-of-flips-out-of-order.patch
 # Bug 1047151 - Numlock LED incorrect after keyboard map switch
 Patch10004:	0001-xkb-after-changing-the-keymap-force-an-indicator-upd.patch
 Patch10005:	0001-xkb-add-a-cause-to-the-xkb-indicator-update-after-a-.patch
+# Bug 1338979 - Xwayland: Segmentation fault in cursor update after unrealize
+Patch10006: 0001-wayland-clear-resource-for-pixmap-on-unrealize.patch
 
 # OpenMandriva/Mageia patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
