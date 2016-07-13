@@ -32,7 +32,7 @@ Version:	1.18.3
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	4
+Release:	5
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -343,11 +343,7 @@ Requires:	x11-font-alias
 Requires:	libx11-common
 Requires:	x11-driver-input-evdev
 # (tpg) 0.16.0 and older segfaults
-#Requires:	x11-driver-input-libinput >= 0.17.0
-# 0.19.0 still seems to cause crashes on some hardware
-# probably caused by timing issues.
-# http://issues.openmandriva.org/show_bug.cgi?id=1706
-# Let's stick with what's known to work for now
+Requires:	x11-driver-input-libinput >= 0.17.0
 Requires:	x11-driver-input-evdev
 Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
