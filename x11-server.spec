@@ -28,11 +28,11 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.18.3
+Version:	1.18.4
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	4
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -141,34 +141,17 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
 
+# (tpg) upstream git patch
+Patch100:	0201-glamor-Remove-the-FBO-cache.patch
+
 # Fedora Patches
-Patch6000:	0001-randr-provider-only-allow-slave-gpu-to-be-offload-so.patch
-Patch6001:	0002-modesetting-set-driverPrivate-to-NULL-after-closing-.patch
-Patch6002:	0003-xf86Crtc-don-t-set-the-root-window-property-on-slave.patch
-Patch6004:	0004-modesetting-set-capabilities-up-after-glamor-and-ena.patch
-Patch6005:	0005-modesetting-Properly-cleanup-fb-for-reverse-prime-of.patch
-Patch6006:	0006-modesetting-Clear-drmmode-fb_id-before-unflipping.patch
-Patch6007:	0007-modesetting-Fix-swapping-of-provider-sink-source-cap.patch
-Patch6008:	0008-modesetting-Load-on-GPU-s-with-0-outputs.patch
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
 
 # do not upstream - do not even use here yet
 Patch7027:	xserver-autobind-hotplug.patch
 
-# https://bugzilla.redhat.com/show_bug.cgi?id=1282252
-Patch9200:	0001-Xi-don-t-deliver-emulated-motion-events-for-non-emul.patch
-
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
-
-Patch10002:	0001-present-Improve-scaling-of-vblank-handler.patch
-Patch10003:	0002-present-Fix-presentation-of-flips-out-of-order.patch
-
-# Bug 1047151 - Numlock LED incorrect after keyboard map switch
-Patch10004:	0001-xkb-after-changing-the-keymap-force-an-indicator-upd.patch
-Patch10005:	0001-xkb-add-a-cause-to-the-xkb-indicator-update-after-a-.patch
-# Bug 1338979 - Xwayland: Segmentation fault in cursor update after unrealize
-Patch10006: 0001-wayland-clear-resource-for-pixmap-on-unrealize.patch
 
 # OpenMandriva/Mageia patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
@@ -343,11 +326,7 @@ Requires:	x11-font-alias
 Requires:	libx11-common
 Requires:	x11-driver-input-evdev
 # (tpg) 0.16.0 and older segfaults
-#Requires:	x11-driver-input-libinput >= 0.17.0
-# 0.19.0 still seems to cause crashes on some hardware
-# probably caused by timing issues.
-# http://issues.openmandriva.org/show_bug.cgi?id=1706
-# Let's stick with what's known to work for now
+Requires:	x11-driver-input-libinput >= 0.17.0
 Requires:	x11-driver-input-evdev
 Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
