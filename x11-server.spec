@@ -32,7 +32,7 @@ Version:	1.18.4
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -140,6 +140,9 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
+
+# (tpg) upstream git patch
+Patch100:	0201-glamor-Remove-the-FBO-cache.patch
 
 # Fedora Patches
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch

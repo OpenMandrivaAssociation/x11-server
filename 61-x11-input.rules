@@ -5,4 +5,3 @@ KERNEL!="event*",   GOTO="x11_input_end"
 ENV{ID_INPUT_KEY}=="1", IMPORT{program}="/sbin/mandriva-setup-keyboard"
 
 LABEL="x11_input_end"
-

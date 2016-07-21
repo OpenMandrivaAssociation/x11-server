@@ -1,0 +1,410 @@
+From 950ffb8d6fd1480f305e38c571bda44f247f1de2 Mon Sep 17 00:00:00 2001
+From: Eric Anholt <eric@anholt.net>
+Date: Fri, 6 Nov 2015 12:27:42 -0800
+Subject: [PATCH] glamor: Remove the FBO cache.
+
+It is a modest performance improvement (2.7% on Intel), with the
+significant downside that it keeps extra pixmap contents laying around
+for 1000 BlockHandlers without the ability for the system to purge
+them when under memory pressure, and tiled renderers don't know that
+we could avoid reading their current contents when beginning to render
+again.  We could use the FB invalidate functions, but they aren't
+always available, aren't hooked up well in Mesa, and would eat into
+the performance gains of having the cache.
+
+[ajax: rebased to master]
+
+Reviewed-by: Adam Jackson <ajax@redhat.com>
+
+[tmb: rebased on top of 1.18.4]
+Signed-off-by: Thomas Backlund <tmb@mageia.org>
+
+---
+ glamor/glamor.c      |    5 -
+ glamor/glamor_fbo.c  |  237 +--------------------------------------------------
+ glamor/glamor_priv.h |   27 -----
+ 3 files changed, 6 insertions(+), 263 deletions(-)
+
+diff -Nurp xorg-server-1.18.4.orig/glamor/glamor.c xorg-server-1.18.4/glamor/glamor.c
+--- xorg-server-1.18.4.orig/glamor/glamor.c	2016-07-19 20:14:58.000000000 +0300
++++ xorg-server-1.18.4/glamor/glamor.c	2016-07-19 22:03:36.707188551 +0300
+@@ -110,7 +110,6 @@ glamor_set_pixmap_texture(PixmapPtr pixm
+         ErrorF("XXX fail to create fbo.\n");
+         return;
+     }
+-    fbo->external = TRUE;
+ 
+     glamor_pixmap_attach_fbo(pixmap, fbo);
+ }
+@@ -262,9 +261,7 @@ glamor_block_handler(ScreenPtr screen)
+     glamor_screen_private *glamor_priv = glamor_get_screen_private(screen);
+ 
+     glamor_make_current(glamor_priv);
+-    glamor_priv->tick++;
+     glFlush();
+-    glamor_fbo_expire(glamor_priv);
+ }
+ 
+ static void
+@@ -711,7 +708,6 @@ glamor_init(ScreenPtr screen, unsigned i
+     ps->Glyphs = glamor_composite_glyphs;
+ 
+     glamor_init_vbo(screen);
+-    glamor_init_pixmap_fbo(screen);
+     glamor_init_finish_access_shaders(screen);
+ 
+ #ifdef GLAMOR_GRADIENT_SHADER
+@@ -737,7 +733,6 @@ glamor_release_screen_priv(ScreenPtr scr
+ 
+     glamor_priv = glamor_get_screen_private(screen);
+     glamor_fini_vbo(screen);
+-    glamor_fini_pixmap_fbo(screen);
+     glamor_pixmap_fini(screen);
+     free(glamor_priv);
+ 
+diff -Nurp xorg-server-1.18.4.orig/glamor/glamor_fbo.c xorg-server-1.18.4/glamor/glamor_fbo.c
+--- xorg-server-1.18.4.orig/glamor/glamor_fbo.c	2016-07-19 20:14:58.000000000 +0300
++++ xorg-server-1.18.4/glamor/glamor_fbo.c	2016-07-19 22:04:43.614281388 +0300
+@@ -30,107 +30,9 @@
+ 
+ #include "glamor_priv.h"
+ 
+-#define GLAMOR_CACHE_EXPIRE_MAX 100
+-
+-#define GLAMOR_CACHE_DEFAULT    0
+-#define GLAMOR_CACHE_EXACT_SIZE 1
+-
+-//#define NO_FBO_CACHE 1
+-#define FBO_CACHE_THRESHOLD  (256*1024*1024)
+-
+-/* Loop from the tail to the head. */
+-#define xorg_list_for_each_entry_reverse(pos, head, member)             \
+-    for (pos = __container_of((head)->prev, pos, member);               \
+-         &pos->member != (head);                                        \
+-         pos = __container_of(pos->member.prev, pos, member))
+-
+-#define xorg_list_for_each_entry_safe_reverse(pos, tmp, head, member)   \
+-    for (pos = __container_of((head)->prev, pos, member),               \
+-         tmp = __container_of(pos->member.prev, pos, member);           \
+-         &pos->member != (head);                                        \
+-         pos = tmp, tmp = __container_of(pos->member.prev, tmp, member))
+-
+-inline static int
+-cache_wbucket(int size)
+-{
+-    int order = __fls(size / 32);
+-
+-    if (order >= CACHE_BUCKET_WCOUNT)
+-        order = CACHE_BUCKET_WCOUNT - 1;
+-    return order;
+-}
+-
+-inline static int
+-cache_hbucket(int size)
+-{
+-    int order = __fls(size / 32);
+-
+-    if (order >= CACHE_BUCKET_HCOUNT)
+-        order = CACHE_BUCKET_HCOUNT - 1;
+-    return order;
+-}
+-
+-static int
+-cache_format(GLenum format)
+-{
+-    switch (format) {
+-    case GL_ALPHA:
+-    case GL_LUMINANCE:
+-    case GL_RED:
+-        return 2;
+-    case GL_RGB:
+-        return 1;
+-    case GL_RGBA:
+-        return 0;
+-    default:
+-        return -1;
+-    }
+-}
+-
+-static glamor_pixmap_fbo *
+-glamor_pixmap_fbo_cache_get(glamor_screen_private *glamor_priv,
+-                            int w, int h, GLenum format)
+-{
+-    struct xorg_list *cache;
+-    glamor_pixmap_fbo *fbo_entry, *ret_fbo = NULL;
+-    int n_format;
+-
+-#ifdef NO_FBO_CACHE
+-    return NULL;
+-#else
+-    n_format = cache_format(format);
+-    if (n_format == -1)
+-        return NULL;
+-    cache = &glamor_priv->fbo_cache[n_format]
+-        [cache_wbucket(w)]
+-        [cache_hbucket(h)];
+-
+-    xorg_list_for_each_entry(fbo_entry, cache, list) {
+-        if (fbo_entry->width == w && fbo_entry->height == h) {
+-
+-            DEBUGF("Request w %d h %d format %x \n", w, h, format);
+-            DEBUGF("got cache entry %p w %d h %d fbo %d tex %d format %x\n",
+-                   fbo_entry, fbo_entry->width, fbo_entry->height,
+-                   fbo_entry->fb, fbo_entry->tex, fbo_entry->format);
+-            assert(format == fbo_entry->format);
+-            xorg_list_del(&fbo_entry->list);
+-            ret_fbo = fbo_entry;
+-            break;
+-        }
+-    }
+-
+-    if (ret_fbo)
+-        glamor_priv->fbo_cache_watermark -= ret_fbo->width * ret_fbo->height;
+-
+-    assert(glamor_priv->fbo_cache_watermark >= 0);
+-
+-    return ret_fbo;
+-#endif
+-}
+-
+-static void
+-glamor_purge_fbo(glamor_screen_private *glamor_priv,
+-                 glamor_pixmap_fbo *fbo)
++void
++glamor_destroy_fbo(glamor_screen_private *glamor_priv,
++                   glamor_pixmap_fbo *fbo)
+ {
+     glamor_make_current(glamor_priv);
+ 
+@@ -142,40 +44,6 @@ glamor_purge_fbo(glamor_screen_private *
+     free(fbo);
+ }
+ 
+-static void
+-glamor_pixmap_fbo_cache_put(glamor_screen_private *glamor_priv,
+-                            glamor_pixmap_fbo *fbo)
+-{
+-    struct xorg_list *cache;
+-    int n_format;
+-
+-#ifdef NO_FBO_CACHE
+-    glamor_purge_fbo(fbo);
+-    return;
+-#else
+-    n_format = cache_format(fbo->format);
+-
+-    if (fbo->fb == 0 || fbo->external || n_format == -1
+-        || glamor_priv->fbo_cache_watermark >= FBO_CACHE_THRESHOLD) {
+-        glamor_priv->tick += GLAMOR_CACHE_EXPIRE_MAX;
+-        glamor_fbo_expire(glamor_priv);
+-        glamor_purge_fbo(glamor_priv, fbo);
+-        return;
+-    }
+-
+-    cache = &glamor_priv->fbo_cache[n_format]
+-        [cache_wbucket(fbo->width)]
+-        [cache_hbucket(fbo->height)];
+-    DEBUGF
+-        ("Put cache entry %p to cache %p w %d h %d format %x fbo %d tex %d \n",
+-         fbo, cache, fbo->width, fbo->height, fbo->format, fbo->fb, fbo->tex);
+-
+-    glamor_priv->fbo_cache_watermark += fbo->width * fbo->height;
+-    xorg_list_add(&fbo->list, cache);
+-    fbo->expire = glamor_priv->tick + GLAMOR_CACHE_EXPIRE_MAX;
+-#endif
+-}
+-
+ static int
+ glamor_pixmap_ensure_fb(glamor_screen_private *glamor_priv,
+                         glamor_pixmap_fbo *fbo)
+@@ -235,20 +103,14 @@ glamor_create_fbo_from_tex(glamor_screen
+     if (fbo == NULL)
+         return NULL;
+ 
+-    xorg_list_init(&fbo->list);
+-
+     fbo->tex = tex;
+     fbo->width = w;
+     fbo->height = h;
+-    fbo->external = FALSE;
+     fbo->format = format;
+ 
+-    if (flag == CREATE_PIXMAP_USAGE_SHARED)
+-        fbo->external = TRUE;
+-
+     if (flag != GLAMOR_CREATE_FBO_NO_FBO) {
+         if (glamor_pixmap_ensure_fb(glamor_priv, fbo) != 0) {
+-            glamor_purge_fbo(glamor_priv, fbo);
++            glamor_destroy_fbo(glamor_priv, fbo);
+             fbo = NULL;
+         }
+     }
+@@ -256,79 +118,6 @@ glamor_create_fbo_from_tex(glamor_screen
+     return fbo;
+ }
+ 
+-void
+-glamor_fbo_expire(glamor_screen_private *glamor_priv)
+-{
+-    struct xorg_list *cache;
+-    glamor_pixmap_fbo *fbo_entry, *tmp;
+-    int i, j, k;
+-
+-    for (i = 0; i < CACHE_FORMAT_COUNT; i++)
+-        for (j = 0; j < CACHE_BUCKET_WCOUNT; j++)
+-            for (k = 0; k < CACHE_BUCKET_HCOUNT; k++) {
+-                cache = &glamor_priv->fbo_cache[i][j][k];
+-                xorg_list_for_each_entry_safe_reverse(fbo_entry, tmp, cache,
+-                                                      list) {
+-                    if (GLAMOR_TICK_AFTER(fbo_entry->expire, glamor_priv->tick)) {
+-                        break;
+-                    }
+-
+-                    glamor_priv->fbo_cache_watermark -=
+-                        fbo_entry->width * fbo_entry->height;
+-                    xorg_list_del(&fbo_entry->list);
+-                    DEBUGF("cache %p fbo %p expired %d current %d \n", cache,
+-                           fbo_entry, fbo_entry->expire, glamor_priv->tick);
+-                    glamor_purge_fbo(glamor_priv, fbo_entry);
+-                }
+-            }
+-
+-}
+-
+-void
+-glamor_init_pixmap_fbo(ScreenPtr screen)
+-{
+-    glamor_screen_private *glamor_priv;
+-    int i, j, k;
+-
+-    glamor_priv = glamor_get_screen_private(screen);
+-    for (i = 0; i < CACHE_FORMAT_COUNT; i++)
+-        for (j = 0; j < CACHE_BUCKET_WCOUNT; j++)
+-            for (k = 0; k < CACHE_BUCKET_HCOUNT; k++) {
+-                xorg_list_init(&glamor_priv->fbo_cache[i][j][k]);
+-            }
+-    glamor_priv->fbo_cache_watermark = 0;
+-}
+-
+-void
+-glamor_fini_pixmap_fbo(ScreenPtr screen)
+-{
+-    struct xorg_list *cache;
+-    glamor_screen_private *glamor_priv;
+-    glamor_pixmap_fbo *fbo_entry, *tmp;
+-    int i, j, k;
+-
+-    glamor_priv = glamor_get_screen_private(screen);
+-    for (i = 0; i < CACHE_FORMAT_COUNT; i++)
+-        for (j = 0; j < CACHE_BUCKET_WCOUNT; j++)
+-            for (k = 0; k < CACHE_BUCKET_HCOUNT; k++) {
+-                cache = &glamor_priv->fbo_cache[i][j][k];
+-                xorg_list_for_each_entry_safe_reverse(fbo_entry, tmp, cache,
+-                                                      list) {
+-                    xorg_list_del(&fbo_entry->list);
+-                    glamor_purge_fbo(glamor_priv, fbo_entry);
+-                }
+-            }
+-}
+-
+-void
+-glamor_destroy_fbo(glamor_screen_private *glamor_priv,
+-                   glamor_pixmap_fbo *fbo)
+-{
+-    xorg_list_del(&fbo->list);
+-    glamor_pixmap_fbo_cache_put(glamor_priv, fbo);
+-
+-}
+-
+ static int
+ _glamor_create_tex(glamor_screen_private *glamor_priv,
+                    int w, int h, GLenum format)
+@@ -366,22 +155,8 @@ glamor_pixmap_fbo *
+ glamor_create_fbo(glamor_screen_private *glamor_priv,
+                   int w, int h, GLenum format, int flag)
+ {
+-    glamor_pixmap_fbo *fbo;
+-    GLint tex = 0;
+-
+-    if (flag == GLAMOR_CREATE_FBO_NO_FBO || flag == CREATE_PIXMAP_USAGE_SHARED)
+-        goto new_fbo;
+-
+-    fbo = glamor_pixmap_fbo_cache_get(glamor_priv, w, h, format);
+-    if (fbo)
+-        return fbo;
+- new_fbo:
+-    tex = _glamor_create_tex(glamor_priv, w, h, format);
+-    if (!tex)
+-        return NULL;
+-    fbo = glamor_create_fbo_from_tex(glamor_priv, w, h, format, tex, flag);
+-
+-    return fbo;
++    GLint tex = _glamor_create_tex(glamor_priv, w, h, format);
++    return glamor_create_fbo_from_tex(glamor_priv, w, h, format, tex, flag);
+ }
+ 
+ /**
+diff -Nurp xorg-server-1.18.4.orig/glamor/glamor_priv.h xorg-server-1.18.4/glamor/glamor_priv.h
+--- xorg-server-1.18.4.orig/glamor/glamor_priv.h	2016-07-19 20:14:58.000000000 +0300
++++ xorg-server-1.18.4/glamor/glamor_priv.h	2016-07-19 22:02:54.613130141 +0300
+@@ -184,16 +184,7 @@ struct glamor_saved_procs {
+     ScreenBlockHandlerProcPtr block_handler;
+ };
+ 
+-#define CACHE_FORMAT_COUNT 3
+-
+-#define CACHE_BUCKET_WCOUNT 4
+-#define CACHE_BUCKET_HCOUNT 4
+-
+-#define GLAMOR_TICK_AFTER(t0, t1) 	\
+-	(((int)(t1) - (int)(t0)) < 0)
+-
+ typedef struct glamor_screen_private {
+-    unsigned int tick;
+     enum glamor_gl_flavor gl_flavor;
+     int glsl_version;
+     Bool has_pack_invert;
+@@ -213,10 +204,6 @@ typedef struct glamor_screen_private {
+ 
+     GLuint one_channel_format;
+ 
+-    struct xorg_list
+-        fbo_cache[CACHE_FORMAT_COUNT][CACHE_BUCKET_WCOUNT][CACHE_BUCKET_HCOUNT];
+-    unsigned long fbo_cache_watermark;
+-
+     /* glamor point shader */
+     glamor_program point_prog;
+ 
+@@ -330,21 +317,10 @@ enum glamor_fbo_state {
+ };
+ 
+ typedef struct glamor_pixmap_fbo {
+-    struct xorg_list list; /**< linked list pointers when in the fbo cache */
+-    /** glamor_priv->tick number when this FBO will be expired from the cache. */
+-    unsigned int expire;
+     GLuint tex; /**< GL texture name */
+     GLuint fb; /**< GL FBO name */
+     int width; /**< width in pixels */
+     int height; /**< height in pixels */
+-    /**
+-     * Flag for when texture contents might be shared with a
+-     * non-glamor user.
+-     *
+-     * This is used to avoid putting textures used by other clients
+-     * into the FBO cache.
+-     */
+-    Bool external;
+     GLenum format; /**< GL format used to create the texture. */
+     GLenum type; /**< GL type used to create the texture. */
+ } glamor_pixmap_fbo;
+@@ -588,10 +564,7 @@ glamor_pixmap_fbo *glamor_create_fbo(gla
+ void glamor_destroy_fbo(glamor_screen_private *glamor_priv,
+                         glamor_pixmap_fbo *fbo);
+ void glamor_pixmap_destroy_fbo(PixmapPtr pixmap);
+-void glamor_init_pixmap_fbo(ScreenPtr screen);
+-void glamor_fini_pixmap_fbo(ScreenPtr screen);
+ Bool glamor_pixmap_fbo_fixup(ScreenPtr screen, PixmapPtr pixmap);
+-void glamor_fbo_expire(glamor_screen_private *glamor_priv);
+ 
+ /* Return whether 'picture' is alpha-only */
+ static inline Bool glamor_picture_is_alpha(PicturePtr picture)
