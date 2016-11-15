@@ -82,7 +82,6 @@ BuildRequires:	pkgconfig(gl)
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gbm)
-BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(pciaccess)
 BuildRequires:	pkgconfig(pixman-1)
@@ -114,7 +113,7 @@ BuildRequires:	pkgconfig(libdrm)
 BuildRequires:	pkgconfig(xcb-glx)
 BuildRequires:	pkgconfig(xcb-xf86dri) > 1.6
 BuildRequires:	x11-font-util >= 1.1
-BuildRequires:	x11-proto-devel >= 7.7-21
+BuildRequires:	x11-proto-devel >= 7.7-28
 BuildRequires:	x11-util-macros >= 1.15
 BuildRequires:	x11-xtrans-devel >= 1.2.7-2
 
@@ -140,9 +139,6 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
-
-# (tpg) upstream git patch
-Patch100:	0201-glamor-Remove-the-FBO-cache.patch
 
 # Fedora Patches
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
