@@ -24,7 +24,7 @@
 %define videodrv_minor 0
 %define xinput_major 24
 %define xinput_minor 1
-%define extension_major 9
+%define extension_major 10
 %define extension_minor 0
 
 Name:		x11-server
