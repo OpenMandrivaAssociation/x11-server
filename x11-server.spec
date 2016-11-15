@@ -90,7 +90,8 @@ BuildRequires:	pkgconfig(xaw7) >= 1.0.1
 BuildRequires:	pkgconfig(xdmcp) >= 1.0.0
 BuildRequires:	pkgconfig(xext) >= 1.1
 BuildRequires:	pkgconfig(xfixes)
-BuildRequires:	pkgconfig(xfont) >= 1.2.8-2mdv
+BuildRequires:	pkgconfig(xfont) >= 1.5.2
+BuildRequires:	pkgconfig(xfont2)
 BuildRequires:	pkgconfig(xi) >= 1.1.3
 BuildRequires:	pkgconfig(xkbfile) >= 1.0.4
 BuildRequires:	pkgconfig(xmu) >= 1.0.0
@@ -195,6 +196,7 @@ Requires:	libpciaccess-devel
 Requires:	libxkbfile-devel
 Requires:	libxext-devel >= 1.1
 Requires:	pkgconfig(dri)
+Requires:	pkgconfig(xfont2)
 Obsoletes:	libglamor-devel < 0.6.0-10
 
 %description devel
