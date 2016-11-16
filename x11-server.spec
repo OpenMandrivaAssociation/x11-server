@@ -683,7 +683,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--with-systemd-daemon \
 	--enable-systemd-logind \
 	--enable-suid-wrapper \
-	--enable-input-thread \ 
+	--enable-input-thread \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
