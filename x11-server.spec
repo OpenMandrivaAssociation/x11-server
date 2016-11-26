@@ -20,19 +20,19 @@
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 20
+%define videodrv_major 23
 %define videodrv_minor 0
-%define xinput_major 22
+%define xinput_major 24
 %define xinput_minor 1
-%define extension_major 9
+%define extension_major 10
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.18.4
+Version:	1.19.0
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	1
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -82,7 +82,6 @@ BuildRequires:	pkgconfig(gl)
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gbm)
-BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(pciaccess)
 BuildRequires:	pkgconfig(pixman-1)
@@ -91,7 +90,8 @@ BuildRequires:	pkgconfig(xaw7) >= 1.0.1
 BuildRequires:	pkgconfig(xdmcp) >= 1.0.0
 BuildRequires:	pkgconfig(xext) >= 1.1
 BuildRequires:	pkgconfig(xfixes)
-BuildRequires:	pkgconfig(xfont) >= 1.2.8-2mdv
+BuildRequires:	pkgconfig(xfont) >= 1.5.2
+BuildRequires:	pkgconfig(xfont2)
 BuildRequires:	pkgconfig(xi) >= 1.1.3
 BuildRequires:	pkgconfig(xkbfile) >= 1.0.4
 BuildRequires:	pkgconfig(xmu) >= 1.0.0
@@ -101,6 +101,7 @@ BuildRequires:	pkgconfig(xres) >= 1.0.0
 BuildRequires:	pkgconfig(xshmfence) >= 1.1
 BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(wayland-client)
+BuildRequires:	pkgconfig(wayland-protocols) >= 1.1
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-aux)
@@ -114,7 +115,7 @@ BuildRequires:	pkgconfig(libdrm)
 BuildRequires:	pkgconfig(xcb-glx)
 BuildRequires:	pkgconfig(xcb-xf86dri) > 1.6
 BuildRequires:	x11-font-util >= 1.1
-BuildRequires:	x11-proto-devel >= 7.7-21
+BuildRequires:	x11-proto-devel >= 7.7-28
 BuildRequires:	x11-util-macros >= 1.15
 BuildRequires:	x11-xtrans-devel >= 1.2.7-2
 
@@ -140,9 +141,6 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
-
-# (tpg) upstream git patch
-Patch100:	0201-glamor-Remove-the-FBO-cache.patch
 
 # Fedora Patches
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
@@ -199,6 +197,7 @@ Requires:	libpciaccess-devel
 Requires:	libxkbfile-devel
 Requires:	libxext-devel >= 1.1
 Requires:	pkgconfig(dri)
+Requires:	pkgconfig(xfont2)
 Obsoletes:	libglamor-devel < 0.6.0-10
 
 %description devel
@@ -684,6 +683,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--with-systemd-daemon \
 	--enable-systemd-logind \
 	--enable-suid-wrapper \
+	--enable-input-thread \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
