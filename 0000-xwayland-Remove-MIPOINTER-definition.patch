@@ -1,0 +1,35 @@
+From 45af7fcb522464922831005d63cc362dc09f19a9 Mon Sep 17 00:00:00 2001
+From: Olivier Fourdan <ofourdan@redhat.com>
+Date: Thu, 10 Nov 2016 09:36:40 +0100
+Subject: [PATCH 00/16] xwayland: Remove MIPOINTER() definition
+
+Not needed anymore now that mipointer exposes an API for that,
+miPointerInvalidateSprite()
+
+Signed-off-by: Olivier Fourdan <ofourdan@redhat.com>
+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+---
+ hw/xwayland/xwayland-input.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/hw/xwayland/xwayland-input.c b/hw/xwayland/xwayland-input.c
+index 7ec3b1a..0526122 100644
+--- a/hw/xwayland/xwayland-input.c
++++ b/hw/xwayland/xwayland-input.c
+@@ -35,12 +35,6 @@
+ #include <mipointer.h>
+ #include <mipointrst.h>
+ 
+-/* Copied from mipointer.c */
+-#define MIPOINTER(dev) \
+-    (IsFloating(dev) ? \
+-        (miPointerPtr)dixLookupPrivate(&(dev)->devPrivates, miPointerPrivKey): \
+-        (miPointerPtr)dixLookupPrivate(&(GetMaster(dev, MASTER_POINTER))->devPrivates, miPointerPrivKey))
+-
+ struct sync_pending {
+     struct xorg_list l;
+     DeviceIntPtr pending_dev;
+-- 
+2.8.3
+

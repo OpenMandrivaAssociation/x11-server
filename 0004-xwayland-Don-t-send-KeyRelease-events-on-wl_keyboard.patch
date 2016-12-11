@@ -1,0 +1,114 @@
+From 5611585b87ce48428a66f98ece319a083f55d205 Mon Sep 17 00:00:00 2001
+From: Rui Matos <tiagomatos@gmail.com>
+Date: Thu, 24 Nov 2016 19:56:18 +0100
+Subject: [PATCH 04/16] xwayland: Don't send KeyRelease events on
+ wl_keyboard::leave
+
+Commits 816015648ffe660ddaa0f7d4d192e555b723c372 and
+fee0827a9a695600765f3d04376fc9babe497401 made it so that
+wl_keyboard::enter doesn't result in X clients getting KeyPress events
+while still updating our internal xkb state to be in sync with the
+host compositor.
+
+wl_keyboard::leave needs to be handled in the same way as its
+semantics from an X client POV should be the same as an X grab getting
+triggered, i.e. X clients shouldn't get KeyRelease events for keys
+that are still down at that point.
+
+This patch uses LeaveNotify for these events on wl_keyboard::leave and
+changes the current use of KeymapNotify to EnterNotify instead just to
+keep some symmetry between both cases.
+
+On ProcessDeviceEvent() we still need to deactivate X grabs if needed
+for KeyReleases.
+
+Signed-off-by: Rui Matos <tiagomatos@gmail.com>
+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+---
+ Xi/exevents.c                | 22 +++++++++++++---------
+ dix/getevents.c              |  5 ++++-
+ hw/xwayland/xwayland-input.c |  8 ++------
+ 3 files changed, 19 insertions(+), 16 deletions(-)
+
+diff --git a/Xi/exevents.c b/Xi/exevents.c
+index fc5298e..17d751e 100644
+--- a/Xi/exevents.c
++++ b/Xi/exevents.c
+@@ -1798,15 +1798,19 @@ ProcessDeviceEvent(InternalEvent *ev, DeviceIntPtr device)
+         break;
+     }
+ 
+-    if (grab)
+-        DeliverGrabbedEvent((InternalEvent *) event, device,
+-                            deactivateDeviceGrab);
+-    else if (device->focus && !IsPointerEvent(ev))
+-        DeliverFocusedEvent(device, (InternalEvent *) event,
+-                            GetSpriteWindow(device));
+-    else
+-        DeliverDeviceEvents(GetSpriteWindow(device), (InternalEvent *) event,
+-                            NullGrab, NullWindow, device);
++    /* Don't deliver focus events (e.g. from KeymapNotify when running
++     * nested) to clients. */
++    if (event->source_type != EVENT_SOURCE_FOCUS) {
++        if (grab)
++            DeliverGrabbedEvent((InternalEvent *) event, device,
++                                deactivateDeviceGrab);
++        else if (device->focus && !IsPointerEvent(ev))
++            DeliverFocusedEvent(device, (InternalEvent *) event,
++                                GetSpriteWindow(device));
++        else
++            DeliverDeviceEvents(GetSpriteWindow(device), (InternalEvent *) event,
++                                NullGrab, NullWindow, device);
++    }
+ 
+     if (deactivateDeviceGrab == TRUE) {
+         (*device->deviceGrab.DeactivateGrab) (device);
+diff --git a/dix/getevents.c b/dix/getevents.c
+index 4d06818..0d87453 100644
+--- a/dix/getevents.c
++++ b/dix/getevents.c
+@@ -1101,9 +1101,12 @@ GetKeyboardEvents(InternalEvent *events, DeviceIntPtr pDev, int type,
+     }
+ #endif
+ 
+-    if (type == KeymapNotify) {
++    if (type == EnterNotify) {
+         source_type = EVENT_SOURCE_FOCUS;
+         type = KeyPress;
++    } else if (type == LeaveNotify) {
++        source_type = EVENT_SOURCE_FOCUS;
++        type = KeyRelease;
+     }
+ 
+     /* refuse events from disabled devices */
+diff --git a/hw/xwayland/xwayland-input.c b/hw/xwayland/xwayland-input.c
+index cc03961..3bc7110 100644
+--- a/hw/xwayland/xwayland-input.c
++++ b/hw/xwayland/xwayland-input.c
+@@ -640,7 +640,7 @@ keyboard_handle_enter(void *data, struct wl_keyboard *keyboard,
+ 
+     wl_array_copy(&xwl_seat->keys, keys);
+     wl_array_for_each(k, &xwl_seat->keys)
+-        QueueKeyboardEvents(xwl_seat->keyboard, KeymapNotify, *k + 8);
++        QueueKeyboardEvents(xwl_seat->keyboard, EnterNotify, *k + 8);
+ }
+ 
+ static void
+@@ -652,12 +652,8 @@ keyboard_handle_leave(void *data, struct wl_keyboard *keyboard,
+ 
+     xwl_seat->xwl_screen->serial = serial;
+ 
+-    /* Unlike keymap_handle_enter above, this time we _do_ want to trigger
+-     * full release, as we don't know how long we'll be out of focus for.
+-     * Notify clients that the keys have been released, disable autorepeat,
+-     * etc. */
+     wl_array_for_each(k, &xwl_seat->keys)
+-        QueueKeyboardEvents(xwl_seat->keyboard, KeyRelease, *k + 8);
++        QueueKeyboardEvents(xwl_seat->keyboard, LeaveNotify, *k + 8);
+ 
+     xwl_seat->keyboard_focus = NULL;
+ }
+-- 
+2.8.3
+
