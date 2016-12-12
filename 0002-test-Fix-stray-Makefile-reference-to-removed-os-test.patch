@@ -1,0 +1,63 @@
+From cf8860786c3e301486cd2853bc82977ba75e6b17 Mon Sep 17 00:00:00 2001
+From: Rhys Kidd <rhyskidd@gmail.com>
+Date: Fri, 28 Oct 2016 22:44:30 -0400
+Subject: [PATCH 02/16] test: Fix stray Makefile reference to removed os test
+
+Fixes the following warning:
+
+test/Makefile.am:69: warning: variable 'os_LDADD' is defined but no program or
+test/Makefile.am:69: library has 'os' as canonical name (possible typo)
+
+Introduced upon the removal of test/os in:
+
+commit 6a5a4e60373c1386b311b2a8bb666c32d68a9d99
+Author: Keith Packard <keithp@keithp.com>
+Date:   Tue Dec 8 14:39:46 2015 -0800
+
+    Remove SIGIO support for input [v5]
+
+    This removes all of the SIGIO handling support used for input
+    throughout the X server, preparing the way for using threads for input
+    handling instead.
+
+    Places calling OsBlockSIGIO and OsReleaseSIGIO are marked with calls
+    to stub functions input_lock/input_unlock so that we don't lose this
+    information.
+
+    xfree86 SIGIO support is reworked to use internal versions of
+    OsBlockSIGIO and OsReleaseSIGIO.
+
+    v2: Don't change locking order (Peter Hutterer)
+    v3: Comment weird && FALSE in xf86Helper.c
+        Leave errno save/restore in xf86ReadInput
+        Squash with stub adding patch (Peter Hutterer)
+    v4: Leave UseSIGIO config parameter so that
+        existing config files don't break (Peter Hutterer)
+    v5: Split a couple of independent patch bits out
+        of kinput.c (Peter Hutterer)
+
+    Signed-off-by: Keith Packard <keithp@keithp.com>
+    Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+
+Signed-off-by: Rhys Kidd <rhyskidd@gmail.com>
+Reviewed-by: Keith Packard <keithp@keithp.com>
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+---
+ test/Makefile.am | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/test/Makefile.am b/test/Makefile.am
+index c89915c..b8a0f4d 100644
+--- a/test/Makefile.am
++++ b/test/Makefile.am
+@@ -66,7 +66,6 @@ xfree86_LDADD=$(TEST_LDADD)
+ touch_LDADD=$(TEST_LDADD)
+ signal_logging_LDADD=$(TEST_LDADD)
+ hashtabletest_LDADD=$(TEST_LDADD)
+-os_LDADD=$(TEST_LDADD)
+ 
+ libxservertest_la_LIBADD = $(XSERVER_LIBS)
+ if XORG
+-- 
+2.8.3
+

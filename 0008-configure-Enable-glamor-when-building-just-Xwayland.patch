@@ -1,0 +1,33 @@
+From e1d30075c923f96a375895d74ea12a3c92a640c6 Mon Sep 17 00:00:00 2001
+From: Adam Jackson <ajax@redhat.com>
+Date: Tue, 22 Nov 2016 10:51:24 -0500
+Subject: [PATCH 08/16] configure: Enable glamor when building just Xwayland
+
+Signed-off-by: Adam Jackson <ajax@redhat.com>
+Acked-by: Daniel Stone <daniels@collabora.com>
+Reviewed-by: Pekka Paalanen <pekka.paalanen@collabora.co.uk>
+Tested-by: Pekka Paalanen <pekka.paalanen@collabora.co.uk>
+Reviewed-by: Eric Anholt <eric@anholt.net>
+---
+ configure.ac | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 6fd853b..93c81a6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2138,10 +2138,7 @@ AM_CONDITIONAL([XORG_DRIVER_MODESETTING], [test "x$XORG_DRIVER_MODESETTING" = xy
+ 
+ dnl glamor
+ if test "x$GLAMOR" = xauto; then
+-	if test "x$XORG" = xyes; then
+-		GLAMOR=yes
+-	fi
+-	if test "x$XEPHYR" = xyes; then
++	if echo "$XORG" "$XEPHYR" "$XWAYLAND" | grep -q yes ; then
+ 		GLAMOR=yes
+ 	fi
+ fi
+-- 
+2.8.3
+
