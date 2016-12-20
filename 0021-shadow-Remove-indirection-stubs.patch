@@ -1,0 +1,81 @@
+From a530dc2a62349d922de77a75786a3795102aec11 Mon Sep 17 00:00:00 2001
+From: Adam Jackson <ajax@redhat.com>
+Date: Fri, 9 Dec 2016 14:52:36 -0500
+Subject: [PATCH 21/30] shadow: Remove indirection stubs
+
+These are no longer used in the drivers.
+
+Signed-off-by: Adam Jackson <ajax@redhat.com>
+Reviewed-by: Keith Packard <keithp@keithp.com>
+---
+ miext/shadow/shadow.h   |  5 -----
+ miext/shadow/shpacked.c |  6 ------
+ miext/shadow/shplanar.c | 12 ------------
+ miext/shadow/shrotate.c |  6 ------
+ 4 files changed, 29 deletions(-)
+
+diff --git a/miext/shadow/shadow.h b/miext/shadow/shadow.h
+index 0bbbe45..c9a4100 100644
+--- a/miext/shadow/shadow.h
++++ b/miext/shadow/shadow.h
+@@ -161,9 +161,4 @@ extern _X_EXPORT void
+ 
+ typedef void (*shadowUpdateProc) (ScreenPtr, shadowBufPtr);
+ 
+-extern _X_EXPORT shadowUpdateProc shadowUpdatePackedWeak(void);
+-extern _X_EXPORT shadowUpdateProc shadowUpdatePlanar4Weak(void);
+-extern _X_EXPORT shadowUpdateProc shadowUpdatePlanar4x8Weak(void);
+-extern _X_EXPORT shadowUpdateProc shadowUpdateRotatePackedWeak(void);
+-
+ #endif                          /* _SHADOW_H_ */
+diff --git a/miext/shadow/shpacked.c b/miext/shadow/shpacked.c
+index 5ef18f8..34527bc 100644
+--- a/miext/shadow/shpacked.c
++++ b/miext/shadow/shpacked.c
+@@ -107,9 +107,3 @@ shadowUpdatePacked(ScreenPtr pScreen, shadowBufPtr pBuf)
+         pbox++;
+     }
+ }
+-
+-shadowUpdateProc
+-shadowUpdatePackedWeak(void)
+-{
+-    return shadowUpdatePacked;
+-}
+diff --git a/miext/shadow/shplanar.c b/miext/shadow/shplanar.c
+index 4f6542c..cb5fc54 100644
+--- a/miext/shadow/shplanar.c
++++ b/miext/shadow/shplanar.c
+@@ -166,15 +166,3 @@ shadowUpdatePlanar4(ScreenPtr pScreen, shadowBufPtr pBuf)
+         pbox++;
+     }
+ }
+-
+-shadowUpdateProc
+-shadowUpdatePlanar4Weak(void)
+-{
+-    return shadowUpdatePlanar4;
+-}
+-
+-shadowUpdateProc
+-shadowUpdatePlanar4x8Weak(void)
+-{
+-    return shadowUpdatePlanar4x8;
+-}
+diff --git a/miext/shadow/shrotate.c b/miext/shadow/shrotate.c
+index a0fc4ec..7dc471f 100644
+--- a/miext/shadow/shrotate.c
++++ b/miext/shadow/shrotate.c
+@@ -296,9 +296,3 @@ shadowUpdateRotatePacked(ScreenPtr pScreen, shadowBufPtr pBuf)
+         }
+     }
+ }
+-
+-shadowUpdateProc
+-shadowUpdateRotatePackedWeak(void)
+-{
+-    return shadowUpdateRotatePacked;
+-}
+-- 
+2.8.3
+

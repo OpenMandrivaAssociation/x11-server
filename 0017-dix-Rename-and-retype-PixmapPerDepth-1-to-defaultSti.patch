@@ -1,0 +1,143 @@
+From e900a00f8dc5a1db63bafddd4ad1cde744975db1 Mon Sep 17 00:00:00 2001
+From: Adam Jackson <ajax@redhat.com>
+Date: Fri, 9 Dec 2016 14:52:28 -0500
+Subject: [PATCH 17/30] dix: Rename (and retype) PixmapPerDepth[1] to
+ defaultStipple
+
+Signed-off-by: Adam Jackson <ajax@redhat.com>
+Reviewed-by: Keith Packard <keithp@keithp.com>
+---
+ dix/gc.c              | 13 ++++++-------
+ hw/dmx/dmxextension.c | 10 +++++-----
+ hw/xnest/Screen.c     |  2 +-
+ include/scrnintstr.h  | 12 +++++-------
+ 4 files changed, 17 insertions(+), 20 deletions(-)
+
+diff --git a/dix/gc.c b/dix/gc.c
+index 78f3be2..960e868 100644
+--- a/dix/gc.c
++++ b/dix/gc.c
+@@ -504,7 +504,7 @@ NewGCObject(ScreenPtr pScreen, int depth)
+     pGC->font = defaultFont;
+     if (pGC->font)              /* necessary, because open of default font could fail */
+         pGC->font->refcnt++;
+-    pGC->stipple = pGC->pScreen->PixmapPerDepth[0];
++    pGC->stipple = pGC->pScreen->defaultStipple;
+     if (pGC->stipple)
+         pGC->stipple->refcnt++;
+ 
+@@ -874,8 +874,7 @@ CreateDefaultStipple(int screenNum)
+     w = 16;
+     h = 16;
+     (*pScreen->QueryBestSize) (StippleShape, &w, &h, pScreen);
+-    if (!(pScreen->PixmapPerDepth[0] =
+-          (*pScreen->CreatePixmap) (pScreen, w, h, 1, 0)))
++    if (!(pScreen->defaultStipple = pScreen->CreatePixmap(pScreen, w, h, 1, 0)))
+         return FALSE;
+     /* fill stipple with 1 */
+     tmpval[0].val = GXcopy;
+@@ -883,17 +882,17 @@ CreateDefaultStipple(int screenNum)
+     tmpval[2].val = FillSolid;
+     pgcScratch = GetScratchGC(1, pScreen);
+     if (!pgcScratch) {
+-        (*pScreen->DestroyPixmap) (pScreen->PixmapPerDepth[0]);
++        (*pScreen->DestroyPixmap) (pScreen->defaultStipple);
+         return FALSE;
+     }
+     (void) ChangeGC(NullClient, pgcScratch,
+                     GCFunction | GCForeground | GCFillStyle, tmpval);
+-    ValidateGC((DrawablePtr) pScreen->PixmapPerDepth[0], pgcScratch);
++    ValidateGC((DrawablePtr) pScreen->defaultStipple, pgcScratch);
+     rect.x = 0;
+     rect.y = 0;
+     rect.width = w;
+     rect.height = h;
+-    (*pgcScratch->ops->PolyFillRect) ((DrawablePtr) pScreen->PixmapPerDepth[0],
++    (*pgcScratch->ops->PolyFillRect) ((DrawablePtr) pScreen->defaultStipple,
+                                       pgcScratch, 1, &rect);
+     FreeScratchGC(pgcScratch);
+     return TRUE;
+@@ -904,7 +903,7 @@ FreeDefaultStipple(int screenNum)
+ {
+     ScreenPtr pScreen = screenInfo.screens[screenNum];
+ 
+-    (*pScreen->DestroyPixmap) (pScreen->PixmapPerDepth[0]);
++    (*pScreen->DestroyPixmap) (pScreen->defaultStipple);
+ }
+ 
+ int
+diff --git a/hw/dmx/dmxextension.c b/hw/dmx/dmxextension.c
+index 75d7166..4f5ca72 100644
+--- a/hw/dmx/dmxextension.c
++++ b/hw/dmx/dmxextension.c
+@@ -922,7 +922,7 @@ dmxBECreateResources(void *value, XID id, RESTYPE type, void *n)
+                 dmxBECreatePixmap(pGC->tile.pixmap);
+                 dmxBERestorePixmap(pGC->tile.pixmap);
+             }
+-            if (pGC->stipple != pScreen->PixmapPerDepth[0]) {
++            if (pGC->stipple != pScreen->defaultStipple) {
+                 dmxBECreatePixmap(pGC->stipple);
+                 dmxBERestorePixmap(pGC->stipple);
+             }
+@@ -1327,8 +1327,8 @@ dmxAttachScreen(int idx, DMXScreenAttributesPtr attr)
+      * updated to handle dynamic addition/removal of screens. */
+ 
+     /* Create default stipple */
+-    dmxBECreatePixmap(pScreen->PixmapPerDepth[0]);
+-    dmxBERestorePixmap(pScreen->PixmapPerDepth[0]);
++    dmxBECreatePixmap(pScreen->defaultStipple);
++    dmxBERestorePixmap(pScreen->defaultStipple);
+ 
+     /* Create the scratch GCs */
+     dmxBECreateScratchGCs(idx);
+@@ -1692,8 +1692,8 @@ dmxDetachScreen(int idx)
+     dmxBEDestroyWindowTree(idx);
+ 
+     /* Free default stipple */
+-    dmxBESavePixmap(screenInfo.screens[idx]->PixmapPerDepth[0]);
+-    dmxBEFreePixmap(screenInfo.screens[idx]->PixmapPerDepth[0]);
++    dmxBESavePixmap(screenInfo.screens[idx]->defaultStipple);
++    dmxBEFreePixmap(screenInfo.screens[idx]->defaultStipple);
+ 
+     /* Free the remaining screen resources and close the screen */
+     dmxBECloseScreen(screenInfo.screens[idx]);
+diff --git a/hw/xnest/Screen.c b/hw/xnest/Screen.c
+index 214b550..30c6a46 100644
+--- a/hw/xnest/Screen.c
++++ b/hw/xnest/Screen.c
+@@ -248,7 +248,7 @@ xnestOpenScreen(ScreenPtr pScreen, int argc, char *argv[])
+     pScreen->whitePixel = xnestWhitePixel;
+     pScreen->blackPixel = xnestBlackPixel;
+     /* GCperDepth */
+-    /* PixmapPerDepth */
++    /* defaultStipple */
+     pScreen->devPrivate = NULL;
+     /* WindowPrivateLen */
+     /* WindowPrivateSizes */
+diff --git a/include/scrnintstr.h b/include/scrnintstr.h
+index f898392..f174549 100644
+--- a/include/scrnintstr.h
++++ b/include/scrnintstr.h
+@@ -504,14 +504,12 @@ typedef struct _Screen {
+     char backingStoreSupport, saveUnderSupport;
+     unsigned long whitePixel, blackPixel;
+     GCPtr GCperDepth[MAXFORMATS + 1];
+-    /* next field is a stipple to use as default in
+-       a GC.  we don't build default tiles of all depths
+-       because they are likely to be of a color
+-       different from the default fg pixel, so
+-       we don't win anything by building
+-       a standard one.
++    /* next field is a stipple to use as default in a GC.  we don't build
++     * default tiles of all depths because they are likely to be of a color
++     * different from the default fg pixel, so we don't win anything by
++     * building a standard one.
+      */
+-    PixmapPtr PixmapPerDepth[1];
++    PixmapPtr defaultStipple;
+     void *devPrivate;
+     short numVisuals;
+     VisualPtr visuals;
+-- 
+2.8.3
+
