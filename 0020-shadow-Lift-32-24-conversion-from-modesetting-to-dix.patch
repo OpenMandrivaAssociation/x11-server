@@ -1,0 +1,397 @@
+From 1ae09800863992cfb1d5d21c600e2bc29e3b6ab2 Mon Sep 17 00:00:00 2001
+From: Adam Jackson <ajax@redhat.com>
+Date: Fri, 9 Dec 2016 14:52:35 -0500
+Subject: [PATCH 20/30] shadow: Lift 32->24 conversion from modesetting to dix
+
+Signed-off-by: Adam Jackson <ajax@redhat.com>
+Reviewed-by: Keith Packard <keithp@keithp.com>
+---
+ hw/xfree86/drivers/modesetting/Makefile.am |   2 -
+ hw/xfree86/drivers/modesetting/driver.c    |   7 +-
+ hw/xfree86/drivers/modesetting/sh3224.c    | 140 -----------------------------
+ hw/xfree86/drivers/modesetting/sh3224.h    |   7 --
+ miext/shadow/Makefile.am                   |   1 +
+ miext/shadow/sh3224.c                      | 138 ++++++++++++++++++++++++++++
+ miext/shadow/shadow.h                      |   3 +
+ 7 files changed, 145 insertions(+), 153 deletions(-)
+ delete mode 100644 hw/xfree86/drivers/modesetting/sh3224.c
+ delete mode 100644 hw/xfree86/drivers/modesetting/sh3224.h
+ create mode 100644 miext/shadow/sh3224.c
+
+diff --git a/hw/xfree86/drivers/modesetting/Makefile.am b/hw/xfree86/drivers/modesetting/Makefile.am
+index 44823b0..e0411ef 100644
+--- a/hw/xfree86/drivers/modesetting/Makefile.am
++++ b/hw/xfree86/drivers/modesetting/Makefile.am
+@@ -51,8 +51,6 @@ modesetting_drv_la_SOURCES = \
+ 	 dumb_bo.c \
+ 	 dumb_bo.h \
+ 	 present.c \
+-	 sh3224.c \
+-	 sh3224.h \
+ 	 vblank.c \
+ 	 pageflip.c \
+ 	 $(NULL)
+diff --git a/hw/xfree86/drivers/modesetting/driver.c b/hw/xfree86/drivers/modesetting/driver.c
+index 3da69a3..a27b327 100644
+--- a/hw/xfree86/drivers/modesetting/driver.c
++++ b/hw/xfree86/drivers/modesetting/driver.c
+@@ -60,7 +60,6 @@
+ #endif
+ 
+ #include "driver.h"
+-#include "sh3224.h"
+ 
+ static void AdjustFrame(ScrnInfoPtr pScrn, int x, int y);
+ static Bool CloseScreen(ScreenPtr pScreen);
+@@ -1124,7 +1123,7 @@ msUpdatePacked(ScreenPtr pScreen, shadowBufPtr pBuf)
+ {
+     ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
+     modesettingPtr ms = modesettingPTR(pScrn);
+-    Bool use_ms_shadow = ms->drmmode.force_24_32 && pScrn->bitsPerPixel == 32;
++    Bool use_3224 = ms->drmmode.force_24_32 && pScrn->bitsPerPixel == 32;
+ 
+     if (ms->drmmode.shadow_enable2 && ms->drmmode.shadow_fb2) do {
+         RegionPtr damage = DamageRegion(pBuf->pDamage), tiles;
+@@ -1166,8 +1165,8 @@ msUpdatePacked(ScreenPtr pScreen, shadowBufPtr pBuf)
+         free(prect);
+     } while (0);
+ 
+-    if (use_ms_shadow)
+-        ms_shadowUpdate32to24(pScreen, pBuf);
++    if (use_3224)
++        shadowUpdate32to24(pScreen, pBuf);
+     else
+         shadowUpdatePacked(pScreen, pBuf);
+ }
+diff --git a/hw/xfree86/drivers/modesetting/sh3224.c b/hw/xfree86/drivers/modesetting/sh3224.c
+deleted file mode 100644
+index a64a103..0000000
+--- a/hw/xfree86/drivers/modesetting/sh3224.c
++++ /dev/null
+@@ -1,140 +0,0 @@
+-/*
+- *
+- * Copyright © 2000 Keith Packard
+- *
+- * Permission to use, copy, modify, distribute, and sell this software and its
+- * documentation for any purpose is hereby granted without fee, provided that
+- * the above copyright notice appear in all copies and that both that
+- * copyright notice and this permission notice appear in supporting
+- * documentation, and that the name of Keith Packard not be used in
+- * advertising or publicity pertaining to distribution of the software without
+- * specific, written prior permission.  Keith Packard makes no
+- * representations about the suitability of this software for any purpose.  It
+- * is provided "as is" without express or implied warranty.
+- *
+- * KEITH PACKARD DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+- * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+- * EVENT SHALL KEITH PACKARD BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+- * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
+- * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+- * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+- * PERFORMANCE OF THIS SOFTWARE.
+- */
+-
+-#ifdef HAVE_DIX_CONFIG_H
+-#include "dix-config.h"
+-#endif
+-
+-#include    "shadow.h"
+-#include    "fb.h"
+-
+-#include "sh3224.h"
+-#define Get8(a)	((CARD32) READ(a))
+-
+-#if BITMAP_BIT_ORDER == MSBFirst
+-#define Get24(a)    ((Get8(a) << 16) | (Get8((a)+1) << 8) | Get8((a)+2))
+-#define Put24(a,p)  ((WRITE((a+0), (CARD8) ((p) >> 16))), \
+-		     (WRITE((a+1), (CARD8) ((p) >> 8))), \
+-		     (WRITE((a+2), (CARD8) (p))))
+-#else
+-#define Get24(a)    (Get8(a) | (Get8((a)+1) << 8) | (Get8((a)+2)<<16))
+-#define Put24(a,p)  ((WRITE((a+0), (CARD8) (p))), \
+-		     (WRITE((a+1), (CARD8) ((p) >> 8))), \
+-		     (WRITE((a+2), (CARD8) ((p) >> 16))))
+-#endif
+-
+-static void
+-sh24_32BltLine(CARD8 *srcLine,
+-               CARD8 *dstLine,
+-               int width)
+-{
+-    CARD32 *src;
+-    CARD8 *dst;
+-    int w;
+-    CARD32 pixel;
+-
+-    src = (CARD32 *) srcLine;
+-    dst = dstLine;
+-    w = width;
+-
+-    while (((long)dst & 3) && w) {
+-	w--;
+-	pixel = READ(src++);
+-	Put24(dst, pixel);
+-	dst += 3;
+-    }
+-    /* Do four aligned pixels at a time */
+-    while (w >= 4) {
+-	CARD32 s0, s1;
+-
+-	s0 = READ(src++);
+-	s1 = READ(src++);
+-#if BITMAP_BIT_ORDER == LSBFirst
+-	WRITE((CARD32 *) dst, (s0 & 0xffffff) | (s1 << 24));
+-#else
+-	WRITE((CARD32 *) dst, (s0 << 8) | ((s1 & 0xffffff) >> 16));
+-#endif
+-	s0 = READ(src++);
+-#if BITMAP_BIT_ORDER == LSBFirst
+-	WRITE((CARD32 *) (dst + 4),
+-	      ((s1 & 0xffffff) >> 8) | (s0 << 16));
+-#else
+-	WRITE((CARD32 *) (dst + 4),
+-	      (s1 << 16) | ((s0 & 0xffffff) >> 8));
+-#endif
+-	s1 = READ(src++);
+-#if BITMAP_BIT_ORDER == LSBFirst
+-	WRITE((CARD32 *) (dst + 8),
+-	      ((s0 & 0xffffff) >> 16) | (s1 << 8));
+-#else
+-	WRITE((CARD32 *) (dst + 8), (s0 << 24) | (s1 & 0xffffff));
+-#endif
+-	dst += 12;
+-	w -= 4;
+-    }
+-    while (w--) {
+-	pixel = READ(src++);
+-	Put24(dst, pixel);
+-	dst += 3;
+-    }
+-}
+-
+-void
+-ms_shadowUpdate32to24(ScreenPtr pScreen, shadowBufPtr pBuf)
+-{
+-    RegionPtr damage = shadowDamage(pBuf);
+-    PixmapPtr pShadow = pBuf->pPixmap;
+-    int nbox = RegionNumRects(damage);
+-    BoxPtr pbox = RegionRects(damage);
+-    FbStride shaStride;
+-    int shaBpp;
+-    _X_UNUSED int shaXoff, shaYoff;
+-    int x, y, w, h;
+-    CARD32 winSize;
+-    FbBits *shaBase, *shaLine;
+-    CARD8 *winBase = NULL, *winLine;
+-
+-    fbGetDrawable(&pShadow->drawable, shaBase, shaStride, shaBpp, shaXoff,
+-                  shaYoff);
+-
+-    /* just get the initial window base + stride */
+-    winBase = (*pBuf->window)(pScreen, 0, 0, SHADOW_WINDOW_WRITE,
+-			      &winSize, pBuf->closure);
+-
+-    while (nbox--) {
+-        x = pbox->x1;
+-        y = pbox->y1;
+-        w = pbox->x2 - pbox->x1;
+-        h = pbox->y2 - pbox->y1;
+-
+-	winLine = winBase + y * winSize + (x * 3);
+-        shaLine = shaBase + y * shaStride + ((x * shaBpp) >> FB_SHIFT);
+-
+-        while (h--) {
+-	    sh24_32BltLine((CARD8 *)shaLine, (CARD8 *)winLine, w);
+-	    winLine += winSize;
+-            shaLine += shaStride;
+-        }
+-        pbox++;
+-    }
+-}
+diff --git a/hw/xfree86/drivers/modesetting/sh3224.h b/hw/xfree86/drivers/modesetting/sh3224.h
+deleted file mode 100644
+index fc301f9..0000000
+--- a/hw/xfree86/drivers/modesetting/sh3224.h
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#ifndef SH3224_H
+-#define SH3224_H
+-
+-void
+-ms_shadowUpdate32to24(ScreenPtr pScreen, shadowBufPtr pBuf);
+-
+-#endif
+diff --git a/miext/shadow/Makefile.am b/miext/shadow/Makefile.am
+index 27cf414..b611c9b 100644
+--- a/miext/shadow/Makefile.am
++++ b/miext/shadow/Makefile.am
+@@ -10,6 +10,7 @@ libshadow_la_SOURCES =		\
+ 	c2p_core.h		\
+ 	shadow.c		\
+ 	shadow.h		\
++	sh3224.c		\
+ 	shafb4.c		\
+ 	shafb8.c		\
+ 	shalloc.c		\
+diff --git a/miext/shadow/sh3224.c b/miext/shadow/sh3224.c
+new file mode 100644
+index 0000000..ba54121
+--- /dev/null
++++ b/miext/shadow/sh3224.c
+@@ -0,0 +1,138 @@
++/*
++ * Copyright © 2000 Keith Packard
++ *
++ * Permission to use, copy, modify, distribute, and sell this software and its
++ * documentation for any purpose is hereby granted without fee, provided that
++ * the above copyright notice appear in all copies and that both that
++ * copyright notice and this permission notice appear in supporting
++ * documentation, and that the name of Keith Packard not be used in
++ * advertising or publicity pertaining to distribution of the software without
++ * specific, written prior permission.  Keith Packard makes no
++ * representations about the suitability of this software for any purpose.  It
++ * is provided "as is" without express or implied warranty.
++ *
++ * KEITH PACKARD DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
++ * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
++ * EVENT SHALL KEITH PACKARD BE LIABLE FOR ANY SPECIAL, INDIRECT OR
++ * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
++ * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
++ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
++ * PERFORMANCE OF THIS SOFTWARE.
++ */
++
++#ifdef HAVE_DIX_CONFIG_H
++#include "dix-config.h"
++#endif
++
++#include "shadow.h"
++#include "fb.h"
++
++#define Get8(a)	((CARD32) READ(a))
++
++#if BITMAP_BIT_ORDER == MSBFirst
++#define Get24(a)    ((Get8(a) << 16) | (Get8((a)+1) << 8) | Get8((a)+2))
++#define Put24(a,p)  ((WRITE((a+0), (CARD8) ((p) >> 16))), \
++		     (WRITE((a+1), (CARD8) ((p) >> 8))), \
++		     (WRITE((a+2), (CARD8) (p))))
++#else
++#define Get24(a)    (Get8(a) | (Get8((a)+1) << 8) | (Get8((a)+2)<<16))
++#define Put24(a,p)  ((WRITE((a+0), (CARD8) (p))), \
++		     (WRITE((a+1), (CARD8) ((p) >> 8))), \
++		     (WRITE((a+2), (CARD8) ((p) >> 16))))
++#endif
++
++static void
++sh24_32BltLine(CARD8 *srcLine,
++               CARD8 *dstLine,
++               int width)
++{
++    CARD32 *src;
++    CARD8 *dst;
++    int w;
++    CARD32 pixel;
++
++    src = (CARD32 *) srcLine;
++    dst = dstLine;
++    w = width;
++
++    while (((long)dst & 3) && w) {
++	w--;
++	pixel = READ(src++);
++	Put24(dst, pixel);
++	dst += 3;
++    }
++    /* Do four aligned pixels at a time */
++    while (w >= 4) {
++	CARD32 s0, s1;
++
++	s0 = READ(src++);
++	s1 = READ(src++);
++#if BITMAP_BIT_ORDER == LSBFirst
++	WRITE((CARD32 *) dst, (s0 & 0xffffff) | (s1 << 24));
++#else
++	WRITE((CARD32 *) dst, (s0 << 8) | ((s1 & 0xffffff) >> 16));
++#endif
++	s0 = READ(src++);
++#if BITMAP_BIT_ORDER == LSBFirst
++	WRITE((CARD32 *) (dst + 4),
++	      ((s1 & 0xffffff) >> 8) | (s0 << 16));
++#else
++	WRITE((CARD32 *) (dst + 4),
++	      (s1 << 16) | ((s0 & 0xffffff) >> 8));
++#endif
++	s1 = READ(src++);
++#if BITMAP_BIT_ORDER == LSBFirst
++	WRITE((CARD32 *) (dst + 8),
++	      ((s0 & 0xffffff) >> 16) | (s1 << 8));
++#else
++	WRITE((CARD32 *) (dst + 8), (s0 << 24) | (s1 & 0xffffff));
++#endif
++	dst += 12;
++	w -= 4;
++    }
++    while (w--) {
++	pixel = READ(src++);
++	Put24(dst, pixel);
++	dst += 3;
++    }
++}
++
++void
++shadowUpdate32to24(ScreenPtr pScreen, shadowBufPtr pBuf)
++{
++    RegionPtr damage = shadowDamage(pBuf);
++    PixmapPtr pShadow = pBuf->pPixmap;
++    int nbox = RegionNumRects(damage);
++    BoxPtr pbox = RegionRects(damage);
++    FbStride shaStride;
++    int shaBpp;
++    _X_UNUSED int shaXoff, shaYoff;
++    int x, y, w, h;
++    CARD32 winSize;
++    FbBits *shaBase, *shaLine;
++    CARD8 *winBase = NULL, *winLine;
++
++    fbGetDrawable(&pShadow->drawable, shaBase, shaStride, shaBpp, shaXoff,
++                  shaYoff);
++
++    /* just get the initial window base + stride */
++    winBase = (*pBuf->window)(pScreen, 0, 0, SHADOW_WINDOW_WRITE,
++			      &winSize, pBuf->closure);
++
++    while (nbox--) {
++        x = pbox->x1;
++        y = pbox->y1;
++        w = pbox->x2 - pbox->x1;
++        h = pbox->y2 - pbox->y1;
++
++	winLine = winBase + y * winSize + (x * 3);
++        shaLine = shaBase + y * shaStride + ((x * shaBpp) >> FB_SHIFT);
++
++        while (h--) {
++	    sh24_32BltLine((CARD8 *)shaLine, (CARD8 *)winLine, w);
++	    winLine += winSize;
++            shaLine += shaStride;
++        }
++        pbox++;
++    }
++}
+diff --git a/miext/shadow/shadow.h b/miext/shadow/shadow.h
+index 7f22169..0bbbe45 100644
+--- a/miext/shadow/shadow.h
++++ b/miext/shadow/shadow.h
+@@ -156,6 +156,9 @@ extern _X_EXPORT void
+ extern _X_EXPORT void
+  shadowUpdateRotate32(ScreenPtr pScreen, shadowBufPtr pBuf);
+ 
++extern _X_EXPORT void
++ shadowUpdate32to24(ScreenPtr pScreen, shadowBufPtr pBuf);
++
+ typedef void (*shadowUpdateProc) (ScreenPtr, shadowBufPtr);
+ 
+ extern _X_EXPORT shadowUpdateProc shadowUpdatePackedWeak(void);
+-- 
+2.8.3
+

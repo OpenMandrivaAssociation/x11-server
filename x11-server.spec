@@ -196,6 +196,20 @@ Patch6013:	0013-xfree86-Try-harder-to-find-atleast-1-non-GPU-Screen.patch
 Patch6014:	0014-composite-Fix-repaint-of-borders-v2.patch
 Patch6015:	0015-test-fix-distributing-scripts.patch
 Patch6016:	0016-Fix-a-segfault-that-occurs-if-xorg.conf.d-is-absent.patch
+Patch6017:	0017-dix-Rename-and-retype-PixmapPerDepth-1-to-defaultSti.patch
+Patch6018:	0018-dix-Clear-graphicsExposures-for-scratch-GCs-in-one-p.patch
+Patch6019:	0019-shadowfb-Rename-this-particular-shadow.c-to-shadowfb.patch
+Patch6020:	0020-shadow-Lift-32-24-conversion-from-modesetting-to-dix.patch
+Patch6021:	0021-shadow-Remove-indirection-stubs.patch
+Patch6022:	0022-shadow-Macro-cleanup.patch
+Patch6023:	0023-shadow-Remove-unused-shadowAlloc.patch
+Patch6024:	0024-Revert-damage-Make-damageRegionProcessPending-take-a.patch
+Patch6025:	0025-xfree86-Free-devlist-returned-by-xf86MatchDevice.patch
+Patch6026:	0026-xfree86-Make-OutputClassMatches-take-a-xf86_platform.patch
+Patch6027:	0027-xfree86-Add-options-support-for-OutputClass-Options.patch
+Patch6028:	0028-xfree86-xf86platformProbe-split-finding-pci-info-and.patch
+Patch6029:	0029-xfree86-Allow-overriding-primary-GPU-detection-from-.patch
+Patch6030:	0030-xfree86-Add-ModulePath-support-for-OutputClass-confi.patch
 
 %description
 X11 servers.
@@ -341,10 +355,7 @@ Requires:	x11-server-common = %{version}-%{release}
 Requires:	x11-data-xkbdata > 1.3-5
 Requires:	x11-font-alias
 Requires:	libx11-common
-Requires:	x11-driver-input-evdev
-# (tpg) 0.16.0 and older segfaults
 Requires:	x11-driver-input-libinput >= 0.17.0
-Requires:	x11-driver-input-evdev
 Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
 Conflicts:	compiz < 0.5.0-1mdv2007.1
