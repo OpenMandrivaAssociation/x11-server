@@ -28,11 +28,11 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.19.0
+Version:	1.19.1
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	3
+Release:	1
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -181,21 +181,11 @@ Patch5001:	point-user-at-journal-rather-than-dev-null.patch
 
 # (tpg) upstream git patches
 Patch6001:	0000-xwayland-Remove-MIPOINTER-definition.patch
-Patch6002:	0002-test-Fix-stray-Makefile-reference-to-removed-os-test.patch
 Patch6003:	0003-xwayland-fix-order-of-calloc-args.patch
-Patch6004:	0004-xwayland-Don-t-send-KeyRelease-events-on-wl_keyboard.patch
-Patch6005:	0005-Xi-when-creating-a-new-master-device-update-barries-.patch
-Patch6006:	0006-glamor-restore-vfunc-handlers-on-init-failure.patch
-Patch6007:	0007-xwayland-Fix-use-after-free-of-cursors.patch
 Patch6008:	0008-configure-Enable-glamor-when-building-just-Xwayland.patch
-Patch6009:	0009-randr-rrCheckPixmapBounding-Do-not-substract-crtc-no.patch
-Patch6010:	0010-randr-rrCheckPixmapBounding-do-not-shrink-the-screen.patch
 Patch6011:	0011-xfree86-Remove-redundant-ServerIsNotSeat0-check-from.patch
 Patch6012:	0012-xfree86-Make-adding-unclaimed-devices-as-GPU-devices.patch
 Patch6013:	0013-xfree86-Try-harder-to-find-atleast-1-non-GPU-Screen.patch
-Patch6014:	0014-composite-Fix-repaint-of-borders-v2.patch
-Patch6015:	0015-test-fix-distributing-scripts.patch
-Patch6016:	0016-Fix-a-segfault-that-occurs-if-xorg.conf.d-is-absent.patch
 Patch6017:	0017-dix-Rename-and-retype-PixmapPerDepth-1-to-defaultSti.patch
 Patch6018:	0018-dix-Clear-graphicsExposures-for-scratch-GCs-in-one-p.patch
 Patch6019:	0019-shadowfb-Rename-this-particular-shadow.c-to-shadowfb.patch
@@ -203,7 +193,6 @@ Patch6020:	0020-shadow-Lift-32-24-conversion-from-modesetting-to-dix.patch
 Patch6021:	0021-shadow-Remove-indirection-stubs.patch
 Patch6022:	0022-shadow-Macro-cleanup.patch
 Patch6023:	0023-shadow-Remove-unused-shadowAlloc.patch
-Patch6024:	0024-Revert-damage-Make-damageRegionProcessPending-take-a.patch
 Patch6025:	0025-xfree86-Free-devlist-returned-by-xf86MatchDevice.patch
 Patch6026:	0026-xfree86-Make-OutputClassMatches-take-a-xf86_platform.patch
 Patch6027:	0027-xfree86-Add-options-support-for-OutputClass-Options.patch
