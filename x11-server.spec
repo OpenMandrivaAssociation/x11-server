@@ -102,6 +102,7 @@ BuildRequires:	pkgconfig(xshmfence) >= 1.1
 BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	pkgconfig(wayland-protocols) >= 1.1
+BuildRequires:	pkgconfig(wayland-eglstream-protocols)
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-aux)
@@ -702,6 +703,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-systemd-logind \
 	--enable-suid-wrapper \
 	--enable-input-thread \
+	--enable-xwayland-eglstream \
 	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
