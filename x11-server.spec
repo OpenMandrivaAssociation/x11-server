@@ -146,7 +146,7 @@ BuildRequires:	pkgconfig(glib-2.0)
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
 
 # do not upstream - do not even use here yet
-Patch7027:	xserver-autobind-hotplug.patch
+Patch7027:	0001-autobind-GPUs-to-the-screen.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
