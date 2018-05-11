@@ -101,8 +101,7 @@ BuildRequires:	pkgconfig(xres) >= 1.0.0
 BuildRequires:	pkgconfig(xshmfence) >= 1.1
 BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(wayland-client)
-BuildRequires:	pkgconfig(wayland-protocols) >= 1.1
-BuildRequires:	pkgconfig(wayland-eglstream-protocols)
+BuildRequires:	pkgconfig(wayland-protocols) >= 1.14
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-aux)
