@@ -115,9 +115,9 @@ BuildRequires:	pkgconfig(libdrm)
 BuildRequires:	pkgconfig(xcb-glx)
 BuildRequires:	pkgconfig(xcb-xf86dri) > 1.6
 BuildRequires:	x11-font-util >= 1.1
-BuildRequires:	x11-proto-devel >= 7.7-28
-BuildRequires:	x11-util-macros >= 1.15
-BuildRequires:	x11-xtrans-devel >= 1.2.7-2
+BuildRequires:	x11-proto-devel >= 2018.4
+BuildRequires:	x11-util-macros >= 1.19.2
+BuildRequires:	x11-xtrans-devel >= 1.3.5
 
 # Probably only needed if we change .l or .y files, but let's have them anyway:
 BuildRequires:	byacc
@@ -179,27 +179,6 @@ Patch4001:	1001-do-not-crash-if-xv-not-initialized.patch
 # (cg) Point the user at the journal rather than a logfile at /dev/null
 Patch5001:	point-user-at-journal-rather-than-dev-null.patch
 
-# (tpg) upstream git patches
-Patch6001:	0000-xwayland-Remove-MIPOINTER-definition.patch
-Patch6003:	0003-xwayland-fix-order-of-calloc-args.patch
-Patch6008:	0008-configure-Enable-glamor-when-building-just-Xwayland.patch
-Patch6011:	0011-xfree86-Remove-redundant-ServerIsNotSeat0-check-from.patch
-Patch6012:	0012-xfree86-Make-adding-unclaimed-devices-as-GPU-devices.patch
-Patch6013:	0013-xfree86-Try-harder-to-find-atleast-1-non-GPU-Screen.patch
-Patch6017:	0017-dix-Rename-and-retype-PixmapPerDepth-1-to-defaultSti.patch
-Patch6018:	0018-dix-Clear-graphicsExposures-for-scratch-GCs-in-one-p.patch
-Patch6019:	0019-shadowfb-Rename-this-particular-shadow.c-to-shadowfb.patch
-Patch6020:	0020-shadow-Lift-32-24-conversion-from-modesetting-to-dix.patch
-Patch6021:	0021-shadow-Remove-indirection-stubs.patch
-Patch6022:	0022-shadow-Macro-cleanup.patch
-Patch6023:	0023-shadow-Remove-unused-shadowAlloc.patch
-Patch6025:	0025-xfree86-Free-devlist-returned-by-xf86MatchDevice.patch
-Patch6026:	0026-xfree86-Make-OutputClassMatches-take-a-xf86_platform.patch
-Patch6027:	0027-xfree86-Add-options-support-for-OutputClass-Options.patch
-Patch6028:	0028-xfree86-xf86platformProbe-split-finding-pci-info-and.patch
-Patch6029:	0029-xfree86-Allow-overriding-primary-GPU-detection-from-.patch
-Patch6030:	0030-xfree86-Add-ModulePath-support-for-OutputClass-confi.patch
-
 %description
 X11 servers.
 
@@ -255,8 +234,8 @@ Requires:	x11-data-xkbdata
 Requires:	xkbcomp
 Requires:	udev
 Requires:	mkcomposecache
-Requires(post):	update-alternatives >= 1.9.0
-Requires(postun):	update-alternatives
+Requires(post):	chkconfig >= 1.9.0
+Requires(postun):	chkconfig
 # see comment about /usr/X11R6/lib below
 Conflicts:	filesystem < 2.1.8
 # nvidia-71xx does not support X.org server >= 1.5
@@ -600,15 +579,14 @@ getminor() {
    tr '(),' '   ' | awk '{ print $5 }'
 }
 
-test `getmajor ansic` == %{ansic_major}
-test `getminor ansic` == %{ansic_minor}
-test `getmajor videodrv` == %{videodrv_major}
-test `getminor videodrv` == %{videodrv_minor}
-test `getmajor xinput` == %{xinput_major}
-test `getminor xinput` == %{xinput_minor}
-test `getmajor extension` == %{extension_major}
-test `getminor extension` == %{extension_minor}
-
+test $(getmajor ansic) == %{ansic_major}
+test $(getminor ansic) == %{ansic_minor}
+test $(getmajor videodrv) == %{videodrv_major}
+test $(getminor videodrv) == %{videodrv_minor}
+test $(getmajor xinput) == %{xinput_major}
+test $(getminor xinput) == %{xinput_minor}
+test $(getmajor extension) == %{extension_major}
+test $(getminor extension) == %{extension_minor}
 
 %build
 CONFIGURE_TOP="$PWD"

@@ -1,7 +1,7 @@
-diff -Naur xorg-server-1.16.0/hw/xfree86/common/xf86Configure.c xorg-server-1.16.0.tpg/hw/xfree86/common/xf86Configure.c
---- xorg-server-1.16.0/hw/xfree86/common/xf86Configure.c	2014-04-16 20:24:00.000000000 +0000
-+++ xorg-server-1.16.0.tpg/hw/xfree86/common/xf86Configure.c	2014-08-15 14:53:19.352473795 +0000
-@@ -545,6 +545,28 @@
+diff -Naur xorg-server-1.20.0/hw/xfree86/common/xf86Configure.c xorg-server-1.20.0.tpg/hw/xfree86/common/xf86Configure.c
+--- xorg-server-1.20.0/hw/xfree86/common/xf86Configure.c	2018-05-10 16:32:35.000000000 +0000
++++ xorg-server-1.20.0.tpg/hw/xfree86/common/xf86Configure.c	2018-05-17 14:40:07.888961616 +0000
+@@ -601,6 +601,28 @@
      XF86ConfigPtr xf86config = NULL;
      const char **vlist, **vl;
      int *dev2screen;
@@ -28,9 +28,9 @@ diff -Naur xorg-server-1.16.0/hw/xfree86/common/xf86Configure.c xorg-server-1.16
 +           }
 +    }
  
-     vlist = xf86DriverlistFromCompile();
+     vlist = GenerateDriverList();
  
-@@ -572,12 +594,20 @@
+@@ -628,12 +650,20 @@
          Bool found_screen;
          DriverRec *const drv = xf86DriverList[CurrentDriver];
  
