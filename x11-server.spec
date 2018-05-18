@@ -10,7 +10,7 @@
 #    print 'Section "InputClass"'
 %define _python_bytecompile_build 0
 %define _python_bytecompile_errors_terminate_build 0
-
+fbd
 # Do magic with .rpmsave named links
 %define pre_post_trans 1
 
@@ -311,7 +311,6 @@ fi
 %if %{enable_dmx}
 %{_mandir}/man1/vdltodmx.*
 %endif
-%{_mandir}/man4/fbdevhw.*
 %{_mandir}/man4/exa.*
 %{_mandir}/man4/modesetting.4.*
 %dir %{_prefix}/X11R6
@@ -504,25 +503,6 @@ Possible uses include:
 %files xephyr
 %{_bindir}/Xephyr
 %{_mandir}/man1/Xephyr.1*
-
-#------------------------------------------------------------------------------
-
-%package xfbdev
-Summary:	KDrive fbdev X server
-Group:		System/X11
-License:	MIT
-Requires:	x11-server-common = %{version}-%{release}
-
-%description xfbdev
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for being used on top of linux framebuffer.
-
-%files xfbdev
-%{_bindir}/Xfbdev
 
 #------------------------------------------------------------------------------
 
