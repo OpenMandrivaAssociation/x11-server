@@ -3,7 +3,6 @@
 %define with_debug 0
 %define enable_dmx 1
 %define enable_kdrive 0
-%define enable_xfake 1
 %define enable_builddocs 0
 # /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
 # Error compiling '/builddir/build/BUILDROOT/x11-server-1.20.0-1.x86_64/usr/share/x11-server-source/config/fdi2iclass.py'...
@@ -76,9 +75,7 @@ Requires:	%{name}-xvfb
 # This should be removed when any of the vnc packages provide x11-server-xvnc:
 Obsoletes:	%{name}-xvnc < %{version}-%{release}
 
-%if !%{enable_xfake}
 Obsoletes:	%{name}-xfake < %{version}-%{release}
-%endif
 
 # FIXME: build with systemtap installed is broken
 BuildConflicts:	systemtap
@@ -510,27 +507,6 @@ Possible uses include:
 
 #------------------------------------------------------------------------------
 
-%if %{enable_xfake}
-%package xfake
-Summary:	KDrive fake X server
-Group:		System/X11
-License:	MIT
-Requires:	x11-server-common = %{version}-%{release}
-
-%description xfake
-KDrive (formerly known as TinyX) is a light-weight X server targetting specific
-chipsets. It is recommended to be used on thin-clients and embedded systems.
-If you are on a standard desktop system you might want to use x11-server-xorg
-and the video driver corresponding to your video card.
-
-This KDrive server is targetted for testing purposes.
-
-%files xfake
-%{_bindir}/Xfake
-%endif
-
-#------------------------------------------------------------------------------
-
 %package xfbdev
 Summary:	KDrive fbdev X server
 Group:		System/X11
@@ -671,10 +647,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xnest \
 	--disable-xwin \
 	--enable-kdrive \
-	%if %enable_xfake
-	--enable-xfake \
-	%else
-	--disable-xfake \
 	%endif
 	--enable-xephyr \
 	--disable-install-setuid \
