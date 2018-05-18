@@ -647,7 +647,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xnest \
 	--disable-xwin \
 	--enable-kdrive \
-	%endif
 	--enable-xephyr \
 	--disable-install-setuid \
 	--enable-secure-rpc \
