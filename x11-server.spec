@@ -10,7 +10,7 @@
 #    print 'Section "InputClass"'
 %define _python_bytecompile_build 0
 %define _python_bytecompile_errors_terminate_build 0
-fbd
+
 # Do magic with .rpmsave named links
 %define pre_post_trans 1
 
