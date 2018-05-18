@@ -102,6 +102,7 @@ BuildRequires:	pkgconfig(xshmfence) >= 1.1
 BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	pkgconfig(wayland-protocols) >= 1.14
+BuildRequires:	pkgconfig(wayland-eglstream-protocols) >= 1.0.3
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-aux)
