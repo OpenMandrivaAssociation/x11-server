@@ -5,6 +5,13 @@
 %define enable_kdrive 0
 %define enable_xfake 1
 %define enable_builddocs 0
+# /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
+# Error compiling '/builddir/build/BUILDROOT/x11-server-1.20.0-1.x86_64/usr/share/x11-server-source/config/fdi2iclass.py'...
+#  File "/fdi2iclass.py", line 169
+#    print 'Section "InputClass"'
+%define _python_bytecompile_build 0
+%define _python_bytecompile_errors_terminate_build 0
+
 # Do magic with .rpmsave named links
 %define pre_post_trans 1
 
@@ -642,7 +649,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xdmcp \
 	--enable-xdm-auth-1 \
 	--enable-glx \
-	--enable-aiglx \
 	--enable-dri \
 	--enable-dri2 \
 	--enable-dri3 \
@@ -653,7 +659,6 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 	--enable-xcsecurity \
 	--enable-xf86bigfont \
 	--enable-dpms \
-	--disable-tslib \
 	--enable-dbe \
 	--enable-xfree86-utils \
 	--enable-xorg \
