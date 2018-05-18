@@ -311,6 +311,7 @@ fi
 %if %{enable_dmx}
 %{_mandir}/man1/vdltodmx.*
 %endif
+%{_mandir}/man4/fbdevhw.*
 %{_mandir}/man4/exa.*
 %{_mandir}/man4/modesetting.4.*
 %dir %{_prefix}/X11R6
