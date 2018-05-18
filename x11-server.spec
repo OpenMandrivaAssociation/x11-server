@@ -319,7 +319,7 @@ fi
 %{_mandir}/man4/modesetting.4.*
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
-%dir %{_prefix}/X11R6/lib/X11
+%{_prefix}/X11R6/lib/X11
 
 #------------------------------------------------------------------------------
 
