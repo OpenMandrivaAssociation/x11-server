@@ -1,0 +1,182 @@
+From 1326ee0bc5eb858c3c00847b3ba65134e4ca2e2d Mon Sep 17 00:00:00 2001
+From: Michal Srb <msrb@suse.com>
+Date: Tue, 13 Feb 2018 10:33:30 +0100
+Subject: [PATCH] glx: Do not call into Composite if it is disabled.
+
+Otherwise X server crashes if GLX is enabled and Composite disabled. For
+example the compIsAlternateVisual function will try to lookup CompScreenPtr
+using the CompScreenPrivateKey, but that was never initialized if Composite is
+disabled.
+
+Fixes: f84e59a4f4. ("glx: Duplicate relevant fbconfigs for compositing visuals")
+Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=104993
+Signed-off-by: Michal Srb <msrb@suse.com>
+---
+ glx/glxdricommon.c | 63 +++++++++++++++++++++++++++++-------------------------
+ glx/glxscreens.c   | 33 +++++++++++++++++-----------
+ 2 files changed, 55 insertions(+), 41 deletions(-)
+
+diff --git a/glx/glxdricommon.c b/glx/glxdricommon.c
+index a6602f9..1baf082 100644
+--- a/glx/glxdricommon.c
++++ b/glx/glxdricommon.c
+@@ -35,6 +35,7 @@
+ #include <GL/glxtokens.h>
+ #include <GL/internal/dri_interface.h>
+ #include <os.h>
++#include "extinit.h"
+ #include "glxserver.h"
+ #include "glxext.h"
+ #include "glxcontext.h"
+@@ -183,28 +184,30 @@ createModeFromConfig(const __DRIcoreExtension * core,
+     config->config.yInverted = GL_TRUE;
+ 
+ #ifdef COMPOSITE
+-    /*
+-     * Here we decide what fbconfigs will be duplicated for compositing.
+-     * fgbconfigs marked with duplicatedForConf will be reserved for
+-     * compositing visuals.
+-     * It might look strange to do this decision this late when translation
+-     * from a __DRIConfig is already done, but using the __DRIConfig
+-     * accessor function becomes worse both with respect to code complexity
+-     * and CPU usage.
+-     */
+-    if (duplicateForComp &&
+-        (render_type_is_pbuffer_only(renderType) ||
+-         config->config.rgbBits != 32 ||
+-         config->config.redBits != 8 ||
+-         config->config.greenBits != 8 ||
+-         config->config.blueBits != 8 ||
+-         config->config.visualRating != GLX_NONE ||
+-         config->config.sampleBuffers != 0)) {
+-        free(config);
+-        return NULL;
+-    }
++    if (!noCompositeExtension) {
++        /*
++        * Here we decide what fbconfigs will be duplicated for compositing.
++        * fgbconfigs marked with duplicatedForConf will be reserved for
++        * compositing visuals.
++        * It might look strange to do this decision this late when translation
++        * from a __DRIConfig is already done, but using the __DRIConfig
++        * accessor function becomes worse both with respect to code complexity
++        * and CPU usage.
++        */
++        if (duplicateForComp &&
++            (render_type_is_pbuffer_only(renderType) ||
++            config->config.rgbBits != 32 ||
++            config->config.redBits != 8 ||
++            config->config.greenBits != 8 ||
++            config->config.blueBits != 8 ||
++            config->config.visualRating != GLX_NONE ||
++            config->config.sampleBuffers != 0)) {
++            free(config);
++            return NULL;
++        }
+ 
+-    config->config.duplicatedForComp = duplicateForComp;
++        config->config.duplicatedForComp = duplicateForComp;
++    }
+ #endif
+ 
+     return &config->config;
+@@ -238,14 +241,16 @@ glxConvertConfigs(const __DRIcoreExtension * core,
+     }
+ 
+ #ifdef COMPOSITE
+-    /* Duplicate fbconfigs for use with compositing visuals */
+-    for (i = 0; configs[i]; i++) {
+-        tail->next = createModeFromConfig(core, configs[i], GLX_TRUE_COLOR,
+-                                          GL_TRUE);
+-        if (tail->next == NULL)
+-            continue;
+-
+-	tail = tail->next;
++    if (!noCompositeExtension) {
++        /* Duplicate fbconfigs for use with compositing visuals */
++        for (i = 0; configs[i]; i++) {
++            tail->next = createModeFromConfig(core, configs[i], GLX_TRUE_COLOR,
++                                            GL_TRUE);
++            if (tail->next == NULL)
++                continue;
++
++            tail = tail->next;
++        }
+     }
+ #endif
+ 
+diff --git a/glx/glxscreens.c b/glx/glxscreens.c
+index 596d972..5cd9fcf 100644
+--- a/glx/glxscreens.c
++++ b/glx/glxscreens.c
+@@ -38,6 +38,7 @@
+ #include <os.h>
+ #include <colormapst.h>
+ 
++#include "extinit.h"
+ #include "privates.h"
+ #include "glxserver.h"
+ #include "glxutil.h"
+@@ -280,10 +281,12 @@ pickFBConfig(__GLXscreen * pGlxScreen, VisualPtr visual)
+         if (config->visualID != 0)
+             continue;
+ #ifdef COMPOSITE
+-	/* Use only duplicated configs for compIsAlternateVisuals */
+-        if (!!compIsAlternateVisual(pGlxScreen->pScreen, visual->vid) !=
+-	    !!config->duplicatedForComp)
+-            continue;
++        if (!noCompositeExtension) {
++            /* Use only duplicated configs for compIsAlternateVisuals */
++            if (!!compIsAlternateVisual(pGlxScreen->pScreen, visual->vid) !=
++                !!config->duplicatedForComp)
++                continue;
++        }
+ #endif
+         /*
+          * If possible, use the same swapmethod for all built-in visual
+@@ -353,8 +356,10 @@ __glXScreenInit(__GLXscreen * pGlxScreen, ScreenPtr pScreen)
+             pGlxScreen->visuals[pGlxScreen->numVisuals++] = config;
+             config->visualID = visual->vid;
+ #ifdef COMPOSITE
+-            if (compIsAlternateVisual(pScreen, visual->vid))
+-                config->visualSelectGroup++;
++            if (!noCompositeExtension) {
++                if (compIsAlternateVisual(pScreen, visual->vid))
++                    config->visualSelectGroup++;
++            }
+ #endif
+         }
+     }
+@@ -376,10 +381,12 @@ __glXScreenInit(__GLXscreen * pGlxScreen, ScreenPtr pScreen)
+          */
+         depth = config->redBits + config->greenBits + config->blueBits;
+ #ifdef COMPOSITE
+-	if (config->duplicatedForComp) {
+-		depth += config->alphaBits;
+-		config->visualSelectGroup++;
+-	}
++        if (!noCompositeExtension) {
++            if (config->duplicatedForComp) {
++                    depth += config->alphaBits;
++                    config->visualSelectGroup++;
++            }
++        }
+ #endif
+         /* Make sure that our FBconfig's depth can actually be displayed
+          * (corresponds to an existing visual).
+@@ -404,8 +411,10 @@ __glXScreenInit(__GLXscreen * pGlxScreen, ScreenPtr pScreen)
+             continue;
+ 
+ #ifdef COMPOSITE
+-        if (config->duplicatedForComp)
+-	    (void) CompositeRegisterAlternateVisuals(pScreen, &visual->vid, 1);
++        if (!noCompositeExtension) {
++            if (config->duplicatedForComp)
++                (void) CompositeRegisterAlternateVisuals(pScreen, &visual->vid, 1);
++        }
+ #endif
+         pGlxScreen->visuals[pGlxScreen->numVisuals++] = config;
+         initGlxVisual(visual, config);
+-- 
+2.8.3
+

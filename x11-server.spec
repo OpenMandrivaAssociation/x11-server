@@ -32,7 +32,7 @@ Version:	1.19.6
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	3
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -199,6 +199,34 @@ Patch6027:	0027-xfree86-Add-options-support-for-OutputClass-Options.patch
 Patch6028:	0028-xfree86-xf86platformProbe-split-finding-pci-info-and.patch
 Patch6029:	0029-xfree86-Allow-overriding-primary-GPU-detection-from-.patch
 Patch6030:	0030-xfree86-Add-ModulePath-support-for-OutputClass-confi.patch
+Patch6031:	0100-glx-do-not-pick-sRGB-config-for-32-bit-RGBA-visual.patch
+Patch6032:	0101-xwayland-avoid-race-condition-on-new-keymap.patch
+Patch6033:	0102-Xorg.wrap-Ensure-correct-ordering-of-post-install-ho.patch
+Patch6034:	0103-animcur-Use-fixed-size-screen-private.patch
+Patch6035:	0104-animcur-Return-the-next-interval-directly-from-the-t.patch
+Patch6036:	0105-animcur-Run-the-timer-from-the-device-not-the-screen.patch
+Patch6037:	0106-animcur-Fix-transitions-between-animated-cursors.patch
+Patch6038:	0107-glamor-Specify-GLSL-version-for-xv-shader.patch
+Patch6039:	0108-config-fix-NULL-value-detection-for-ID_INPUT-being-u.patch
+Patch6040:	0109-build-guess-availability-of-monotonic-clock-for-cros.patch
+Patch6041:	0110-os-Fix-a-type-error-in-the-IPv6-XDMCP-code.patch
+Patch6042:	0111-xfree86-add-default-modes-for-16-9-and-16-10.patch
+Patch6043:	0112-Revert-present-Only-send-PresentCompleteNotify-event.patch
+Patch6044:	0113-xf86XvMCScreenInit-Clear-pScreenPriv-dixinfo-when-fr.patch
+Patch6045:	0114-composite-Propagate-damagedDescendants-when-reparent.patch
+Patch6046:	0115-os-inputthread-Force-unlock-when-stopping-thread.patch
+Patch6047:	0116-xwayland-remove-dirty-window-unconditionally-on-unre.patch
+Patch6048:	0117-glamor-fix-repeat-reflect-case-in-linear-gradient-sh.patch
+Patch6049:	0118-glamor-fix-no-reflect-case-for-gradients.patch
+Patch6050:	0119-glamor-remove-unused-variables-in-linear-gradient-sh.patch
+Patch6051:	0120-glamor-tidy-up-some-gradient-color-formulas.patch
+Patch6052:	0121-randr-Fix-rotation-check-in-ProcRRSetScreenSize.patch
+Patch6053:	0122-xwayland-Don-t-process-cursor-warping-without-an-xwl.patch
+Patch6054:	0123-glx-Only-assign-8-bpc-fbconfigs-for-composite-visual.patch
+
+
+# (tpg) fix bug https://issues.openmandriva.org/show_bug.cgi?id=2363
+Patch7000:	0200-glx-Do-not-call-into-Composite-if-it-is-disabled.patch
 
 %description
 X11 servers.
@@ -349,6 +377,7 @@ Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
 Conflicts:	compiz < 0.5.0-1mdv2007.1
 Obsoletes:	x11-server13-xorg <= 1.2.99.905
+Requires:	dri-drivers
 
 # minimum libxfont needed for xserver-1.9:
 Requires:	libxfont >= 1.4.2
@@ -416,6 +445,7 @@ Summary:	A X server for Wayland
 Group:		System/X11
 License:	MIT
 Requires:	x11-server-common = %{EVRD}
+Requires:	dri-drivers
 
 %description xwayland
 Wayland is a complete window system in itself, but even so, if we're migrating
