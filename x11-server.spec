@@ -333,7 +333,7 @@ Requires:	udev
 Conflicts:	drakx-kbd-mouse-x11 < 0.66
 Conflicts:	compiz < 0.5.0-1mdv2007.1
 Obsoletes:	x11-server13-xorg <= 1.2.99.905
-
+Requires:	dri-drivers
 # minimum libxfont needed for xserver-1.9:
 Requires:	libxfont >= 1.4.2
 
@@ -400,6 +400,7 @@ Summary:	A X server for Wayland
 Group:		System/X11
 License:	MIT
 Requires:	x11-server-common = %{EVRD}
+Requires:	dri-drivers
 
 %description xwayland
 Wayland is a complete window system in itself, but even so, if we're migrating
