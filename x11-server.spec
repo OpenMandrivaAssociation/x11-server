@@ -32,7 +32,7 @@ Version:	1.19.6
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	3
+Release:	4
 %endif
 Summary:	X11 servers
 Group:		System/X11
