@@ -1,5 +1,7 @@
 %define git 0
 
+%global optflags %{optflags} -O3
+
 %define with_debug 0
 %define enable_dmx 1
 %define enable_kdrive 0
@@ -38,7 +40,7 @@ Version:	1.20.0
 %if %{git}
 Release:	1.%{git}.1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -155,6 +157,10 @@ Patch7027:	0001-autobind-GPUs-to-the-screen.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+
+# (tpg) fix firefox hang on Xwayland https://bugzilla.redhat.com/show_bug.cgi?id=1579067
+Patch10001:	xserver-1-2-glamor-Always-return-0-from-glamor_fds_from_pixmap-on-error.patch
+Patch10002:	xserver-2-2-glamor-Propagate-glamor_fds_from_pixmap-error-in-glamor_fd_from_pixmap.patch
 
 # OpenMandriva/Mageia patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
@@ -571,6 +577,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 #define _disable_lto 1
 #CC=gcc CXX=g++ \
 %endif
+
 %configure \
 	--with-log-dir=%{_logdir} \
 	--with-module-dir=%{moduledir} \
