@@ -1,6 +1,6 @@
 %define git 0
 
-%global optflags %{optflags} -O3
+%global optflags %{optflags} -O2
 
 %define with_debug 0
 %define enable_dmx 1
