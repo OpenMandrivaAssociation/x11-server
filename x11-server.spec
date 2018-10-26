@@ -1,6 +1,6 @@
 %define git 0
 
-%global optflags %{optflags} -O2
+%global optflags %{optflags} -O3
 
 %define with_debug 0
 %define enable_dmx 1
@@ -36,7 +36,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.20.2
+Version:	1.20.3
 %if %{git}
 Release:	0.%{git}.1
 %else
