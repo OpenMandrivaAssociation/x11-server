@@ -148,6 +148,8 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:  hostname
+BuildRequires:  pkgconfig(libunwind)
 
 # Fedora Patches
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
@@ -648,7 +650,7 @@ pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 %make_build
 
 %install
-%make_install -CC .build
+%make_install -C .build
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
 ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
