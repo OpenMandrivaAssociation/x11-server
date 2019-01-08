@@ -40,7 +40,7 @@ Version:	1.20.3
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -533,7 +533,7 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 %else
 %setup -q -n xorg-server-%{version}
 %endif
-%apply_patches
+%autopatch -p1
 
 autoreconf -if
 
@@ -569,14 +569,14 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 # As of xorg-server 1.20.1 clang 7.0.0:
 # https://bugs.freedesktop.org/show_bug.cgi?id=108354
 # when building with clang
-%define _disable_lto 1
-CC=gcc CXX=g++ \
+#define _disable_lto 1
+#CC=gcc CXX=g++ \
 %endif
 %configure \
 	--with-log-dir=%{_logdir} \
 	--with-module-dir=%{moduledir} \
 	--enable-dependency-tracking \
-%ifnarch %{ix86} x86_64
+%ifnarch %{ix86} %{x86_64}
 	--disable-vbe \
 	--disable-int10-module \
 %else
@@ -645,10 +645,10 @@ CC=gcc CXX=g++ \
 
 pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
-%make
+%make_build
 
 %install
-%makeinstall_std -C .build
+%make_install -CC .build
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
 ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
