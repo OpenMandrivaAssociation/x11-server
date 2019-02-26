@@ -36,11 +36,11 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.20.3
+Version:	1.20.4
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	3
+Release:	1
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -150,6 +150,8 @@ BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:  hostname
 BuildRequires:  pkgconfig(libunwind)
+
+Patch100:	xorg-server-1.20.4-det_mon-size.patch
 
 # Fedora Patches
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
@@ -572,7 +574,7 @@ CFLAGS='-DBUILDDEBUG -O0 -g3' \
 # https://bugs.freedesktop.org/show_bug.cgi?id=108354
 # when building with clang
 #define _disable_lto 1
-#CC=gcc CXX=g++ \
+CC=gcc CXX=g++ \
 %endif
 %configure \
 	--with-log-dir=%{_logdir} \
