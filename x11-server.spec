@@ -40,7 +40,7 @@ Version:	1.20.4
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -158,7 +158,11 @@ Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
 
 # do not upstream - do not even use here yet
 Patch7027:	0001-autobind-GPUs-to-the-screen.patch
-
+Patch7028:	0001-xwayland-present-Destroy-sync_callback-in-xwl_presen.patch
+Patch7029:	0001-dix-leave-last.valuators-alone-on-slave-switch.patch
+Patch7030:	0002-modesetting-Propagate-more-failure-in-drmmode_set_mo.patch
+Patch7031:	0003-modesetting-Factor-out-drmmode_target_output.patch
+Patch7032:	0004-modesetting-Use-atomic-instead-of-per-crtc-walks-whe.patch
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
 
