@@ -40,7 +40,7 @@ Version:	1.20.4
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	3
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -573,13 +573,6 @@ pushd .build
 CFLAGS='-DBUILDDEBUG -O0 -g3' \
 %endif
 
-%if ! %{cross_compiling}
-# As of xorg-server 1.20.1 clang 7.0.0:
-# https://bugs.freedesktop.org/show_bug.cgi?id=108354
-# when building with clang
-#define _disable_lto 1
-CC=gcc CXX=g++ \
-%endif
 %configure \
 	--with-log-dir=%{_logdir} \
 	--with-module-dir=%{moduledir} \
