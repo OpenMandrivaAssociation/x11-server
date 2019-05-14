@@ -40,7 +40,7 @@ Version:	1.20.4
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	3
+Release:	4
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -152,8 +152,16 @@ BuildRequires:  hostname
 BuildRequires:  pkgconfig(libunwind)
 
 Patch100:	xorg-server-1.20.4-det_mon-size.patch
+Patch101:	http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-graphics/xorg-xserver/xserver-xorg/0001-test-xtest-Initialize-array-with-braces.patch
 
 # Fedora Patches
+# From Debian use intel ddx driver only for gen4 and older chipsets
+Patch7022:	06_use-intel-only-on-pre-gen4.diff
+# Default to xf86-video-modesetting on GeForce 8 and newer
+Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
+# Default to va_gl on intel i965 as we use the modesetting drv there
+# va_gl should probably just be the default everywhere ?
+Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
 
 # do not upstream - do not even use here yet
