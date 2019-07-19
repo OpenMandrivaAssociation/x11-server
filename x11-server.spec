@@ -164,18 +164,19 @@ Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
 Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
 Patch7026:	0001-Xi-return-AlreadyGrabbed-for-key-grabs-255.patch
-Patch7027:	0001-xwayland-Avoid-a-crash-on-pointer-enter-with-a-grab.patch
-Patch7028:	0001-xwayland-Check-status-in-GBM-pixmap-creation.patch
-Patch7029:	0001-glamor-Make-pixmap-exportable-from-gbm_bo_from_pixma.patch
-Patch7030:	0001-xwayland-Reset-scheduled-frames-after-hiding-tablet-.patch
-Patch7031:	0001-Revert-present-scmd-Check-that-the-flip-and-screen-p.patch
-Patch7032:	0001-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch
 
 # do not upstream - do not even use here yet
 Patch7027:	0001-autobind-GPUs-to-the-screen.patch
 Patch7030:	0002-modesetting-Propagate-more-failure-in-drmmode_set_mo.patch
 Patch7031:	0003-modesetting-Factor-out-drmmode_target_output.patch
 Patch7032:	0004-modesetting-Use-atomic-instead-of-per-crtc-walks-whe.patch
+Patch7033:	0001-xwayland-Avoid-a-crash-on-pointer-enter-with-a-grab.patch
+Patch7034:	0001-xwayland-Check-status-in-GBM-pixmap-creation.patch
+Patch7035:	0001-glamor-Make-pixmap-exportable-from-gbm_bo_from_pixma.patch
+Patch7036:	0001-xwayland-Reset-scheduled-frames-after-hiding-tablet-.patch
+Patch7037:	0001-Revert-present-scmd-Check-that-the-flip-and-screen-p.patch
+Patch7038:	0001-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch
+
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
 
