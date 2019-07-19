@@ -40,7 +40,7 @@ Version:	1.20.5
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -163,6 +163,13 @@ Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
 # va_gl should probably just be the default everywhere ?
 Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
+Patch7026:	0001-Xi-return-AlreadyGrabbed-for-key-grabs-255.patch
+Patch7027:	0001-xwayland-Avoid-a-crash-on-pointer-enter-with-a-grab.patch
+Patch7028:	0001-xwayland-Check-status-in-GBM-pixmap-creation.patch
+Patch7029:	0001-glamor-Make-pixmap-exportable-from-gbm_bo_from_pixma.patch
+Patch7030:	0001-xwayland-Reset-scheduled-frames-after-hiding-tablet-.patch
+Patch7031:	0001-Revert-present-scmd-Check-that-the-flip-and-screen-p.patch
+Patch7032:	0001-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch
 
 # do not upstream - do not even use here yet
 Patch7027:	0001-autobind-GPUs-to-the-screen.patch
