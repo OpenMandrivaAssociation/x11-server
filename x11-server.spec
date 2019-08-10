@@ -90,6 +90,7 @@ BuildRequires:	pam-devel
 BuildRequires:	meson
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(libbsd)
+BuildRequires:	pkgconfig(nettle)
 BuildRequires:	pkgconfig(xkbcomp)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gbm)
