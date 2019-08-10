@@ -82,8 +82,9 @@ Obsoletes:	%{name}-xfake < %{version}-%{release}
 # FIXME: build with systemtap installed is broken
 BuildConflicts:	systemtap
 BuildRequires:	pkgconfig(dbus-1)
-# causes to segfaults in X binary
-#BuildRequires:	pkgconfig(libunwind)
+%ifarch %{ix86} %{x86_64}
+BuildRequires:	pkgconfig(libunwind)
+%endif
 BuildRequires:	pkgconfig(gl)
 BuildRequires:	pam-devel
 BuildRequires:	pkgconfig(egl)
@@ -149,7 +150,6 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:  hostname
-BuildRequires:  pkgconfig(libunwind)
 
 Patch100:	xorg-server-1.20.4-det_mon-size.patch
 Patch101:	http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-graphics/xorg-xserver/xserver-xorg/0001-test-xtest-Initialize-array-with-braces.patch
