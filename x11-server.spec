@@ -87,6 +87,10 @@ BuildRequires:	pkgconfig(libunwind)
 %endif
 BuildRequires:	pkgconfig(gl)
 BuildRequires:	pam-devel
+BuildRequires:	meson
+BuildRequires:	cmake
+BuildRequires:	pkgconfig(libbsd)
+BuildRequires:	pkgconfig(xkbcomp)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gbm)
 BuildRequires:	pkgconfig(libsystemd)
@@ -330,7 +334,6 @@ fi
 %endif
 %{_libdir}/xorg/modules/*
 %{_libdir}/xorg/protocol.txt
-%{_datadir}/X11/xkb/README.compiled
 %{_mandir}/man1/gtf.*
 %{_mandir}/man1/cvt.*
 %if %{enable_dmx}
@@ -373,7 +376,6 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_bindir}/Xorg
 %{_libexecdir}/Xorg
 %attr(4755,root,root)%{_libexecdir}/Xorg.wrap
-%attr(4755,root,root)%{_bindir}/Xwrapper
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
@@ -539,7 +541,7 @@ Possible uses include:
 Summary:	Xserver source code required to build unofficial servers
 Group:		Development/X11
 License:	MIT
-BuildArch:	noarch
+BuildArch:     noarch
 
 %description source
 Xserver source code needed to build unofficial servers, like Xvnc.
@@ -556,8 +558,6 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 %setup -q -n xorg-server-%{version}
 %endif
 %autopatch -p1
-
-autoreconf -if
 
 # check the ABI in the source against what we expect.
 getmajor() {
@@ -580,90 +580,34 @@ test $(getmajor extension) == %{extension_major}
 test $(getminor extension) == %{extension_minor}
 
 %build
-CONFIGURE_TOP="$PWD"
-mkdir -p .build
-pushd .build
-%if %{with_debug}
-CFLAGS='-DBUILDDEBUG -O0 -g3' \
-%endif
-
-%configure \
-	--with-log-dir=%{_logdir} \
-	--with-module-dir=%{moduledir} \
-	--enable-dependency-tracking \
-%ifnarch %{ix86} %{x86_64}
-	--disable-vbe \
-	--disable-int10-module \
-%else
-	--with-int10=x86emu \
-%endif
-	--with-builder-addr="%{disturl}" \
-	--with-vendor-name="%{vendor}" \
-	--with-os-vendor="%{vendor}" \
-	--with-builderstring="Build ID: %{name} %{version}-%{release}" \
-	--with-os-name="$(hostname -s) $(uname -r)" \
-	--with-vendor-web="%{bugurl}" \
-	%if %{with_debug}
-	--enable-debug \
+%meson \
+	-Dlog_dir="%{_logdir}" \
+	-Dmodule_dir="%{moduledir}" \
+	-Dbuilder_addr="%{disturl}" \
+	-Dbuilder_string="Build ID: %{name} %{version}-%{release}" \
+	-Dvendor_name="%{vendor}" \
+	-Dos_vendor="%{vendor}" \
+	-Dxorg=true \
+	-Dsuid_wrapper=true \
+	-Dxephyr=true \
+	%ifnarch %{ix86} %{x86_64}
+	-Dvbe=false \
+	-Dint10=false \
 	%else
-	--disable-debug \
+	-Dint10=x86emu \
 	%endif
-	--without-dtrace \
-	--enable-present \
-	--enable-config-udev \
-	--enable-config-udev-kms \
-	--disable-strict-compilation \
-	--enable-composite \
-	--enable-xres \
-	--enable-record \
-	--enable-xv \
-	--enable-xvmc \
-	--enable-dga \
-	--enable-screensaver \
-	--enable-xdmcp \
-	--enable-xdm-auth-1 \
-	--enable-glx \
-	--enable-dri \
-	--enable-dri2 \
-	--enable-dri3 \
-	--enable-glamor \
-	--enable-xinerama \
-	--enable-xf86vidmode \
-	--enable-xace \
-	--enable-xcsecurity \
-	--enable-xf86bigfont \
-	--enable-dpms \
-	--enable-dbe \
-	--enable-xfree86-utils \
-	--enable-xorg \
+	-Dvendor_web="%{bugurl}" \
 	%if %enable_dmx
-	--enable-dmx \
-	%else
-	--disable-dmx \
+	-Ddmx=true \
 	%endif
-	--enable-xvfb \
-	--enable-xnest \
-	--disable-xwin \
-	--enable-kdrive \
-	--enable-xephyr \
-	--disable-install-setuid \
-	--enable-secure-rpc \
-	--enable-pam \
-	--disable-config-hal \
-	--with-sha1=libcrypto \
-	--with-systemd-daemon \
-	--enable-systemd-logind \
-	--enable-suid-wrapper \
-	--enable-input-thread \
-	--enable-xwayland-eglstream \
-	--with-default-font-path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
+	-Ddefault_font_path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
+	
+#pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
-pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
-
-%make_build
+%meson_build
 
 %install
-%make_install -C .build
+%meson_install
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
 ln -s %{_bindir}/Xorg %{buildroot}%{_sysconfdir}/X11/X
@@ -681,9 +625,6 @@ mkdir -p %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
 
 mkdir -p %{buildroot}%{_sysconfdir}/X11/app-defaults
 mkdir -p %{buildroot}%{_sysconfdir}/X11/fontpath.d
-
-# move README.compiled outside compiled/ dir, so there won't be any problem with x11-data-xkbdata
-mv -f %{buildroot}%{_datadir}/X11/xkb/compiled/README.compiled %{buildroot}%{_datadir}/X11/xkb/
 
 # for compatibility with legacy applications (see #23423, for example)
 mkdir -p %{buildroot}%{_prefix}/X11R6/lib/
@@ -711,10 +652,6 @@ install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
 # https://issues.openmandriva.org/show_bug.cgi?id=274
 #install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
 
-# Make the source package
-install -d %{buildroot}/%{xserver_source_dir}
-cp -r * %{buildroot}/%{xserver_source_dir}
-
 install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
 
 # And enable Ctrl+Alt+Backspace by default
@@ -722,5 +659,11 @@ install -c -m 644 %{SOURCE7} %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/
 
 # Add synaptics configuration
 install -c -m 644 %{SOURCE8} %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/
+
+# Make the source package
+install -d %{buildroot}/%{xserver_source_dir}
+rm -rf build
+cp -r * %{buildroot}/%{xserver_source_dir}
+
 
 %files
