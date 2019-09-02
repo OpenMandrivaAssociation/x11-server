@@ -40,7 +40,7 @@ Version:	1.20.5
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	3
+Release:	4
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -158,6 +158,7 @@ BuildRequires:  hostname
 
 Patch100:	xorg-server-1.20.4-det_mon-size.patch
 Patch101:	http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-graphics/xorg-xserver/xserver-xorg/0001-test-xtest-Initialize-array-with-braces.patch
+Patch102:	xorg-server-1.20.5-fix-meson-xkb_output_dir.patch
 
 # Fedora Patches
 # From Debian use intel ddx driver only for gen4 and older chipsets
