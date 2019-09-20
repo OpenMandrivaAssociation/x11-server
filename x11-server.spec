@@ -40,7 +40,7 @@ Version:	1.20.5
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	4
+Release:	5
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -182,6 +182,23 @@ Patch7035:	0001-glamor-Make-pixmap-exportable-from-gbm_bo_from_pixma.patch
 Patch7036:	0001-xwayland-Reset-scheduled-frames-after-hiding-tablet-.patch
 Patch7037:	0001-Revert-present-scmd-Check-that-the-flip-and-screen-p.patch
 Patch7038:	0001-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch
+
+Patch7039:	0001-Xi-Use-current-device-active-grab-to-deliver-touch-e.patch
+Patch7040:	0002-dri2-Sync-i965_pci_ids.h-from-mesa.patch
+Patch7041:	0003-xwayland-Update-screen-pixmap-on-output-resize.patch
+Patch7042:	0004-xwayland-Expand-the-RANDR-screen-size-limits.patch
+# https://bugzilla.redhat.com/1729925
+Patch7043:	0005-xwayland-Do-not-free-a-NULL-GBM-bo.patch
+Patch7044:	0006-xsync-Add-resource-inside-of-SyncCreate-export-SyncC.patch
+Patch7045:	0007-GLX-Add-a-per-client-vendor-mapping.patch
+Patch7046:	0008-GLX-Use-the-sending-client-for-looking-up-XID-s.patch
+Patch7047:	0009-GLX-Add-a-function-to-change-a-clients-vendor-list.patch
+Patch7048:	0010-GLX-Set-GlxServerExports-major-minor-Version.patch
+Patch7049:	0011-miext-sync-Fix-needless-ABI-change.patch
+Patch7050:	0012-glx-Fix-previous-context-validation-in-xorgGlxMakeCu.patch
+Patch7051:	0013-xwayland-Separate-DamagePtr-into-separate-window-dat.patch
+Patch7052:	0014-xwayland-Refactor-surface-creation-into-a-separate-f.patch
+Patch7053:	0015-xwayland-Handle-the-case-of-windows-being-realized-b.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
