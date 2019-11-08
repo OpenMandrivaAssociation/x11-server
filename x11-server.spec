@@ -92,6 +92,7 @@ BuildRequires:	cmake
 BuildRequires:	pkgconfig(libbsd)
 BuildRequires:	pkgconfig(nettle)
 BuildRequires:	pkgconfig(xkbcomp)
+BuildRequires:	pkgconfig(dri)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gbm)
 BuildRequires:	pkgconfig(libsystemd)
