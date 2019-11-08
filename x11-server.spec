@@ -40,7 +40,7 @@ Version:	1.20.5
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	5
+Release:	6
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -199,6 +199,27 @@ Patch7050:	0012-glx-Fix-previous-context-validation-in-xorgGlxMakeCu.patch
 Patch7051:	0013-xwayland-Separate-DamagePtr-into-separate-window-dat.patch
 Patch7052:	0014-xwayland-Refactor-surface-creation-into-a-separate-f.patch
 Patch7053:	0015-xwayland-Handle-the-case-of-windows-being-realized-b.patch
+# Backported Xwayland randr resolution change emulation support
+Patch7054:	0001-dix-Add-GetCurrentClient-helper.patch
+Patch7055:	0002-xwayland-Add-wp_viewport-wayland-extension-support.patch
+Patch7056:	0003-xwayland-Use-buffer_damage-instead-of-surface-damage.patch
+Patch7057:	0004-xwayland-Add-fake-output-modes-to-xrandr-output-mode.patch
+Patch7058:	0005-xwayland-Use-RandR-1.2-interface-rev-2.patch
+Patch7059:	0006-xwayland-Add-per-client-private-data.patch
+Patch7060:	0007-xwayland-Add-support-for-storing-per-client-per-outp.patch
+Patch7061:	0008-xwayland-Add-support-for-randr-resolution-change-emu.patch
+Patch7062:	0009-xwayland-Add-xwlRRModeToDisplayMode-helper-function.patch
+Patch7063:	0010-xwayland-Add-xwlVidModeGetCurrentRRMode-helper-to-th.patch
+Patch7064:	0011-xwayland-Add-vidmode-mode-changing-emulation-support.patch
+Patch7065:	0012-xwayland-xwl_window_should_enable_viewport-Add-extra.patch
+Patch7066:	0013-xwayland-Set-_XWAYLAND_RANDR_EMU_MONITOR_RECTS-prope.patch
+Patch7067:	0014-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
+Patch7068:	0015-xwayland-Call-xwl_window_check_resolution_change_emu.patch
+Patch7069:	0016-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
+Patch7070:	0017-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
+# Fix building with new libglvnd-1.2.0 (E)GL headers and pkgconfig files
+Patch7071:	0001-build-glx-Lower-gl-version-to-work-with-libglvnd.patch
+Patch7072:	0001-glamor-xwayland-Define-EGL_NO_X11.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
