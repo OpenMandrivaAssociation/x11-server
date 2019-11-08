@@ -221,6 +221,8 @@ Patch7070:	0017-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
 # Fix building with new libglvnd-1.2.0 (E)GL headers and pkgconfig files
 Patch7071:	0001-build-glx-Lower-gl-version-to-work-with-libglvnd.patch
 Patch7072:	0001-glamor-xwayland-Define-EGL_NO_X11.patch
+Patch7073:	e6ef2b12404dfec7f23592a3524d2a63d9d25802..c7486613b0dc586f93f6ba293d9b55c69995b05c.patch
+Patch7074:	c7486613b0dc586f93f6ba293d9b55c69995b05c..3340ddf37743fdf197dfc16a97107435ff53c6e4.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
@@ -642,8 +644,6 @@ test $(getminor extension) == %{extension_minor}
 	-Ddmx=true \
 	%endif
 	-Ddefault_font_path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
-	
-#pushd include && make xorg-server.h dix-config.h xorg-config.h && popd
 
 %meson_build
 
