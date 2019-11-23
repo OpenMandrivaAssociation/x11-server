@@ -36,7 +36,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.20.5
+Version:	1.20.6
 %if %{git}
 Release:	0.%{git}.1
 %else
@@ -177,52 +177,6 @@ Patch7027:	0001-autobind-GPUs-to-the-screen.patch
 Patch7030:	0002-modesetting-Propagate-more-failure-in-drmmode_set_mo.patch
 Patch7031:	0003-modesetting-Factor-out-drmmode_target_output.patch
 Patch7032:	0004-modesetting-Use-atomic-instead-of-per-crtc-walks-whe.patch
-Patch7033:	0001-xwayland-Avoid-a-crash-on-pointer-enter-with-a-grab.patch
-Patch7034:	0001-xwayland-Check-status-in-GBM-pixmap-creation.patch
-Patch7035:	0001-glamor-Make-pixmap-exportable-from-gbm_bo_from_pixma.patch
-Patch7036:	0001-xwayland-Reset-scheduled-frames-after-hiding-tablet-.patch
-Patch7037:	0001-Revert-present-scmd-Check-that-the-flip-and-screen-p.patch
-Patch7038:	0001-compiler.h-Do-not-include-sys-io.h-on-ARM-with-glibc.patch
-
-Patch7039:	0001-Xi-Use-current-device-active-grab-to-deliver-touch-e.patch
-Patch7040:	0002-dri2-Sync-i965_pci_ids.h-from-mesa.patch
-Patch7041:	0003-xwayland-Update-screen-pixmap-on-output-resize.patch
-Patch7042:	0004-xwayland-Expand-the-RANDR-screen-size-limits.patch
-# https://bugzilla.redhat.com/1729925
-Patch7043:	0005-xwayland-Do-not-free-a-NULL-GBM-bo.patch
-Patch7044:	0006-xsync-Add-resource-inside-of-SyncCreate-export-SyncC.patch
-Patch7045:	0007-GLX-Add-a-per-client-vendor-mapping.patch
-Patch7046:	0008-GLX-Use-the-sending-client-for-looking-up-XID-s.patch
-Patch7047:	0009-GLX-Add-a-function-to-change-a-clients-vendor-list.patch
-Patch7048:	0010-GLX-Set-GlxServerExports-major-minor-Version.patch
-Patch7049:	0011-miext-sync-Fix-needless-ABI-change.patch
-Patch7050:	0012-glx-Fix-previous-context-validation-in-xorgGlxMakeCu.patch
-Patch7051:	0013-xwayland-Separate-DamagePtr-into-separate-window-dat.patch
-Patch7052:	0014-xwayland-Refactor-surface-creation-into-a-separate-f.patch
-Patch7053:	0015-xwayland-Handle-the-case-of-windows-being-realized-b.patch
-# Backported Xwayland randr resolution change emulation support
-Patch7054:	0001-dix-Add-GetCurrentClient-helper.patch
-Patch7055:	0002-xwayland-Add-wp_viewport-wayland-extension-support.patch
-Patch7056:	0003-xwayland-Use-buffer_damage-instead-of-surface-damage.patch
-Patch7057:	0004-xwayland-Add-fake-output-modes-to-xrandr-output-mode.patch
-Patch7058:	0005-xwayland-Use-RandR-1.2-interface-rev-2.patch
-Patch7059:	0006-xwayland-Add-per-client-private-data.patch
-Patch7060:	0007-xwayland-Add-support-for-storing-per-client-per-outp.patch
-Patch7061:	0008-xwayland-Add-support-for-randr-resolution-change-emu.patch
-Patch7062:	0009-xwayland-Add-xwlRRModeToDisplayMode-helper-function.patch
-Patch7063:	0010-xwayland-Add-xwlVidModeGetCurrentRRMode-helper-to-th.patch
-Patch7064:	0011-xwayland-Add-vidmode-mode-changing-emulation-support.patch
-Patch7065:	0012-xwayland-xwl_window_should_enable_viewport-Add-extra.patch
-Patch7066:	0013-xwayland-Set-_XWAYLAND_RANDR_EMU_MONITOR_RECTS-prope.patch
-Patch7067:	0014-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
-Patch7068:	0015-xwayland-Call-xwl_window_check_resolution_change_emu.patch
-Patch7069:	0016-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
-Patch7070:	0017-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
-# Fix building with new libglvnd-1.2.0 (E)GL headers and pkgconfig files
-Patch7071:	0001-build-glx-Lower-gl-version-to-work-with-libglvnd.patch
-Patch7072:	0001-glamor-xwayland-Define-EGL_NO_X11.patch
-Patch7073:	e6ef2b12404dfec7f23592a3524d2a63d9d25802..c7486613b0dc586f93f6ba293d9b55c69995b05c.patch
-Patch7074:	c7486613b0dc586f93f6ba293d9b55c69995b05c..3340ddf37743fdf197dfc16a97107435ff53c6e4.patch
 
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
