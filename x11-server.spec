@@ -40,7 +40,7 @@ Version:	1.20.6
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	6
+Release:	7
 %endif
 Summary:	X11 servers
 Group:		System/X11
