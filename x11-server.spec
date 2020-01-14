@@ -36,11 +36,11 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.20.6
+Version:	1.20.7
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	7
+Release:	1
 %endif
 Summary:	X11 servers
 Group:		System/X11
