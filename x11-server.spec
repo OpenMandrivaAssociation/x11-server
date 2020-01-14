@@ -170,7 +170,6 @@ Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
 # va_gl should probably just be the default everywhere ?
 Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
-Patch7026:	0001-Xi-return-AlreadyGrabbed-for-key-grabs-255.patch
 
 # do not upstream - do not even use here yet
 Patch7027:	0001-autobind-GPUs-to-the-screen.patch
