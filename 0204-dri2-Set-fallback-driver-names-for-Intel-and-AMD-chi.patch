@@ -1,0 +1,54 @@
+From 2a9268e4a0ba7b062ded4d361be3119d887aac41 Mon Sep 17 00:00:00 2001
+From: Adam Jackson <ajax@redhat.com>
+Date: Tue, 3 Sep 2019 11:20:58 -0400
+Subject: [PATCH] dri2: Set fallback driver names for Intel and AMD chips
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+i965 and radeonsi, respectively, are the drivers that have been
+receiving new hardware support. It's really silly to need to update the
+server side to know specific new devices IDs every time a new ASIC comes
+out.
+
+Reviewed-by: Michel Dänzer <mdaenzer@redhat.com>
+---
+ hw/xfree86/dri2/pci_ids/pci_id_driver_map.h | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/hw/xfree86/dri2/pci_ids/pci_id_driver_map.h b/hw/xfree86/dri2/pci_ids/pci_id_driver_map.h
+index da7ea1c1e..04f372279 100644
+--- a/hw/xfree86/dri2/pci_ids/pci_id_driver_map.h
++++ b/hw/xfree86/dri2/pci_ids/pci_id_driver_map.h
+@@ -45,12 +45,6 @@ static const int r600_chip_ids[] = {
+ #undef CHIPSET
+ };
+ 
+-static const int radeonsi_chip_ids[] = {
+-#define CHIPSET(chip, name, family) chip,
+-#include "pci_ids/radeonsi_pci_ids.h"
+-#undef CHIPSET
+-};
+-
+ static const int virtio_gpu_chip_ids[] = {
+ #define CHIPSET(chip, name, family) chip,
+ #include "pci_ids/virtio_gpu_pci_ids.h"
+@@ -71,13 +65,14 @@ static const struct {
+ } driver_map[] = {
+    { 0x8086, "i915", i915_chip_ids, ARRAY_SIZE(i915_chip_ids) },
+    { 0x8086, "i965", i965_chip_ids, ARRAY_SIZE(i965_chip_ids) },
++   { 0x8086, "i965", NULL, -1 },
+ #ifndef DRIVER_MAP_GALLIUM_ONLY
+    { 0x1002, "radeon", r100_chip_ids, ARRAY_SIZE(r100_chip_ids) },
+    { 0x1002, "r200", r200_chip_ids, ARRAY_SIZE(r200_chip_ids) },
+ #endif
+    { 0x1002, "r300", r300_chip_ids, ARRAY_SIZE(r300_chip_ids) },
+    { 0x1002, "r600", r600_chip_ids, ARRAY_SIZE(r600_chip_ids) },
+-   { 0x1002, "radeonsi", radeonsi_chip_ids, ARRAY_SIZE(radeonsi_chip_ids) },
++   { 0x1002, "radeonsi", NULL, -1 },
+    { 0x10de, "nouveau", NULL, -1 },
+    { 0x1af4, "virtio_gpu", virtio_gpu_chip_ids, ARRAY_SIZE(virtio_gpu_chip_ids) },
+    { 0x15ad, "vmwgfx", vmwgfx_chip_ids, ARRAY_SIZE(vmwgfx_chip_ids) },
+-- 
+2.23.0
+

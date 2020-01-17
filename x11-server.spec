@@ -29,7 +29,7 @@
 %define ansic_major 0
 %define ansic_minor 4
 %define videodrv_major 24
-%define videodrv_minor 0
+%define videodrv_minor 1
 %define xinput_major 24
 %define xinput_minor 1
 %define extension_major 10
@@ -138,12 +138,12 @@ BuildRequires:	byacc
 BuildRequires:	flex
 BuildRequires:	bison
 
-BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(libudev) >= 186
 
 %if %{enable_dmx}
-BuildRequires:	libdmx-devel
-BuildRequires:	libxtst-devel >= 1.1
+BuildRequires:	pkgconfig(dmx)
+BuildRequires:	pkgconfig(xtst) >= 1.1
 %endif
 
 %if %{enable_builddocs}
@@ -155,7 +155,7 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 %endif
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
-BuildRequires:  hostname
+BuildRequires:	hostname
 
 Patch100:	xorg-server-1.20.4-det_mon-size.patch
 Patch101:	http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-graphics/xorg-xserver/xserver-xorg/0001-test-xtest-Initialize-array-with-braces.patch
@@ -168,15 +168,16 @@ Patch7022:	06_use-intel-only-on-pre-gen4.diff
 Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
 # Default to va_gl on intel i965 as we use the modesetting drv there
 # va_gl should probably just be the default everywhere ?
-Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
+# (tpg) 2020-01-17 not needed anymore ?
+#Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
 Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
+Patch7026:	0204-dri2-Set-fallback-driver-names-for-Intel-and-AMD-chi.patch
 
 # do not upstream - do not even use here yet
 Patch7027:	0001-autobind-GPUs-to-the-screen.patch
 Patch7030:	0002-modesetting-Propagate-more-failure-in-drmmode_set_mo.patch
 Patch7031:	0003-modesetting-Factor-out-drmmode_target_output.patch
 Patch7032:	0004-modesetting-Use-atomic-instead-of-per-crtc-walks-whe.patch
-
 # because the display-managers are not ready yet, do not upstream
 Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
 
@@ -223,9 +224,9 @@ License:	MIT
 Conflicts:	%{oldxorgnamedevel}-devel < 7.0
 Obsoletes:	x11-server13-devel <= 1.2.99.905
 Requires:	pkgconfig(pixman-1)
-Requires:	libpciaccess-devel
-Requires:	libxkbfile-devel
-Requires:	libxext-devel >= 1.1
+Requires:	pkgconfig(pciaccess)
+Requires:	pkgconfig(xkbfile)
+Requires:	pkgconfig(xext) >= 1.1
 Requires:	pkgconfig(dri)
 Requires:	pkgconfig(xfont2)
 Obsoletes:	libglamor-devel < 0.6.0-10
