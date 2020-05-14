@@ -40,7 +40,7 @@ Version:	1.20.8
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	3
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -55,8 +55,6 @@ Source2:	xvfb-run.sh
 # for finding & loading nvidia and flgrx drivers:
 Source3:	00-modules.conf
 Source4:	10-quirks.conf
-Source5:	mandriva-setup-keyboard-udev
-Source6:	61-x11-input.rules
 Source7:	90-zap.conf
 Source8:	50-synaptics.conf
 # from RH/FC:
@@ -157,45 +155,57 @@ BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	hostname
 
-Patch100:	xorg-server-1.20.4-det_mon-size.patch
-Patch101:	http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-graphics/xorg-xserver/xserver-xorg/0001-test-xtest-Initialize-array-with-braces.patch
-Patch102:	xorg-server-1.20.5-fix-meson-xkb_output_dir.patch
-
 # Fedora Patches
 # From Debian use intel ddx driver only for gen4 and older chipsets
-Patch7022:	06_use-intel-only-on-pre-gen4.diff
+Patch100:	06_use-intel-only-on-pre-gen4.diff
 # Default to xf86-video-modesetting on GeForce 8 and newer
-Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
+Patch101:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
 # Default to va_gl on intel i965 as we use the modesetting drv there
 # va_gl should probably just be the default everywhere ?
 # (tpg) 2020-01-17 not needed anymore ?
-#Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
-Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
-Patch7026:	0204-dri2-Set-fallback-driver-names-for-Intel-and-AMD-chi.patch
+#Patch102:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
 
 # do not upstream - do not even use here yet
-Patch7027:	0001-autobind-GPUs-to-the-screen.patch
-Patch7030:	0002-modesetting-Propagate-more-failure-in-drmmode_set_mo.patch
-Patch7031:	0003-modesetting-Factor-out-drmmode_target_output.patch
-Patch7032:	0004-modesetting-Use-atomic-instead-of-per-crtc-walks-whe.patch
+Patch103:	0001-autobind-GPUs-to-the-screen.patch
 # because the display-managers are not ready yet, do not upstream
-Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+Patch104:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+
+# Backports from "master" upstream:
+# Backported Xwayland randr resolution change emulation support
+Patch500:	0001-dix-Add-GetCurrentClient-helper.patch
+Patch501:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+Patch502:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
+Patch503:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
+Patch504:	0002-xwayland-Add-wp_viewport-wayland-extension-support.patch
+Patch505:	0003-xwayland-Use-buffer_damage-instead-of-surface-damage.patch
+Patch506:	0004-xwayland-Add-fake-output-modes-to-xrandr-output-mode.patch
+Patch507:	0005-xwayland-Use-RandR-1.2-interface-rev-2.patch
+Patch508:	0006-xwayland-Add-per-client-private-data.patch
+Patch509:	0007-xwayland-Add-support-for-storing-per-client-per-outp.patch
+Patch510:	0008-xwayland-Add-support-for-randr-resolution-change-emu.patch
+Patch511:	0009-xwayland-Add-xwlRRModeToDisplayMode-helper-function.patch
+Patch512:	0010-xwayland-Add-xwlVidModeGetCurrentRRMode-helper-to-th.patch
+Patch513:	0011-xwayland-Add-vidmode-mode-changing-emulation-support.patch
+Patch514:	0012-xwayland-xwl_window_should_enable_viewport-Add-extra.patch
+Patch515:	0013-xwayland-Set-_XWAYLAND_RANDR_EMU_MONITOR_RECTS-prope.patch
+Patch516:	0014-xwayland-Cache-client-id-for-the-window-manager-clie.patch
+Patch517:	0015-xwayland-Reuse-viewport-instead-of-recreating.patch
+Patch518:	0016-xwayland-Recurse-on-finding-the-none-wm-owner.patch
+Patch519:	0017-xwayland-Make-window_get_none_wm_owner-return-a-Wind.patch
+Patch520:	0018-xwayland-Check-emulation-on-client-toplevel-resize.patch
+Patch521:	0019-xwayland-Also-check-resolution-change-emulation-when.patch
+Patch522:	0020-xwayland-Also-hook-screen-s-MoveWindow-method.patch
+Patch523:	0021-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
+Patch524:	0022-xwayland-Call-xwl_window_check_resolution_change_emu.patch
+Patch525:	0023-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
+Patch526:	0024-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
 
 # OpenMandriva/Mageia patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
-Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
-Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
-Patch903:	0903-LED-behavior-fixes.patch
 Patch906:	0906-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
-Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
-Patch910:	xorg-1.13.0-link-tirpc.patch
 Patch911:	xorg-server-1.16.0-blacklist-driver.patch
 
 # Candidates for dropping:
-# 902: by pixel, so that X11 choose the best resolution with a better algorithm
-# 903: Input subsystem has changed *a lot* since this patch was written... I
-#      fear it might break things now
 # 906: All this patch does is force users to hit ctrl+alt+bksp twice (with
 #      an annoying sound) IF the hotkey is enabled. If the user chooses to
 #      enable ctrk+alt+bksp, why force him to hit twice? OTOH, the sound is
@@ -208,7 +218,6 @@ Patch4001:	1001-do-not-crash-if-xv-not-initialized.patch
 
 # (cg) Point the user at the journal rather than a logfile at /dev/null
 Patch5001:	point-user-at-journal-rather-than-dev-null.patch
-Patch5002:	xorg-server-1.20.2-bug95301.patch
 
 %description
 X11 servers.
@@ -220,7 +229,7 @@ Summary:	Development files for %{name}
 Group:		Development/X11
 License:	MIT
 
-%define oldxorgnamedevel  %mklibname xorg-x11
+%define oldxorgnamedevel %mklibname xorg-x11
 Conflicts:	%{oldxorgnamedevel}-devel < 7.0
 Obsoletes:	x11-server13-devel <= 1.2.99.905
 Requires:	pkgconfig(pixman-1)
@@ -641,11 +650,6 @@ install -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/X11/xorg.conf.d/
 
 mkdir -p %{buildroot}/sbin
 mkdir -p %{buildroot}/lib/udev/rules.d/
-install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
-# (tpg) do not install this as running mandriva-setup-keyboard 
-# with systemd configuration before X start produces keyboard layout issues
-# https://issues.openmandriva.org/show_bug.cgi?id=274
-#install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
 
 install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
 
@@ -659,6 +663,5 @@ install -c -m 644 %{SOURCE8} %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/
 install -d %{buildroot}/%{xserver_source_dir}
 rm -rf build
 cp -r * %{buildroot}/%{xserver_source_dir}
-
 
 %files
