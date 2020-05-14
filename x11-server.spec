@@ -331,7 +331,6 @@ fi
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 %{_bindir}/gtf
 %{_bindir}/cvt
-/sbin/mandriva-setup-keyboard
 %if %{enable_dmx}
 %{_bindir}/vdltodmx
 %endif
