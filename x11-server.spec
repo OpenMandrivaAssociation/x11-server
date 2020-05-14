@@ -173,32 +173,29 @@ Patch104:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
 # Backports from "master" upstream:
 # Backported Xwayland randr resolution change emulation support
 Patch500:	0001-dix-Add-GetCurrentClient-helper.patch
-Patch501:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
-Patch502:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
-Patch503:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
-Patch504:	0002-xwayland-Add-wp_viewport-wayland-extension-support.patch
-Patch505:	0003-xwayland-Use-buffer_damage-instead-of-surface-damage.patch
-Patch506:	0004-xwayland-Add-fake-output-modes-to-xrandr-output-mode.patch
-Patch507:	0005-xwayland-Use-RandR-1.2-interface-rev-2.patch
-Patch508:	0006-xwayland-Add-per-client-private-data.patch
-Patch509:	0007-xwayland-Add-support-for-storing-per-client-per-outp.patch
-Patch510:	0008-xwayland-Add-support-for-randr-resolution-change-emu.patch
-Patch511:	0009-xwayland-Add-xwlRRModeToDisplayMode-helper-function.patch
-Patch512:	0010-xwayland-Add-xwlVidModeGetCurrentRRMode-helper-to-th.patch
-Patch513:	0011-xwayland-Add-vidmode-mode-changing-emulation-support.patch
-Patch514:	0012-xwayland-xwl_window_should_enable_viewport-Add-extra.patch
-Patch515:	0013-xwayland-Set-_XWAYLAND_RANDR_EMU_MONITOR_RECTS-prope.patch
-Patch516:	0014-xwayland-Cache-client-id-for-the-window-manager-clie.patch
-Patch517:	0015-xwayland-Reuse-viewport-instead-of-recreating.patch
-Patch518:	0016-xwayland-Recurse-on-finding-the-none-wm-owner.patch
-Patch519:	0017-xwayland-Make-window_get_none_wm_owner-return-a-Wind.patch
-Patch520:	0018-xwayland-Check-emulation-on-client-toplevel-resize.patch
-Patch521:	0019-xwayland-Also-check-resolution-change-emulation-when.patch
-Patch522:	0020-xwayland-Also-hook-screen-s-MoveWindow-method.patch
-Patch523:	0021-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
-Patch524:	0022-xwayland-Call-xwl_window_check_resolution_change_emu.patch
-Patch525:	0023-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
-Patch526:	0024-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
+Patch501:	0002-xwayland-Add-wp_viewport-wayland-extension-support.patch
+Patch502:	0003-xwayland-Use-buffer_damage-instead-of-surface-damage.patch
+Patch503:	0004-xwayland-Add-fake-output-modes-to-xrandr-output-mode.patch
+Patch504:	0005-xwayland-Use-RandR-1.2-interface-rev-2.patch
+Patch505:	0006-xwayland-Add-per-client-private-data.patch
+Patch506:	0007-xwayland-Add-support-for-storing-per-client-per-outp.patch
+Patch507:	0008-xwayland-Add-support-for-randr-resolution-change-emu.patch
+Patch508:	0009-xwayland-Add-xwlRRModeToDisplayMode-helper-function.patch
+Patch509:	0010-xwayland-Add-xwlVidModeGetCurrentRRMode-helper-to-th.patch
+Patch510:	0011-xwayland-Add-vidmode-mode-changing-emulation-support.patch
+Patch511:	0012-xwayland-xwl_window_should_enable_viewport-Add-extra.patch
+Patch512:	0013-xwayland-Set-_XWAYLAND_RANDR_EMU_MONITOR_RECTS-prope.patch
+Patch513:	0014-xwayland-Cache-client-id-for-the-window-manager-clie.patch
+Patch514:	0015-xwayland-Reuse-viewport-instead-of-recreating.patch
+Patch515:	0016-xwayland-Recurse-on-finding-the-none-wm-owner.patch
+Patch516:	0017-xwayland-Make-window_get_none_wm_owner-return-a-Wind.patch
+Patch517:	0018-xwayland-Check-emulation-on-client-toplevel-resize.patch
+Patch518:	0019-xwayland-Also-check-resolution-change-emulation-when.patch
+Patch519:	0020-xwayland-Also-hook-screen-s-MoveWindow-method.patch
+Patch520:	0021-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
+Patch521:	0022-xwayland-Call-xwl_window_check_resolution_change_emu.patch
+Patch522:	0023-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
+Patch523:	0024-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
 
 # OpenMandriva/Mageia patches
 # git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
