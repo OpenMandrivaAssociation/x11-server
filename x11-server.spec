@@ -90,7 +90,7 @@ BuildRequires:	pam-devel
 BuildRequires:	meson
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(libbsd)
-BuildRequires:	pkgconfig(nettle)
+BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(xkbcomp)
 BuildRequires:	pkgconfig(dri)
 BuildRequires:	pkgconfig(egl)
@@ -138,7 +138,6 @@ BuildRequires:	byacc
 BuildRequires:	flex
 BuildRequires:	bison
 
-BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(libudev) >= 186
 
 %if %{enable_dmx}
@@ -588,6 +587,7 @@ test $(getminor extension) == %{extension_minor}
 	-Dsuid_wrapper=true \
 	-Dxephyr=true \
 	-Dxcsecurity=true \
+	-Dsha1=libgcrypt \
 	%ifnarch %{ix86} %{x86_64}
 	-Dvbe=false \
 	-Dint10=false \
