@@ -40,7 +40,7 @@ Version:	1.20.9
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -587,6 +587,7 @@ test $(getminor extension) == %{extension_minor}
 	-Dxorg=true \
 	-Dsuid_wrapper=true \
 	-Dxephyr=true \
+	-Dxcsecurity=true \
 	%ifnarch %{ix86} %{x86_64}
 	-Dvbe=false \
 	-Dint10=false \
