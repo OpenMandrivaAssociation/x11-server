@@ -132,12 +132,10 @@ BuildRequires:	x11-font-util >= 1.1
 BuildRequires:	x11-proto-devel >= 2018.4
 BuildRequires:	x11-util-macros >= 1.19.2
 BuildRequires:	x11-xtrans-devel >= 1.3.5
-
 # Probably only needed if we change .l or .y files, but let's have them anyway:
 BuildRequires:	byacc
 BuildRequires:	flex
 BuildRequires:	bison
-
 BuildRequires:	pkgconfig(libudev) >= 186
 
 %if %{enable_dmx}
@@ -208,6 +206,34 @@ Patch4001:	1001-do-not-crash-if-xv-not-initialized.patch
 # (cg) Point the user at the journal rather than a logfile at /dev/null
 Patch5001:	point-user-at-journal-rather-than-dev-null.patch
 Patch5002:	xorg-server-1.20.2-bug95301.patch
+
+# (tpg) upstream patches from git
+Patch6000:	0000-meson-Add-sha1-library-options.patch
+# Backported Xwayland randr resolution change emulation support
+Patch6002:	0001-dix-Add-GetCurrentClient-helper.patch
+Patch5003:	0002-xwayland-Add-wp_viewport-wayland-extension-support.patch
+Patch6004:	0003-xwayland-Use-buffer_damage-instead-of-surface-damage.patch
+Patch6005:	0004-xwayland-Add-fake-output-modes-to-xrandr-output-mode.patch
+Patch6006:	0005-xwayland-Use-RandR-1.2-interface-rev-2.patch
+Patch6007:	0006-xwayland-Add-per-client-private-data.patch
+Patch6008:	0007-xwayland-Add-support-for-storing-per-client-per-outp.patch
+Patch6009:	0008-xwayland-Add-support-for-randr-resolution-change-emu.patch
+Patch6010:	0009-xwayland-Add-xwlRRModeToDisplayMode-helper-function.patch
+Patch6011:	0010-xwayland-Add-xwlVidModeGetCurrentRRMode-helper-to-th.patch
+Patch6012:	0011-xwayland-Add-vidmode-mode-changing-emulation-support.patch
+Patch6013:	0012-xwayland-xwl_window_should_enable_viewport-Add-extra.patch
+Patch6014:	0013-xwayland-Set-_XWAYLAND_RANDR_EMU_MONITOR_RECTS-prope.patch
+Patch6015:	0014-xwayland-Cache-client-id-for-the-window-manager-clie.patch
+Patch6016:	0015-xwayland-Reuse-viewport-instead-of-recreating.patch
+Patch6017:	0016-xwayland-Recurse-on-finding-the-none-wm-owner.patch
+Patch6018:	0017-xwayland-Make-window_get_none_wm_owner-return-a-Wind.patch
+Patch6019:	0018-xwayland-Check-emulation-on-client-toplevel-resize.patch
+Patch6020:	0019-xwayland-Also-check-resolution-change-emulation-when.patch
+Patch6021:	0020-xwayland-Also-hook-screen-s-MoveWindow-method.patch
+Patch6022:	0021-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
+Patch6023:	0022-xwayland-Call-xwl_window_check_resolution_change_emu.patch
+Patch6024:	0023-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
+Patch6025:	0024-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
 
 %description
 X11 servers.
