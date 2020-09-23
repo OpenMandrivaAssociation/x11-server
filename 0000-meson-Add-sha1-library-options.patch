@@ -1,6 +1,18 @@
+diff -Naur xorg-server-1.20.9/include/meson.build xorg-server-1.20.9.tpg/include/meson.build
+--- xorg-server-1.20.9/include/meson.build	2020-08-25 15:39:55.000000000 +0000
++++ xorg-server-1.20.9.tpg/include/meson.build	2020-09-23 14:33:59.408414847 +0000
+@@ -201,7 +201,7 @@
+ conf_data.set('XvExtension', build_xv)
+ conf_data.set('XvMCExtension', build_xvmc)
+ 
+-conf_data.set('HAVE_SHA1_IN_LIBNETTLE', '1') # XXX
++conf_data.set('HAVE_SHA1_IN_' + sha1.to_upper(), '1', description: 'Use @0@ SHA1 functions'.format(sha1))
+ 
+ conf_data.set('HAVE_APM', build_apm or build_acpi)
+ conf_data.set('HAVE_ACPI', build_acpi)
 diff -Naur xorg-server-1.20.9/meson.build xorg-server-1.20.9.tpg/meson.build
---- xorg-server-1.20.9/meson.build	2020-09-23 14:04:01.250414847 +0000
-+++ xorg-server-1.20.9.tpg/meson.build	2020-09-23 14:17:10.313414847 +0000
+--- xorg-server-1.20.9/meson.build	2020-09-23 14:29:09.014414847 +0000
++++ xorg-server-1.20.9.tpg/meson.build	2020-09-23 14:31:55.771414847 +0000
 @@ -91,7 +91,6 @@
  xkbcomp_dep = dependency('xkbcomp', required: false)
  xkbfile_dep = dependency('xkbfile')
@@ -109,7 +121,7 @@ diff -Naur xorg-server-1.20.9/meson.build xorg-server-1.20.9.tpg/meson.build
  if get_option('xdmcp')
 diff -Naur xorg-server-1.20.9/meson_options.txt xorg-server-1.20.9.tpg/meson_options.txt
 --- xorg-server-1.20.9/meson_options.txt	2020-08-25 15:39:55.000000000 +0000
-+++ xorg-server-1.20.9.tpg/meson_options.txt	2020-09-23 14:13:54.125414847 +0000
++++ xorg-server-1.20.9.tpg/meson_options.txt	2020-09-23 14:31:55.772414847 +0000
 @@ -94,6 +94,8 @@
         description: 'ACPI support on Linux')
  option('mitshm', type: 'combo', choices: ['true', 'false', 'auto'], value: 'auto',

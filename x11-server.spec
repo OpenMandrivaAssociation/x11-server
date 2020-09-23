@@ -64,7 +64,6 @@ Source8:	50-synaptics.conf
 Source30:	xserver-sdk-abi-requires
 Source100:	x11-server.rpmlintrc
 License:	GPLv2+ and MIT
-
 Requires:	%{name}-xorg
 %if %{enable_dmx}
 Requires:	%{name}-xdmx
@@ -76,7 +75,6 @@ Requires:	%{name}-xvfb
 
 # This should be removed when any of the vnc packages provide x11-server-xvnc:
 Obsoletes:	%{name}-xvnc < %{version}-%{release}
-
 Obsoletes:	%{name}-xfake < %{version}-%{release}
 
 # FIXME: build with systemtap installed is broken
