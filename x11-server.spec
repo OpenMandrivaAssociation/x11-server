@@ -40,7 +40,7 @@ Version:	1.20.9
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	3
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -232,6 +232,9 @@ Patch6022:	0021-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
 Patch6023:	0022-xwayland-Call-xwl_window_check_resolution_change_emu.patch
 Patch6024:	0023-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
 Patch6025:	0024-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
+# Backported fix for probing non-PCI platform devices on a system with PCI
+# (e.g. Pinebook Pro)
+Patch6050:	https://gitlab.freedesktop.org/xorg/xserver/-/commit/e50c85f4ebf559a3bac4817b41074c43d4691779.patch
 
 %description
 X11 servers.
