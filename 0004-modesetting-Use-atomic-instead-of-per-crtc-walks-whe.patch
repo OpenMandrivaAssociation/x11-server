@@ -1,27 +1,6 @@
-From e4e389447c59c89d39a5a78a5f19cdfd22d7699c Mon Sep 17 00:00:00 2001
-From: Adam Jackson <ajax@redhat.com>
-Date: Fri, 5 Oct 2018 14:09:35 -0400
-Subject: [PATCH xserver 4/4] modesetting: Use atomic instead of per-crtc walks
- where we can
-
-drmmode_set_desired_modes (reachable from CreateScreenResources,
-EnterVT, etc.) currently works by doing ->set_mode_major on each CRTC.
-This is silly, as atomic lets us configure every CRTC at once. It's also
-fragile, because we're not trying very hard to ensure the intermediate
-states are valid.
-
-This patch introduces drmmode_set_mode_atomic, which blasts the entire
-RANDR state into the kernel in an... atomic... fashion. We change
-drmmode_set_desired_modes and drmmode_xf86crtc_resize to use this
-instead of walking each CRTC. We also change drmmode_crtc_set_mode to
-use this, so that client RANDR requests (operating CRTC-at-a-time, since
-RANDR doesn't have atomic changes yet) use the same code paths.
-
-Signed-off-by: Adam Jackson <ajax@redhat.com>
----
-diff -up xorg-server-1.20.9/hw/xfree86/drivers/modesetting/drmmode_display.c.11~ xorg-server-1.20.9/hw/xfree86/drivers/modesetting/drmmode_display.c
---- xorg-server-1.20.9/hw/xfree86/drivers/modesetting/drmmode_display.c.11~	2020-08-25 23:04:25.810935851 +0200
-+++ xorg-server-1.20.9/hw/xfree86/drivers/modesetting/drmmode_display.c	2020-08-25 23:07:37.762614162 +0200
+diff -up xorg-server-1.20.10/hw/xfree86/drivers/modesetting/drmmode_display.c.11~ xorg-server-1.20.10/hw/xfree86/drivers/modesetting/drmmode_display.c
+--- xorg-server-1.20.10/hw/xfree86/drivers/modesetting/drmmode_display.c.11~	2020-12-01 23:38:44.698170076 +0000
++++ xorg-server-1.20.10/hw/xfree86/drivers/modesetting/drmmode_display.c	2020-12-01 23:44:29.751236168 +0000
 @@ -764,6 +764,96 @@ drmmode_target_output(ScrnInfoPtr scrn,
  
      return NULL;
@@ -226,11 +205,12 @@ diff -up xorg-server-1.20.9/hw/xfree86/drivers/modesetting/drmmode_display.c.11~
      }
  
      if (old_fb_id)
-@@ -3475,8 +3509,13 @@ Bool
- drmmode_set_desired_modes(ScrnInfoPtr pScrn, drmmode_ptr drmmode, Bool set_hw)
+@@ -3476,9 +3510,14 @@ drmmode_set_desired_modes(ScrnInfoPtr pS
+                           Bool ign_err)
  {
      xf86CrtcConfigPtr config = XF86_CRTC_CONFIG_PTR(pScrn);
 +    modesettingPtr ms = modesettingPTR(pScrn);
+     Bool success = TRUE;
      int c;
  
 +    /* drmmode_set_mode_atomic returns 0 on success, we return TRUE */
