@@ -40,7 +40,7 @@ Version:	1.20.10
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -111,9 +111,6 @@ BuildRequires:	pkgconfig(xrender) >= 0.9.4
 BuildRequires:	pkgconfig(xres) >= 1.0.0
 BuildRequires:	pkgconfig(xshmfence) >= 1.1
 BuildRequires:	pkgconfig(epoxy)
-BuildRequires:	pkgconfig(wayland-client)
-BuildRequires:	pkgconfig(wayland-protocols) >= 1.14
-BuildRequires:	pkgconfig(wayland-eglstream-protocols) >= 1.0.3
 BuildRequires:	pkgconfig(xv)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-aux)
@@ -207,31 +204,7 @@ Patch5002:	xorg-server-1.20.2-bug95301.patch
 
 # (tpg) upstream patches from git
 Patch6000:	0000-meson-Add-sha1-library-options.patch
-# Backported Xwayland randr resolution change emulation support
-Patch6002:	0001-dix-Add-GetCurrentClient-helper.patch
-Patch5003:	0002-xwayland-Add-wp_viewport-wayland-extension-support.patch
-Patch6004:	0003-xwayland-Use-buffer_damage-instead-of-surface-damage.patch
-Patch6005:	0004-xwayland-Add-fake-output-modes-to-xrandr-output-mode.patch
-Patch6006:	0005-xwayland-Use-RandR-1.2-interface-rev-2.patch
-Patch6007:	0006-xwayland-Add-per-client-private-data.patch
-Patch6008:	0007-xwayland-Add-support-for-storing-per-client-per-outp.patch
-Patch6009:	0008-xwayland-Add-support-for-randr-resolution-change-emu.patch
-Patch6010:	0009-xwayland-Add-xwlRRModeToDisplayMode-helper-function.patch
-Patch6011:	0010-xwayland-Add-xwlVidModeGetCurrentRRMode-helper-to-th.patch
-Patch6012:	0011-xwayland-Add-vidmode-mode-changing-emulation-support.patch
-Patch6013:	0012-xwayland-xwl_window_should_enable_viewport-Add-extra.patch
-Patch6014:	0013-xwayland-Set-_XWAYLAND_RANDR_EMU_MONITOR_RECTS-prope.patch
-Patch6015:	0014-xwayland-Cache-client-id-for-the-window-manager-clie.patch
-Patch6016:	0015-xwayland-Reuse-viewport-instead-of-recreating.patch
-Patch6017:	0016-xwayland-Recurse-on-finding-the-none-wm-owner.patch
-Patch6018:	0017-xwayland-Make-window_get_none_wm_owner-return-a-Wind.patch
-Patch6019:	0018-xwayland-Check-emulation-on-client-toplevel-resize.patch
-Patch6020:	0019-xwayland-Also-check-resolution-change-emulation-when.patch
-Patch6021:	0020-xwayland-Also-hook-screen-s-MoveWindow-method.patch
-Patch6022:	0021-xwayland-Fix-emulated-modes-not-being-removed-when-s.patch
-Patch6023:	0022-xwayland-Call-xwl_window_check_resolution_change_emu.patch
-Patch6024:	0023-xwayland-Fix-setting-of-_XWAYLAND_RANDR_EMU_MONITOR_.patch
-Patch6025:	0024-xwayland-Remove-unnecessary-xwl_window_is_toplevel-c.patch
+
 # Backported fix for probing non-PCI platform devices on a system with PCI
 # (e.g. Pinebook Pro)
 Patch6050:	https://gitlab.freedesktop.org/xorg/xserver/-/commit/e50c85f4ebf559a3bac4817b41074c43d4691779.patch
@@ -445,27 +418,6 @@ and standard and/or commonly available X server extensions.
 
 #------------------------------------------------------------------------------
 
-%package xwayland
-Summary:	A X server for Wayland
-Group:		System/X11
-License:	MIT
-Requires:	x11-server-common = %{EVRD}
-Requires:	dri-drivers
-
-%description xwayland
-Wayland is a complete window system in itself, but even so, if we're migrating
-away from X, it makes sense to have a good backwards compatibility story. With
-a few changes, the Xorg server can be modified to use wayland input devices for
-input and forward either the root window or individual top-level windows as
-wayland surfaces. The server still runs the same 2D driver with the same
-acceleration code as it does when it runs natively. The main difference is that
-wayland handles presentation of the windows instead of KMS. 
-
-%files xwayland
-%{_bindir}/Xwayland
-
-#------------------------------------------------------------------------------
-
 %package xnest
 Summary:	A nested X server
 Group:		System/X11
@@ -615,6 +567,8 @@ test $(getminor extension) == %{extension_minor}
 	-Dxephyr=true \
 	-Dxcsecurity=true \
 	-Dsha1=libgcrypt \
+	-Dxwayland=false \
+	-Dxwayland_eglstream=false \
 	%ifnarch %{ix86} %{x86_64}
 	-Dvbe=false \
 	-Dint10=false \
