@@ -40,7 +40,7 @@ Version:	1.20.11
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -359,7 +359,8 @@ Conflicts:	compiz < 0.5.0-1mdv2007.1
 Obsoletes:	x11-server13-xorg <= 1.2.99.905
 Requires:	dri-drivers
 # minimum libxfont needed for xserver-1.9:
-Requires:	libxfont >= 1.4.2
+# but we can get away without any libxfont 1.x
+Conflicts:	libxfont < 1.4.2
 
 # This package was used in the transition to modular:
 Obsoletes:	xorg-x11-server
