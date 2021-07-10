@@ -36,11 +36,11 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.20.11
+Version:	1.20.12
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	1
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -48,7 +48,7 @@ URL:		http://xorg.freedesktop.org
 %if %{git}
 Source0:	xorg-server-%{git}.tar.bz2
 %else
-Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.bz2
+Source0:	http://xorg.freedesktop.org/releases/individual/xserver/xorg-server-%{version}.tar.xz
 %endif
 Source1:	xserver.pamd
 Source2:	xvfb-run.sh
