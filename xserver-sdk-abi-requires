@@ -13,7 +13,7 @@
 
 ver=$(pkg-config --variable abi_$1 xorg-server)
 
-major=$(echo $ver | cut -f 1 -d .)
-minor=$(echo $ver | cut -f 2 -d .)
+major=$(printf '%s\n' $ver | cut -f 1 -d .)
+minor=$(printf '%s\n' $ver | cut -f 2 -d .)
 
-echo "xserver-abi($1-$major) >= $minor"
+printf '%s\n' "xserver-abi($1-$major) >= $minor"

@@ -2,10 +2,8 @@
 
 %global optflags %{optflags} -O3
 
-%define with_debug 0
-%define enable_dmx 1
-%define enable_kdrive 0
-%define enable_builddocs 0
+%bcond_with builddocs
+
 # /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
 # Error compiling '/builddir/build/BUILDROOT/x11-server-1.20.0-1.x86_64/usr/share/x11-server-source/config/fdi2iclass.py'...
 #  File "/fdi2iclass.py", line 169
@@ -22,28 +20,27 @@
 # Alternatives priority for standard libglx.so and mesa libs
 %define priority 500
 
-%define moduledir %{_libdir}/xorg/modules
-
 # ABI versions.  Have to keep these manually in sync with the source
 # because rpm is a terrible language.  HTFU.
 %define ansic_major 0
 %define ansic_minor 4
-%define videodrv_major 24
-%define videodrv_minor 1
+%define videodrv_major 25
+%define videodrv_minor 2
 %define xinput_major 24
-%define xinput_minor 1
+%define xinput_minor 4
 %define extension_major 10
 %define extension_minor 0
 
 Name:		x11-server
-Version:	1.20.13
+Version:	21.1.1
 %if %{git}
 Release:	0.%{git}.1
 %else
-Release:	2
+Release:	1
 %endif
 Summary:	X11 servers
 Group:		System/X11
+License:	GPLv2+ and MIT
 URL:		http://xorg.freedesktop.org
 %if %{git}
 Source0:	xorg-server-%{git}.tar.bz2
@@ -55,21 +52,66 @@ Source2:	xvfb-run.sh
 # for finding & loading nvidia and flgrx drivers:
 Source3:	00-modules.conf
 Source4:	10-quirks.conf
-Source5:	mandriva-setup-keyboard-udev
-Source6:	61-x11-input.rules
 Source7:	90-zap.conf
 Source8:	50-synaptics.conf
 # from RH/FC:
 # for requires generation in drivers
 Source30:	xserver-sdk-abi-requires
 Source100:	x11-server.rpmlintrc
-License:	GPLv2+ and MIT
+
+Patch100:	xorg-server-1.20.4-det_mon-size.patch
+Patch102:	xorg-server-1.20.5-fix-meson-xkb_output_dir.patch
+
+# Fedora Patches
+# From Debian use intel ddx driver only for gen4 and older chipsets
+Patch7022:	06_use-intel-only-on-pre-gen4.diff
+# Default to xf86-video-modesetting on GeForce 8 and newer
+Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
+# Default to va_gl on intel i965 as we use the modesetting drv there
+# va_gl should probably just be the default everywhere ?
+# (tpg) 2020-01-17 not needed anymore ?
+#Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
+
+# do not upstream - do not even use here yet
+# (tpg) 2021-11-08 disable for now
+#Patch7030:	0002-modesetting-Propagate-more-failure-in-drmmode_set_mo.patch
+#Patch7031:	0003-modesetting-Factor-out-drmmode_target_output.patch
+#Patch7032:	0004-modesetting-Use-atomic-instead-of-per-crtc-walks-whe.patch
+
+# because the display-managers are not ready yet, do not upstream
+Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+
+# OpenMandriva/Mageia patches
+# git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
+Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
+Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
+Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
+Patch903:	0903-LED-behavior-fixes.patch
+Patch906:	0906-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
+Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
+Patch910:	xorg-1.13.0-link-tirpc.patch
+Patch911:	xorg-server-1.16.0-blacklist-driver.patch
+
+# Candidates for dropping:
+# 902: by pixel, so that X11 choose the best resolution with a better algorithm
+# 903: Input subsystem has changed *a lot* since this patch was written... I
+#      fear it might break things now
+# 906: All this patch does is force users to hit ctrl+alt+bksp twice (with
+#      an annoying sound) IF the hotkey is enabled. If the user chooses to
+#      enable ctrk+alt+bksp, why force him to hit twice? OTOH, the sound is
+#      annoying, and it should teach users to not use ctrl+alt+bksp =D
+
+# Do not crash if Xv is not initialized (patch from xorg-devel ML)
+# The crash happened when v4l was loaded and xv was not registered,
+# for example on RV610 with radeon driver
+Patch4001:	1001-do-not-crash-if-xv-not-initialized.patch
+
+# (cg) Point the user at the journal rather than a logfile at /dev/null
+Patch5001:	point-user-at-journal-rather-than-dev-null.patch
+Patch5002:	xorg-server-1.20.2-bug95301.patch
+
 Requires:	%{name}-xorg
-%if %{enable_dmx}
-Requires:	%{name}-xdmx
-%else
 Obsoletes:	%{name}-xdmx < %{version}-%{release}
-%endif
 Requires:	%{name}-xnest
 Requires:	%{name}-xvfb
 
@@ -131,14 +173,10 @@ BuildRequires:	x11-xtrans-devel >= 1.3.5
 BuildRequires:	byacc
 BuildRequires:	flex
 BuildRequires:	bison
+BuildRequires:	pkgconfig(libxcvt)
 BuildRequires:	pkgconfig(libudev) >= 186
 
-%if %{enable_dmx}
-BuildRequires:	pkgconfig(dmx)
-BuildRequires:	pkgconfig(xtst) >= 1.1
-%endif
-
-%if %{enable_builddocs}
+%if %{with builddocs}
 BuildRequires:	doxygen
 #BuildRequires:	fop
 BuildRequires:	lynx
@@ -148,66 +186,6 @@ BuildRequires:	x11-sgml-doctools >= 1.8
 BuildRequires:	pkgconfig(libtirpc) >= 0.2.0
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	hostname
-
-Patch100:	xorg-server-1.20.4-det_mon-size.patch
-Patch101:	http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-graphics/xorg-xserver/xserver-xorg/0001-test-xtest-Initialize-array-with-braces.patch
-Patch102:	xorg-server-1.20.5-fix-meson-xkb_output_dir.patch
-
-# Fedora Patches
-# From Debian use intel ddx driver only for gen4 and older chipsets
-Patch7022:	06_use-intel-only-on-pre-gen4.diff
-# Default to xf86-video-modesetting on GeForce 8 and newer
-Patch7023:	0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
-# Default to va_gl on intel i965 as we use the modesetting drv there
-# va_gl should probably just be the default everywhere ?
-# (tpg) 2020-01-17 not needed anymore ?
-#Patch7024:	0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
-Patch7025:	0001-Always-install-vbe-and-int10-sdk-headers.patch
-Patch7026:	0204-dri2-Set-fallback-driver-names-for-Intel-and-AMD-chi.patch
-
-# do not upstream - do not even use here yet
-Patch7027:	0001-autobind-GPUs-to-the-screen.patch
-Patch7030:	0002-modesetting-Propagate-more-failure-in-drmmode_set_mo.patch
-Patch7031:	0003-modesetting-Factor-out-drmmode_target_output.patch
-Patch7032:	0004-modesetting-Use-atomic-instead-of-per-crtc-walks-whe.patch
-# because the display-managers are not ready yet, do not upstream
-Patch10000:	0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
-
-# OpenMandriva/Mageia patches
-# git format-patch --start-number 900 mdv-1.6.4-redhat..mdv-1.6.4-patches
-Patch900:	0900-Use-a-X-wrapper-that-uses-pam-and-consolehelper-to-g.patch
-Patch901:	0901-Don-t-print-information-about-X-Server-being-a-pre-r.patch
-Patch902:	0902-Take-width-into-account-when-choosing-default-mode.patch
-Patch903:	0903-LED-behavior-fixes.patch
-Patch906:	0906-xfree86-need-to-press-Ctrl-Alt-Bksp-twice-to-termina.patch
-Patch907:	0907-Add-nr-argument-for-backwards-compatibility.patch
-Patch910:	xorg-1.13.0-link-tirpc.patch
-Patch911:	xorg-server-1.16.0-blacklist-driver.patch
-
-# Candidates for dropping:
-# 902: by pixel, so that X11 choose the best resolution with a better algorithm
-# 903: Input subsystem has changed *a lot* since this patch was written... I
-#      fear it might break things now
-# 906: All this patch does is force users to hit ctrl+alt+bksp twice (with
-#      an annoying sound) IF the hotkey is enabled. If the user chooses to
-#      enable ctrk+alt+bksp, why force him to hit twice? OTOH, the sound is
-#      annoying, and it should teach users to not use ctrl+alt+bksp =D
-
-# Do not crash if Xv is not initialized (patch from xorg-devel ML)
-# The crash happened when v4l was loaded and xv was not registered,
-# for example on RV610 with radeon driver
-Patch4001:	1001-do-not-crash-if-xv-not-initialized.patch
-
-# (cg) Point the user at the journal rather than a logfile at /dev/null
-Patch5001:	point-user-at-journal-rather-than-dev-null.patch
-Patch5002:	xorg-server-1.20.2-bug95301.patch
-
-# (tpg) upstream patches from git
-Patch6000:	0000-meson-Add-sha1-library-options.patch
-
-# Backported fix for probing non-PCI platform devices on a system with PCI
-# (e.g. Pinebook Pro)
-Patch6050:	https://gitlab.freedesktop.org/xorg/xserver/-/commit/e50c85f4ebf559a3bac4817b41074c43d4691779.patch
 
 %description
 X11 servers.
@@ -219,9 +197,6 @@ Summary:	Development files for %{name}
 Group:		Development/X11
 License:	MIT
 
-%define oldxorgnamedevel  %mklibname xorg-x11
-Conflicts:	%{oldxorgnamedevel}-devel < 7.0
-Obsoletes:	x11-server13-devel <= 1.2.99.905
 Requires:	pkgconfig(pixman-1)
 Requires:	pkgconfig(pciaccess)
 Requires:	pkgconfig(xkbfile)
@@ -252,9 +227,6 @@ Summary:	X server common files
 Group:		System/X11
 License:	MIT
 Provides:	XFree86 = 7.0.0
-Conflicts:	xorg-x11 <= 6.9.0-12mdk
-Obsoletes:	x11-server13-common <= 1.2.99.905
-Obsoletes:	x11-server-xprt <= 1.3.0.0-2mdv2008.0
 Requires:	rgb
 # for 'fixed' and 'cursor' fonts
 Requires:	x11-font-misc-misc
@@ -266,16 +238,10 @@ Requires:	udev
 Requires:	mkcomposecache
 Requires(post):	chkconfig >= 1.9.0
 Requires(postun):	chkconfig
-# see comment about /usr/X11R6/lib below
-Conflicts:	filesystem < 2.1.8
 # nvidia-71xx does not support X.org server >= 1.5
 Conflicts:	x11-driver-video-nvidia71xx < 71.86.09-2
 # old fglrx does not support X.org server >= 1.7
 Conflicts:	x11-driver-video-fglrx < 8.720
-# Fix: missing conflicts to allow upgrade from 2008.0 to cooker
-# http://qa.mandriva.com/show_bug.cgi?id=36651
-Conflicts:	x11-driver-video-nvidia-current <= 100.14.19
-Conflicts:	x11-xorg1_5-server < 1.5.3-4
 Obsoletes:	%{_lib}glamor0 <= 0.6.0-10
 Obsoletes:	x11-driver-video-modesetting < 2:0.9.1
 Provides:	x11-driver-video-modesetting = 2:0.9.1
@@ -291,20 +257,6 @@ X server common files.
 %post common
 %{_sbindir}/update-alternatives \
 	--install %{_sysconfdir}/ld.so.conf.d/GL.conf gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf %{priority}
-
-# (anssi)
-%triggerun common -- %{name}-common < 1.3.0.0-17
-[ $1 -eq 2 ] || exit 0 # do not run if downgrading
-current_glconf="$(readlink -e %{_sysconfdir}/ld.so.conf.d/GL.conf)"
-if [ "${current_glconf#*mesa}" == "gl1.conf" ]; then
-# This an upgrade of a system with no proprietary drivers enabled, update
-# the link to point to the new standard.conf instead of libmesagl1.conf (2008.0 change).
-    %{_sbindir}/update-alternatives --set gl_conf %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
-else
-# XFdrake did not set symlink to manual mode before 2008.0, so we ensure it here.
-    %{_sbindir}/update-alternatives --set gl_conf "${current_glconf}"
-fi
-true
 
 %postun common
 if [ ! -f %{_sysconfdir}/ld.so.conf.d/GL/standard.conf ]; then
@@ -323,21 +275,13 @@ fi
 %ghost %{_sysconfdir}/ld.so.conf.d/GL.conf
 %{_sysconfdir}/ld.so.conf.d/GL/standard.conf
 %{_bindir}/gtf
-%{_bindir}/cvt
-/sbin/mandriva-setup-keyboard
-%if %{enable_dmx}
-%{_bindir}/vdltodmx
-%endif
 %{_libdir}/xorg/modules/*
 %{_libdir}/xorg/protocol.txt
-%{_mandir}/man1/gtf.*
-%{_mandir}/man1/cvt.*
-%if %{enable_dmx}
-%{_mandir}/man1/vdltodmx.*
-%endif
-%{_mandir}/man4/fbdevhw.*
-%{_mandir}/man4/exa.*
-%{_mandir}/man4/modesetting.4.*
+%doc %{_mandir}/man1/gtf.*
+%doc %{_mandir}/man4/fbdevhw.*
+%doc %{_mandir}/man4/exa.*
+%doc %{_mandir}/man4/modesetting.4.*
+%doc %{_mandir}/man4/inputtestdrv.4.*
 %dir %{_prefix}/X11R6
 %dir %{_prefix}/X11R6/lib
 %{_prefix}/X11R6/lib/X11
@@ -354,16 +298,7 @@ Requires:	x11-font-alias
 Requires:	libx11-common
 Requires:	x11-driver-input-libinput >= 0.17.0
 Requires:	udev
-Conflicts:	drakx-kbd-mouse-x11 < 0.66
-Conflicts:	compiz < 0.5.0-1mdv2007.1
-Obsoletes:	x11-server13-xorg <= 1.2.99.905
 Requires:	dri-drivers
-# minimum libxfont needed for xserver-1.9:
-# but we can get away without any libxfont 1.x
-Conflicts:	libxfont < 1.4.2
-
-# This package was used in the transition to modular:
-Obsoletes:	xorg-x11-server
 
 %description xorg
 x11-server-xorg is the new generation of X server from X.Org.
@@ -376,47 +311,12 @@ x11-server-xorg is the new generation of X server from X.Org.
 %{_sysconfdir}/X11/X
 %{_sysconfdir}/pam.d/xserver
 %{_sysconfdir}/security/console.apps/xserver
-%{_mandir}/man1/Xorg.*
-%{_mandir}/man1/Xserver.*
-%{_mandir}/man5/xorg.conf.*
-%{_mandir}/man5/Xwrapper.config.*
+%doc %{_mandir}/man1/Xorg.*
+%doc %{_mandir}/man1/Xserver.*
+%doc %{_mandir}/man5/xorg.conf.*
+%doc %{_mandir}/man5/Xwrapper.config.*
 %{_datadir}/X11/xorg.conf.d/10-quirks.conf
 %{_datadir}/X11/xorg.conf.d/00-modules.conf
-#------------------------------------------------------------------------------
-
-%if %{enable_dmx}
-%package xdmx
-Summary:	Distributed Multi-head X server
-Group:		System/X11
-License:	MIT
-Requires:	x11-server-common = %{version}-%{release}
-
-# This package was used in the transition to modular:
-Obsoletes:	xorg-x11-Xdmx
-
-%description xdmx
-Xdmx is a proxy X server that uses one or more other X servers
-as its display devices. It provides multi-head X functionality
-for displays that might be located on different machines.
-Xdmx functions as a front-end X server that acts as a proxy
-to a set of back-end X servers. All of the visible rendering is
-passed to the back-end X servers. Clients connect to the Xdmx
-front-end, and everything appears as it would in a regular
-multi-head configuration. If Xinerama is enabled (e.g.,
-with +xinerama on the command line), the clients see a single large screen.
-
-Xdmx communicates to the back-end X servers using the standard X11 protocol,
-and standard and/or commonly available X server extensions.
-
-%files xdmx
-%{_bindir}/Xdmx
-%{_bindir}/xdmx*
-%{_bindir}/dmx*
-%{_mandir}/man1/Xdmx.*
-%{_mandir}/man1/xdmxconfig.*
-%{_mandir}/man1/dmxtodmx.*
-%endif
-
 #------------------------------------------------------------------------------
 
 %package xnest
@@ -424,9 +324,6 @@ Summary:	A nested X server
 Group:		System/X11
 License:	MIT
 Requires:	x11-server-common = %{version}-%{release}
-
-# This package was used in the transition to modular:
-Obsoletes:	xorg-x11-Xnest
 
 %description xnest
 Xnest is an X Window System server which runs in an X window.
@@ -441,7 +338,7 @@ testing purposes).
 
 %files xnest
 %{_bindir}/Xnest
-%{_mandir}/man1/Xnest.*
+%doc %{_mandir}/man1/Xnest.*
 
 #------------------------------------------------------------------------------
 
@@ -452,9 +349,6 @@ Group:		System/X11
 License:	MIT and GPLv2
 Requires:	x11-server-common = %{version}-%{release}
 Requires:	xauth
-
-# This package was used in the transition to modular:
-Obsoletes:	xorg-x11-Xvfb
 
 %description xvfb
 Xvfb (X Virtual Frame Buffer) is an X Windows System server
@@ -476,7 +370,7 @@ install Xvfb for that purpose.
 %files xvfb
 %{_bindir}/Xvfb
 %{_bindir}/xvfb-run
-%{_mandir}/man1/Xvfb.*
+%doc %{_mandir}/man1/Xvfb.*
 
 #------------------------------------------------------------------------------
 
@@ -507,7 +401,7 @@ Possible uses include:
 
 %files xephyr
 %{_bindir}/Xephyr
-%{_mandir}/man1/Xephyr.1*
+%doc %{_mandir}/man1/Xephyr.1*
 
 #------------------------------------------------------------------------------
 
@@ -517,7 +411,7 @@ Possible uses include:
 Summary:	Xserver source code required to build unofficial servers
 Group:		Development/X11
 License:	MIT
-BuildArch:     noarch
+BuildArch:	noarch
 
 %description source
 Xserver source code needed to build unofficial servers, like Xvnc.
@@ -558,18 +452,17 @@ test $(getminor extension) == %{extension_minor}
 %build
 %meson \
 	-Dlog_dir="%{_logdir}" \
-	-Dmodule_dir="%{moduledir}" \
+	-Dmodule_dir="%{_libdir}/xorg/modules" \
+	-Dvendor_name="%{vendor}" \
+	-Dvendor_name_short="%{disttag}" \
+	-Dvendor_web="%{disturl}" \
 	-Dbuilder_addr="%{disturl}" \
 	-Dbuilder_string="Build ID: %{name} %{version}-%{release}" \
-	-Dvendor_name="%{vendor}" \
-	-Dos_vendor="%{vendor}" \
 	-Dxorg=true \
 	-Dsuid_wrapper=true \
 	-Dxephyr=true \
 	-Dxcsecurity=true \
 	-Dsha1=libgcrypt \
-	-Dxwayland=false \
-	-Dxwayland_eglstream=false \
 	%ifnarch %{ix86} %{x86_64}
 	-Dvbe=false \
 	-Dint10=false \
@@ -577,9 +470,6 @@ test $(getminor extension) == %{extension_minor}
 	-Dint10=x86emu \
 	%endif
 	-Dvendor_web="%{bugurl}" \
-	%if %enable_dmx
-	-Ddmx=true \
-	%endif
 	-Ddefault_font_path="catalogue:%{_sysconfdir}/X11/fontpath.d,built-ins"
 
 %meson_build
@@ -621,15 +511,6 @@ touch %{buildroot}%{_sysconfdir}/ld.so.conf.d/GL.conf
 
 install -m 0755 %{SOURCE2} %{buildroot}%{_bindir}/xvfb-run
 install -m 0644 %{SOURCE3} %{buildroot}%{_datadir}/X11/xorg.conf.d/
-
-mkdir -p %{buildroot}/sbin
-mkdir -p %{buildroot}/lib/udev/rules.d/
-install -m 0755 %{SOURCE5} %{buildroot}/sbin/mandriva-setup-keyboard
-# (tpg) do not install this as running mandriva-setup-keyboard 
-# with systemd configuration before X start produces keyboard layout issues
-# https://issues.openmandriva.org/show_bug.cgi?id=274
-#install -m 0644 %{SOURCE6} %{buildroot}/lib/udev/rules.d
-
 install -m 755 %{SOURCE30} %{buildroot}%{_bindir}
 
 # And enable Ctrl+Alt+Backspace by default
@@ -642,6 +523,5 @@ install -c -m 644 %{SOURCE8} %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/
 install -d %{buildroot}/%{xserver_source_dir}
 rm -rf build
 cp -r * %{buildroot}/%{xserver_source_dir}
-
 
 %files

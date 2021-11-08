@@ -23,15 +23,15 @@ diff --git a/hw/xfree86/common/xf86Config.c b/hw/xfree86/common/xf86Config.c
 index 2c1d335..87ea34f 100644
 --- a/hw/xfree86/common/xf86Config.c
 +++ b/hw/xfree86/common/xf86Config.c
-@@ -622,6 +622,7 @@ typedef enum {
-     FLAG_NOTRAPSIGNALS,
+@@ -621,6 +621,7 @@ configFiles(XF86ConfFilesPtr fileconf)
+ typedef enum {
      FLAG_DONTVTSWITCH,
      FLAG_DONTZAP,
 +    FLAG_ZAPWARNING,
      FLAG_DONTZOOM,
      FLAG_DISABLEVIDMODE,
      FLAG_ALLOWNONLOCAL,
-@@ -659,6 +660,8 @@ static OptionInfoRec FlagOptions[] = {
+@@ -657,6 +658,8 @@ static OptionInfoRec FlagOptions[] = {
       {0}, FALSE},
      {FLAG_DONTZAP, "DontZap", OPTV_BOOLEAN,
       {0}, FALSE},
@@ -40,8 +40,8 @@ index 2c1d335..87ea34f 100644
      {FLAG_DONTZOOM, "DontZoom", OPTV_BOOLEAN,
       {0}, FALSE},
      {FLAG_DISABLEVIDMODE, "DisableVidModeExtension", OPTV_BOOLEAN,
-@@ -740,6 +743,8 @@ configServerFlags(XF86ConfFlagsPtr flagsconf, XF86OptionPtr layoutopts)
-     xf86GetOptValBool(FlagOptions, FLAG_NOTRAPSIGNALS, &xf86Info.notrapSignals);
+@@ -739,6 +742,8 @@ configServerFlags(XF86ConfFlagsPtr flagsconf, XF86OptionPtr layoutopts)
+ 
      xf86GetOptValBool(FlagOptions, FLAG_DONTVTSWITCH, &xf86Info.dontVTSwitch);
      xf86GetOptValBool(FlagOptions, FLAG_DONTZAP, &xf86Info.dontZap);
 +    if (!xf86GetOptValBool(FlagOptions, FLAG_ZAPWARNING, &xf86Info.ZapWarning))
@@ -53,12 +53,13 @@ diff --git a/hw/xfree86/common/xf86Events.c b/hw/xfree86/common/xf86Events.c
 index 8a800bd..a4c6c2d 100644
 --- a/hw/xfree86/common/xf86Events.c
 +++ b/hw/xfree86/common/xf86Events.c
-@@ -166,13 +166,26 @@ xf86ProcessActionEvent(ActionEvent action, void *arg)
+@@ -158,10 +158,23 @@ xf86ProcessActionEvent(ActionEvent action, void *arg)
      DebugF("ProcessActionEvent(%d,%p)\n", (int) action, arg);
      switch (action) {
      case ACTION_TERMINATE:
 -        if (!xf86Info.dontZap) {
 -            xf86Msg(X_INFO, "Server zapped. Shutting down.\n");
+-            GiveUp(0);
 +	if (xf86Info.dontZap)
 +	    break;
 +
@@ -73,14 +74,8 @@ index 8a800bd..a4c6c2d 100644
 +		LastZap = NewZap;
 +		break;
 +	    }
-+	}
+         }
 +	xf86Msg(X_INFO, "Server zapped. Shutting down.\n");
- #ifdef XFreeXDGA
--            DGAShutdown();
-+        DGAShutdown();
- #endif
--            GiveUp(0);
--        }
 +	GiveUp(0);
          break;
      case ACTION_NEXT_MODE:
@@ -89,14 +84,14 @@ diff --git a/hw/xfree86/common/xf86Globals.c b/hw/xfree86/common/xf86Globals.c
 index e890f05..24c54cc 100644
 --- a/hw/xfree86/common/xf86Globals.c
 +++ b/hw/xfree86/common/xf86Globals.c
-@@ -105,6 +105,7 @@ xf86InfoRec xf86Info = {
+@@ -107,6 +107,7 @@ xf86InfoRec xf86Info = {
      .autoVTSwitch = TRUE,
      .ShareVTs = FALSE,
      .dontZap = FALSE,
 +    .ZapWarning = FALSE,
      .dontZoom = FALSE,
-     .notrapSignals = FALSE,
      .currentScreen = NULL,
+ #ifdef CSRG_BASED
 diff --git a/hw/xfree86/common/xf86Privstr.h b/hw/xfree86/common/xf86Privstr.h
 index 21c2e1f..fcd38f9 100644
 --- a/hw/xfree86/common/xf86Privstr.h
@@ -107,8 +102,8 @@ index 21c2e1f..fcd38f9 100644
      Bool dontZap;
 +    Bool ZapWarning;
      Bool dontZoom;
-     Bool notrapSignals;         /* don't exit cleanly - die at fault */
  
+     /* graphics part */
 diff --git a/hw/xfree86/man/xorg.conf.man b/hw/xfree86/man/xorg.conf.man
 index 9589262..3e49af8 100644
 --- a/hw/xfree86/man/xorg.conf.man
@@ -151,3 +146,4 @@ index 13a9dc3..855bd6d 100644
  It should be noted that zapping is triggered by the
 -- 
 2.16.2
+
