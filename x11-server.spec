@@ -464,7 +464,6 @@ test $(getminor extension) == %{extension_minor}
 	-Dxcsecurity=true \
 	-Dsha1=libgcrypt \
 	%ifnarch %{ix86} %{x86_64}
-	-Dvbe=false \
 	-Dint10=false \
 	%else
 	-Dint10=x86emu \
