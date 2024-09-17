@@ -36,7 +36,7 @@ Version:	21.1.13
 %if %{git}
 Release:	0.%{git}1
 %else
-Release:	1
+Release:	2
 %endif
 Summary:	X11 servers
 Group:		System/X11
@@ -349,6 +349,7 @@ Group:		System/X11
 License:	MIT and GPLv2
 Requires:	x11-server-common = %{version}-%{release}
 Requires:	xauth
+Requires:	util-linux
 
 %description xvfb
 Xvfb (X Virtual Frame Buffer) is an X Windows System server
