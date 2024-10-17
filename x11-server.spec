@@ -41,7 +41,7 @@ Release:	2
 Summary:	X11 servers
 Group:		System/X11
 License:	GPLv2+ and MIT
-URL:		http://xorg.freedesktop.org
+URL:		https://xorg.freedesktop.org
 %if %{git}
 Source0:	xorg-server-%{git}.tar.bz2
 %else
