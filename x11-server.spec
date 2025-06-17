@@ -32,7 +32,7 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	21.1.16
+Version:	21.1.17
 %if %{git}
 Release:	0.%{git}1
 %else
