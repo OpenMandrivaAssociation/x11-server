@@ -32,9 +32,9 @@
 %define extension_minor 0
 
 Name:		x11-server
-Version:	21.1.18
+Version:	21.1.24
 %if %{git}
-Release:	0.%{git}1
+Release:	1.%{git}1
 %else
 Release:	1
 %endif
@@ -424,9 +424,9 @@ Xserver source code needed to build unofficial servers, like Xvnc.
 
 %prep
 %if %{git}
-%setup -q -n xorg-server-%{git}
+%setup -q -n xorg-server-21.1.24
 %else
-%setup -q -n xorg-server-%{version}
+%setup -q -n xorg-server-21.1.24
 %endif
 %autopatch -p1
 
